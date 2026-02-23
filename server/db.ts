@@ -6,6 +6,8 @@ import {
   exchangeLinks, InsertExchangeLink, ExchangeLink,
   faqs, InsertFaq, Faq,
   cryptoNews, InsertCryptoNews, CryptoNews,
+  exchangeFeatureCategories, ExchangeFeatureCategory,
+  exchangeFeatureSupport, ExchangeFeatureSupport,
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -261,6 +263,31 @@ const DEFAULT_NEWS: InsertCryptoNews[] = [
     publishedAt: new Date("2026-02-22T06:00:00Z"),
   },
 ];
+
+// ─── Exchange Feature Guide ─────────────────────────────────────────────────────
+
+/** Return all feature categories ordered by sortOrder */
+export async function getExchangeFeatureCategories(): Promise<ExchangeFeatureCategory[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(exchangeFeatureCategories).orderBy(asc(exchangeFeatureCategories.sortOrder));
+}
+
+/** Return all feature support rows for a given featureSlug */
+export async function getExchangeFeatureSupport(featureSlug: string): Promise<ExchangeFeatureSupport[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(exchangeFeatureSupport)
+    .where(eq(exchangeFeatureSupport.featureSlug, featureSlug));
+}
+
+/** Return all feature support rows for a given exchange */
+export async function getExchangeAllFeatures(exchangeSlug: string): Promise<ExchangeFeatureSupport[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(exchangeFeatureSupport)
+    .where(eq(exchangeFeatureSupport.exchangeSlug, exchangeSlug));
+}
 
 /** Seed crypto_news table if empty, then return active news sorted by publishedAt desc */
 export async function getCryptoNews(limit = 20): Promise<CryptoNews[]> {

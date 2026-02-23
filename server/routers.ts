@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
-import { submitContactForm, getExchangeLinks, updateExchangeLink, getFaqs, getCryptoNews } from "./db";
+import { submitContactForm, getExchangeLinks, updateExchangeLink, getFaqs, getCryptoNews, getExchangeFeatureCategories, getExchangeFeatureSupport, getExchangeAllFeatures } from "./db";
 import { TRPCError } from "@trpc/server";
 
 export const appRouter = router({
@@ -61,6 +61,17 @@ export const appRouter = router({
     list: publicProcedure
       .input(z.object({ search: z.string().optional() }))
       .query(async ({ input }) => getFaqs(input.search)),
+  }),
+
+  /** Exchange Feature Guide — 交易所扫盲指南 */
+  exchangeGuide: router({
+    categories: publicProcedure.query(async () => getExchangeFeatureCategories()),
+    featureSupport: publicProcedure
+      .input(z.object({ featureSlug: z.string().min(1) }))
+      .query(async ({ input }) => getExchangeFeatureSupport(input.featureSlug)),
+    exchangeFeatures: publicProcedure
+      .input(z.object({ exchangeSlug: z.string().min(1) }))
+      .query(async ({ input }) => getExchangeAllFeatures(input.exchangeSlug)),
   }),
 
   /** Crypto news timeline */

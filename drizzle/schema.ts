@@ -1,4 +1,4 @@
-import { boolean, int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { boolean, int, mysqlEnum, mysqlTable, text, timestamp, tinyint, varchar } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -102,3 +102,43 @@ export const cryptoNews = mysqlTable("crypto_news", {
 
 export type CryptoNews = typeof cryptoNews.$inferSelect;
 export type InsertCryptoNews = typeof cryptoNews.$inferInsert;
+
+/**
+ * Exchange feature categories — the 13 functional areas of a CEX.
+ * Editable from Dashboard Database panel.
+ */
+export const exchangeFeatureCategories = mysqlTable("exchange_feature_categories", {
+  id: int("id").autoincrement().primaryKey(),
+  slug: varchar("slug", { length: 32 }).notNull().unique(),
+  nameZh: varchar("nameZh", { length: 64 }).notNull(),
+  nameEn: varchar("nameEn", { length: 64 }).notNull(),
+  icon: varchar("icon", { length: 8 }).notNull(),
+  descZh: text("descZh").notNull(),
+  descEn: text("descEn").notNull(),
+  difficulty: mysqlEnum("difficulty", ["beginner", "intermediate", "advanced"]).default("beginner").notNull(),
+  sortOrder: int("sortOrder").default(0).notNull(),
+});
+
+export type ExchangeFeatureCategory = typeof exchangeFeatureCategories.$inferSelect;
+export type InsertExchangeFeatureCategory = typeof exchangeFeatureCategories.$inferInsert;
+
+/**
+ * Exchange feature support details — per-exchange support level and details for each feature.
+ * Editable from Dashboard Database panel.
+ */
+export const exchangeFeatureSupport = mysqlTable("exchange_feature_support", {
+  id: int("id").autoincrement().primaryKey(),
+  exchangeSlug: varchar("exchangeSlug", { length: 32 }).notNull(),
+  featureSlug: varchar("featureSlug", { length: 32 }).notNull(),
+  supported: tinyint("supported").default(1).notNull(),
+  levelZh: varchar("levelZh", { length: 16 }).notNull(),
+  levelEn: varchar("levelEn", { length: 32 }).notNull(),
+  detailZh: text("detailZh").notNull(),
+  detailEn: text("detailEn").notNull(),
+  maxLeverage: varchar("maxLeverage", { length: 8 }),
+  feeInfo: varchar("feeInfo", { length: 128 }),
+  highlight: tinyint("highlight").default(0).notNull(),
+});
+
+export type ExchangeFeatureSupport = typeof exchangeFeatureSupport.$inferSelect;
+export type InsertExchangeFeatureSupport = typeof exchangeFeatureSupport.$inferInsert;

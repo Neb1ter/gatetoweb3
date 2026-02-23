@@ -503,6 +503,137 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Exchange Guide Section */}
+      <section id="exchange-guide" className="py-20 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-sm font-bold mb-4">
+              {language === 'zh' ? '🏦 交易所扫盲指南' : '🏦 Exchange Feature Guide'}
+            </span>
+            <h2 className="text-4xl font-bold mb-4 text-accent">
+              {language === 'zh' ? '搞懂交易所，才能玩转加密货币' : 'Master Exchange Features to Trade Smarter'}
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              {language === 'zh'
+                ? '从现货到合约，从理财到 Web3，深度解析五大头部交易所的每一项功能，帮你找到最适合自己的交易方式。'
+                : 'From spot to futures, from earn to Web3 — in-depth analysis of all major exchange features to help you find the right trading style.'}
+            </p>
+          </div>
+
+          {/* 功能分类卡片 */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-10">
+            {[
+              { slug: 'spot', icon: '📈', zh: '现货交易', en: 'Spot Trading', risk: 'low', color: 'border-green-500/30 hover:border-green-500/60' },
+              { slug: 'futures', icon: '⚡', zh: '合约交易', en: 'Futures', risk: 'high', color: 'border-red-500/30 hover:border-red-500/60' },
+              { slug: 'earn', icon: '💰', zh: '理财产品', en: 'Earn', risk: 'low', color: 'border-green-500/30 hover:border-green-500/60' },
+              { slug: 'copy', icon: '👥', zh: '跟单交易', en: 'Copy Trading', risk: 'medium', color: 'border-yellow-500/30 hover:border-yellow-500/60' },
+              { slug: 'web3', icon: '🌐', zh: 'Web3 功能', en: 'Web3', risk: 'medium', color: 'border-yellow-500/30 hover:border-yellow-500/60' },
+              { slug: 'bot', icon: '🤖', zh: '交易机器人', en: 'Trading Bot', risk: 'medium', color: 'border-yellow-500/30 hover:border-yellow-500/60' },
+              { slug: 'launchpad', icon: '🚀', zh: '打新 Launchpad', en: 'Launchpad', risk: 'medium', color: 'border-yellow-500/30 hover:border-yellow-500/60' },
+              { slug: 'margin', icon: '🔧', zh: '杠杆交易', en: 'Margin', risk: 'high', color: 'border-red-500/30 hover:border-red-500/60' },
+            ].map((item) => (
+              <button
+                key={item.slug}
+                onClick={() => navigate(`/exchange-guide/${item.slug}`)}
+                className={`bg-card border ${item.color} rounded-xl p-4 text-left transition-all hover:bg-card/80 hover:scale-105 group`}
+              >
+                <div className="text-2xl mb-2">{item.icon}</div>
+                <div className="text-white font-bold text-sm mb-1">{language === 'zh' ? item.zh : item.en}</div>
+                <div className={`text-xs font-semibold ${
+                  item.risk === 'low' ? 'text-green-400' :
+                  item.risk === 'medium' ? 'text-yellow-400' : 'text-red-400'
+                }`}>
+                  {item.risk === 'low' ? (language === 'zh' ? '低风险' : 'Low Risk') :
+                   item.risk === 'medium' ? (language === 'zh' ? '中等风险' : 'Medium Risk') :
+                   (language === 'zh' ? '高风险' : 'High Risk')}
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* 交易所选择建议 */}
+          <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 mb-8">
+            <h3 className="text-2xl font-bold text-accent mb-6 text-center">
+              {language === 'zh' ? '🏆 如何选择适合你的交易所？' : '🏆 How to Choose the Right Exchange?'}
+            </h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                {
+                  label: language === 'zh' ? '新手入门' : 'Beginners',
+                  icon: '🌱',
+                  rec: 'OKX / Binance',
+                  reason: language === 'zh' ? '界面友好，教程丰富，中文支持完善，新手保护机制完备' : 'Beginner-friendly UI, rich tutorials, strong Chinese support',
+                  color: 'border-green-500/30 bg-green-500/5',
+                },
+                {
+                  label: language === 'zh' ? '合约交易' : 'Futures Traders',
+                  icon: '⚡',
+                  rec: 'Bybit / Binance',
+                  reason: language === 'zh' ? 'Bybit 合约深度最佳，Binance 流动性全球第一，手续费低' : 'Bybit has best futures depth, Binance has highest liquidity',
+                  color: 'border-red-500/30 bg-red-500/5',
+                },
+                {
+                  label: language === 'zh' ? '跟单交易' : 'Copy Trading',
+                  icon: '👥',
+                  rec: 'Bitget / Bybit',
+                  reason: language === 'zh' ? 'Bitget 跟单生态最成熟，交易员数量最多，策略多样' : 'Bitget has the most mature copy trading ecosystem',
+                  color: 'border-yellow-500/30 bg-yellow-500/5',
+                },
+                {
+                  label: language === 'zh' ? '理财增值' : 'Passive Earn',
+                  icon: '💰',
+                  rec: 'Gate.io / Binance',
+                  reason: language === 'zh' ? 'Gate.io 理财品种最丰富，Binance Earn 规模最大，收益稳定' : 'Gate.io has most diverse earn products, Binance has largest scale',
+                  color: 'border-blue-500/30 bg-blue-500/5',
+                },
+                {
+                  label: language === 'zh' ? 'Web3 探索' : 'Web3 Explorer',
+                  icon: '🌐',
+                  rec: 'OKX',
+                  reason: language === 'zh' ? 'OKX Web3 钱包支持 80+ 条链，DApp 生态最完整，体验最佳' : 'OKX Web3 wallet supports 80+ chains, best DApp ecosystem',
+                  color: 'border-purple-500/30 bg-purple-500/5',
+                },
+                {
+                  label: language === 'zh' ? '小币种交易' : 'Altcoin Trading',
+                  icon: '🔍',
+                  rec: 'Gate.io / Bitget',
+                  reason: language === 'zh' ? 'Gate.io 上币速度最快，小币种最多，适合早期发现潜力项目' : 'Gate.io lists new coins fastest, best for early altcoin discovery',
+                  color: 'border-orange-500/30 bg-orange-500/5',
+                },
+              ].map((item, i) => (
+                <div key={i} className={`rounded-xl border p-4 ${item.color}`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-xl">{item.icon}</span>
+                    <span className="text-white font-bold text-sm">{item.label}</span>
+                  </div>
+                  <div className="text-accent font-black text-base mb-1">{item.rec}</div>
+                  <p className="text-muted-foreground text-xs leading-relaxed">{item.reason}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA 按钮区 */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              size="lg"
+              className="bg-accent text-accent-foreground hover:bg-accent/90"
+              onClick={() => navigate('/exchange-guide')}
+            >
+              {language === 'zh' ? '📚 进入完整交易所扫盲指南' : '📚 Full Exchange Guide'}
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-accent/50 text-accent hover:bg-accent/10"
+              onClick={() => navigate('/beginner')}
+            >
+              {language === 'zh' ? '❓ 还有疑问？查看新手问答' : '❓ Still confused? See FAQ'}
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Summary & CTA */}
       <section className="py-20 px-4 bg-background">
         <div className="container mx-auto">
