@@ -156,14 +156,14 @@ const startSteps = [
   {
     step: "01",
     title: "选择主流交易所注册",
-    desc: "对于新手，强烈推荐从中心化交易所（CEX）开始。界面友好、支持法币入金、有客服支持。推荐 OKX、Binance 或 Gate.io，通过邀请码注册还能享受手续费返佣，长期省下不少费用。",
-    action: "前往查看返佣邀请码",
+    desc: "对于新手，强烈推荐从中心化交易所（CEX）开始。界面友好、支持法币入金、有客服支持。推荐 OKX、Binance 或 Gate.io，通过合作伙伴链接注册还能享受手续费返佣，长期省下不少费用。",
+    action: "前往查看合作伙伴链接",
     href: "/crypto-saving",
     color: "text-yellow-400",
     borderColor: "border-yellow-500/40",
     bgColor: "bg-yellow-500/10",
     icon: "🏢",
-    tip: "使用邀请码注册可享受最高 30% 手续费返佣",
+    tip: "合作伙伴链接注册可享受永久手续费返佣",
   },
   {
     step: "02",
@@ -1438,7 +1438,7 @@ export default function Web3Guide() {
           <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 to-teal-500/5 p-8 text-center mb-12">
             <h3 className="text-2xl font-black text-white mb-3">准备好开始了吗？</h3>
             <p className="text-slate-400 mb-6">
-              通过我们的邀请码注册交易所，享受最高 30% 手续费返佣，让每一笔交易都更划算。
+              通过我们的邀请码注册交易所，享受永久手续费返佣，让每一笔交易都更划算。
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link href="/crypto-saving">
