@@ -1,0 +1,9 @@
+{
+  "query": "\nINSERT INTO `exchange_links` (`slug`, `name`, `referralLink`, `inviteCode`, `rebateRate`, `sortOrder`) VALUES\n('gate', 'Gate.io', 'https://www.gate.io/signup/FORMANUS', 'FORMANUS', '个性化', 1),\n('okx', 'OKX', 'https://www.okx.com/join/MANUS', 'MANUS', '个性化', 2),\n('binance', 'Binance', 'https://accounts.binance.com/register?ref=MANUS', 'MANUS', '个性化', 3),\n('bybit', 'Bybit', 'https://www.bybit.com/invite?ref=MANUS', 'MANUS', '个性化', 4),\n('bitget', 'Bitget', 'https://www.bitget.com/referral/register?clacCode=MANUS', 'MANUS', '个性化', 5)\nON DUPLICATE KEY UPDATE `name`=VALUES(`name`), `referralLink`=VALUES(`referralLink`), `inviteCode`=VALUES(`inviteCode`), `rebateRate`=VALUES(`rebateRate`), `sortOrder`=VALUES(`sortOrder`);\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2MiaQpkmM6oaaZ3.root --database Eu4gfEEBL6vbxsxR6cJGm2 --execute \nINSERT INTO `exchange_links` (`slug`, `name`, `referralLink`, `inviteCode`, `rebateRate`, `sortOrder`) VALUES\n('gate', 'Gate.io', 'https://www.gate.io/signup/FORMANUS', 'FORMANUS', '个性化', 1),\n('okx', 'OKX', 'https://www.okx.com/join/MANUS', 'MANUS', '个性化', 2),\n('binance', 'Binance', 'https://accounts.binance.com/register?ref=MANUS', 'MANUS', '个性化', 3),\n('bybit', 'Bybit', 'https://www.bybit.com/invite?ref=MANUS', 'MANUS', '个性化', 4),\n('bitget', 'Bitget', 'https://www.bitget.com/referral/register?clacCode=MANUS', 'MANUS', '个性化', 5)\nON DUPLICATE KEY UPDATE `name`=VALUES(`name`), `referralLink`=VALUES(`referralLink`), `inviteCode`=VALUES(`inviteCode`), `rebateRate`=VALUES(`rebateRate`), `sortOrder`=VALUES(`sortOrder`);\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1782
+}
