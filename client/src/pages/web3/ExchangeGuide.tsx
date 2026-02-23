@@ -145,7 +145,7 @@ export default function ExchangeGuideDeep() {
             返回上一页
           </button>
           <div className="flex items-center gap-2">
-            <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hidden sm:inline-flex">入门 · 章节 06</span>
+            <span className="text-xs px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-400 border border-teal-500/30 hidden sm:inline-flex">实操 · 章节 07</span>
             <Web3ChapterNav currentChapterId="exchange-guide" />
           </div>
         </div>
@@ -154,7 +154,7 @@ export default function ExchangeGuideDeep() {
       <div className="max-w-4xl mx-auto px-4 py-12 pb-20">
         <FadeIn className="mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs mb-5">
-            🏦 第五章：交易所入门
+            🏦 第七章：交易所入门
           </div>
           <h1 className="text-4xl sm:text-5xl font-black mb-4 leading-tight">
             <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">交易所</span> 入门指南

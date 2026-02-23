@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
+import Web3ChapterNav from "@/components/Web3ChapterNav";
 
 // ============================================================
 // 工具 Hook：滚动进入视野触发动画
@@ -234,28 +235,18 @@ export default function EconomicOpportunity() {
       }}
     >
       {/* ===== 顶部导航栏 ===== */}
-      <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-[#050D1A]/90 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/web3-guide">
-              <button className="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors text-sm">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Web3 入圈指南
-              </button>
-            </Link>
-            <div className="w-px h-4 bg-slate-700" />
-            <span className="text-orange-400 font-bold text-sm hidden sm:block">第四章：经济形势与 Web3 机遇</span>
-          </div>
+      <nav className="sticky top-0 z-50 border-b border-white/5 bg-[#050D1A]/90 backdrop-blur-xl">
+        <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+          <button onClick={() => window.history.back()} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+            返回上一页
+          </button>
           <div className="flex items-center gap-2">
-            <span className="hidden sm:flex items-center gap-1.5 text-xs px-3 py-1 rounded-full bg-orange-500/20 border border-orange-500/30 text-orange-400">
-              <span className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-pulse" />
-              数据更新至 2025 年
-            </span>
+            <span className="text-xs px-2.5 py-1 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 hidden sm:inline-flex">核心 · 章节 05</span>
+            <Web3ChapterNav currentChapterId="economic-opportunity" />
           </div>
         </div>
-      </header>
+      </nav>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
 
@@ -263,7 +254,7 @@ export default function EconomicOpportunity() {
         <FadeIn delay={100}>
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-400 text-sm font-medium mb-6">
             <span className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
-            第四章 · 经济形势与 Web3 机遇
+            第五章 · 经济形势与 Web3 机遇
           </div>
         </FadeIn>
 
@@ -599,7 +590,7 @@ export default function EconomicOpportunity() {
           </p>
           <Link href="/web3-guide/investment-gateway">
             <button className="text-slate-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2">
-              第五章：参与 Web3 的门户 →
+              第六章：参与 Web3 的门户 →
             </button>
           </Link>
         </div>

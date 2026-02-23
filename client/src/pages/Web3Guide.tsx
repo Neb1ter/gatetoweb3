@@ -1218,7 +1218,7 @@ export default function Web3Guide() {
             <div className="flex items-center gap-3 flex-1">
               <span className="text-3xl">📊</span>
               <div>
-                <h3 className="font-black text-white text-base">第四章：经济形势与 Web3 机遇（深度版）</h3>
+                <h3 className="font-black text-white text-base">第五章：经济形势与 Web3 机遇（深度版）</h3>
                 <p className="text-slate-400 text-xs mt-0.5 leading-relaxed">
                   深度解析 2025 年全球经济压力数据（就业危机、贫富差距、工资停滞），对比 Web3 机构入场、稳定币爆发、区块链市场规模等最新数据，以及主流资产 10 年回报率对比。
                 </p>
@@ -1256,15 +1256,15 @@ export default function Web3Guide() {
         </FadeIn>
 
         {/* ===== Section 5: 投资方式对比 ===== */}
-        <SectionTitle id="invest" icon="🔄" title="Web3 投资方式对比" subtitle="CEX、DEX 与链上投资——找到最适合你的方式（第五章）" />
+        <SectionTitle id="invest" icon="🔄" title="Web3 投资方式对比" subtitle="CEX、DEX 与链上投资——找到最适合你的方式（第六章）" />
 
-        {/* 第五章入口引导 */}
+        {/* 第六章入口引导 */}
         <FadeIn className="mb-6">
           <div className="rounded-2xl border border-orange-500/30 bg-gradient-to-r from-orange-500/10 to-yellow-500/5 p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="flex items-center gap-3 flex-1">
               <span className="text-3xl">🚪</span>
               <div>
-                <h3 className="font-black text-white text-base">第五章：参与 Web3 的门户</h3>
+                <h3 className="font-black text-white text-base">第六章：参与 Web3 的门户</h3>
                 <p className="text-slate-400 text-xs mt-0.5 leading-relaxed">
                   深度对比 CEX、DEX 和链上投资的本质差异，包含质押理财收益计算器、无常损失解析、CEX 内置 Web3 功能介绍，以及新手推荐路径。
                 </p>
@@ -1365,7 +1365,7 @@ export default function Web3Guide() {
               <div className="flex gap-2 flex-wrap">
                 <Link href="/web3-guide/investment-gateway">
                   <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-400 text-black text-sm font-black transition-all whitespace-nowrap">
-                    🚪 第五章：参与 Web3 的门户 →
+                    🚪 第六章：参与 Web3 的门户 →
                   </button>
                 </Link>
                 <Link href="/web3-guide/exchange-guide">
@@ -1379,7 +1379,7 @@ export default function Web3Guide() {
         </FadeIn>
 
         {/* ===== Section 6: 如何开始 ===== */}
-        <SectionTitle id="start" icon="🚀" title="如何迈出第一步" subtitle="从零开始的 Web3 入门行动指南（第六章）" />
+        <SectionTitle id="start" icon="🚀" title="如何迈出第一步" subtitle="从零开始的 Web3 入门行动指南（第七章）" />
 
         <div className="space-y-4 mb-12">
           {startSteps.map((step, i) => (

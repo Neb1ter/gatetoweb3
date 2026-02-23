@@ -443,7 +443,7 @@ export default function InvestmentGateway() {
             返回上一页
           </button>
           <div className="flex items-center gap-2">
-            <span className="text-xs px-2.5 py-1 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 hidden sm:inline-flex">核心 · 章节 05</span>
+            <span className="text-xs px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 hidden sm:inline-flex">核心 · 章节 06</span>
             <Web3ChapterNav currentChapterId="investment-gateway" />
           </div>
         </div>
@@ -453,7 +453,7 @@ export default function InvestmentGateway() {
         {/* 标题 */}
         <FadeIn className="mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 text-xs mb-5">
-            🚪 第五章：参与 Web3 的门户
+            🚪 第六章：参与 Web3 的门户
           </div>
           <h1 className="text-4xl sm:text-5xl font-black mb-4 leading-tight">
             参与 <span className="bg-gradient-to-r from-orange-400 to-yellow-300 bg-clip-text text-transparent">Web3</span> 的门户
@@ -607,7 +607,7 @@ export default function InvestmentGateway() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               <div className="rounded-xl border border-emerald-500/20 bg-black/20 p-4 text-center">
                 <div className="text-2xl mb-2">📚</div>
-                <h4 className="font-bold text-white text-sm mb-1">第六章：交易所入门指南</h4>
+                <h4 className="font-bold text-white text-sm mb-1">第七章：交易所入门指南</h4>
                 <p className="text-slate-400 text-xs mb-3">详细了解各大交易所的对比、注册步骤和安全使用指南</p>
                 <Link href="/web3-guide/exchange-guide">
                   <button className="w-full py-2 rounded-lg border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 text-xs font-bold transition-all">
