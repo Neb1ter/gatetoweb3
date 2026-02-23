@@ -556,12 +556,12 @@ export default function EconomicOpportunity() {
           <div className="rounded-2xl border border-yellow-500/30 bg-yellow-500/5 p-6 text-center mb-10">
             <h3 className="text-xl font-black text-white mb-2">准备好迈出第一步了吗？</h3>
             <p className="text-slate-400 text-sm mb-5">
-              通过我们的邀请码注册交易所，享受最高 30% 手续费返佣，让每一笔交易都更划算。
+              通过我们的合作伙伴链接注册交易所，享受永久高额手续费返佣，让每一笔交易都更划算。
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link href="/crypto-saving">
                 <button className="bg-yellow-500 hover:bg-yellow-400 text-black font-black px-7 py-3 rounded-xl transition-all hover:scale-105 text-sm">
-                  🎁 查看返佣邀请码
+                  🎁可以尝试下
                 </button>
               </Link>
               <Link href="/web3-guide">
