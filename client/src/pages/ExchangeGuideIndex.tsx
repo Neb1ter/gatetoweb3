@@ -4,6 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ChevronRight, ArrowLeft, BookOpen, TrendingUp, Zap, Shield, Coins, Globe, BarChart2, Bot, Users, Repeat, Star, Layers, Gift, Gamepad2 } from "lucide-react";
 import { useScrollMemory } from "@/hooks/useScrollMemory";
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   "📊": <BarChart2 className="w-5 h-5" />,
@@ -509,6 +510,8 @@ function CompareTab({ zh, selectedExchange, setSelectedExchange }: {
           </Link>
         </div>
       </div>
+      {/* 右下角回到顶部按钮 */}
+      <ScrollToTopButton color="yellow" />
     </div>
   );
 }

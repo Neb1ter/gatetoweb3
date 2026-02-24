@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import Web3ChapterNav from "@/components/Web3ChapterNav";
 import { useScrollMemory } from '@/hooks/useScrollMemory';
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -326,6 +327,8 @@ export default function WhatIsWeb3() {
           </div>
         </FadeIn>
       </div>
+      {/* 右下角回到顶部按钮 */}
+      <ScrollToTopButton color="emerald" />
     </div>
   );
 }

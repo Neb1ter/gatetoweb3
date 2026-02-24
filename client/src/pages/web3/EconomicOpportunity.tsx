@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import Web3ChapterNav from "@/components/Web3ChapterNav";
 import { useScrollMemory } from '@/hooks/useScrollMemory';
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 
 // ============================================================
 // 工具 Hook：滚动进入视野触发动画
@@ -597,6 +598,8 @@ export default function EconomicOpportunity() {
           </Link>
         </div>
       </div>
+      {/* 右下角回到顶部按钮 */}
+      <ScrollToTopButton color="emerald" />
     </div>
   );
 }

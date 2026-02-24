@@ -10,6 +10,7 @@ import {
   ArrowUp, ChevronDown, BookOpen,
 } from 'lucide-react';
 import { useScrollMemory } from '@/hooks/useScrollMemory';
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 
 // Emoji map for each exchange slug
 const EXCHANGE_META: Record<string, { emoji: string; color: string }> = {
@@ -569,6 +570,8 @@ export default function Home() {
           </p>
         </div>
       </footer>
+      {/* 右下角回到顶部按钮 */}
+      <ScrollToTopButton color="yellow" />
     </div>
   );
 }

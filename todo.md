@@ -80,4 +80,10 @@
 
 ## /web3-guide 回到顶部按钮
 - [x] 在 Web3Guide.tsx 右下角添加悬浮圆形「回到顶部」按鈕（滚动 300px 后显示，点击平滑滚动到页面顶部）
-- [ ] 保存检查点
+- [x] 保存检查点
+
+## 全站「回到顶部」按钮扩展
+- [x] 创建可复用 ScrollToTopButton 组件（含 Tooltip），替换 Web3Guide 内联实现
+- [x] 为 Web3 7个章节页批量添加 ScrollToTopButton
+- [x] 为 /crypto-saving 和 /exchange-guide 添加 ScrollToTopButton
+- [x] 验证所有页面效果并保存检查点
