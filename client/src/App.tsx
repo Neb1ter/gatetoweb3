@@ -22,6 +22,12 @@ import InvestmentGateway from "./pages/web3/InvestmentGateway";
 import EconomicOpportunity from "@/pages/web3/EconomicOpportunity";
 import ExchangeGuideIndex from "@/pages/ExchangeGuideIndex";
 import ExchangeFeatureDetail from "@/pages/ExchangeFeatureDetail";
+import SpotSim from "@/pages/sim/SpotSim";
+import FuturesSim from "@/pages/sim/FuturesSim";
+import TradFiSim from "@/pages/sim/TradFiSim";
+import MarginSim from "@/pages/sim/MarginSim";
+import OptionsSim from "@/pages/sim/OptionsSim";
+import BotSim from "@/pages/sim/BotSim";
 import { useEffect, useRef, useState } from "react";
 
 // ============================================================
@@ -88,8 +94,17 @@ function Router() {
         <Route path={"/web3-guide/investment-gateway"} component={InvestmentGateway} />
         <Route path="/web3-guide/economic-opportunity" component={EconomicOpportunity} />
         <Route path="/exchange-guide" component={ExchangeGuideIndex} />
-        <Route path="/exchange-guide/:featureSlug" component={ExchangeFeatureDetail} />
-        <Route path={"/404"} component={NotFound} />
+         <Route path="/exchange-guide/:featureSlug" component={ExchangeFeatureDetail} />
+
+        {/* 模拟交易游戏 */}
+        <Route path="/sim/spot" component={SpotSim} />
+        <Route path="/sim/futures" component={FuturesSim} />
+        <Route path="/sim/tradfi" component={TradFiSim} />
+        <Route path="/sim/margin" component={MarginSim} />
+        <Route path="/sim/options" component={OptionsSim} />
+        <Route path="/sim/bot" component={BotSim} />
+
+        <Route path={"404"} component={NotFound} />
         <Route component={NotFound} />
       </Switch>
     </PageTransition>

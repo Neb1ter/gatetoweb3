@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useParams } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ArrowLeft, ChevronDown, ChevronUp, Star, CheckCircle, XCircle, AlertCircle, ExternalLink, MessageCircle, HelpCircle, TrendingUp, Shield, Zap, Users } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronUp, Star, CheckCircle, XCircle, AlertCircle, ExternalLink, MessageCircle, HelpCircle, TrendingUp, Shield, Zap, Users, Gamepad2 } from "lucide-react";
 
 // 功能详细内容数据（静态内容，配合数据库动态数据）
 const FEATURE_CONTENT: Record<string, {
@@ -692,6 +692,41 @@ export default function ExchangeFeatureDetail() {
             ))}
           </div>
         </section>
+
+        {/* 模拟游戏入口 */}
+        {["spot", "futures", "tradfi", "margin", "options", "bot"].includes(featureSlug ?? "") && (() => {
+          const simMap: Record<string, { path: string; label: string; desc: string; color: string; gradient: string }> = {
+            spot: { path: "/sim/spot", label: "现货交易模拟器", desc: "实时K线 · 买卖操作 · 盈亏统计", color: "text-green-400", gradient: "from-green-500/20 to-emerald-500/10 border-green-500/30" },
+            futures: { path: "/sim/futures", label: "合约交易模拟器", desc: "多空方向 · 杠杆选择 · 爆仓体验", color: "text-red-400", gradient: "from-red-500/20 to-orange-500/10 border-red-500/30" },
+            tradfi: { path: "/sim/tradfi", label: "传统金融对比模拟器", desc: "股票/债券/加密 · 对比体验", color: "text-blue-400", gradient: "from-blue-500/20 to-cyan-500/10 border-blue-500/30" },
+            margin: { path: "/sim/margin", label: "杠杆交易模拟器", desc: "借贷利息 · 追保通知 · 强平体验", color: "text-orange-400", gradient: "from-orange-500/20 to-yellow-500/10 border-orange-500/30" },
+            options: { path: "/sim/options", label: "期权交易模拟器", desc: "行权价 · 到期日 · Greeks展示", color: "text-purple-400", gradient: "from-purple-500/20 to-pink-500/10 border-purple-500/30" },
+            bot: { path: "/sim/bot", label: "交易机器人模拟器", desc: "网格/DCA/均线/RSI · 自动执行", color: "text-cyan-400", gradient: "from-cyan-500/20 to-blue-500/10 border-cyan-500/30" },
+          };
+          const sim = simMap[featureSlug ?? ""];
+          if (!sim) return null;
+          return (
+            <section className={`bg-gradient-to-br ${sim.gradient} border rounded-2xl p-6 sm:p-8`}>
+              <div className="flex flex-col sm:flex-row items-center gap-6">
+                <div className="flex-1 text-center sm:text-left">
+                  <div className="flex items-center gap-2 justify-center sm:justify-start mb-2">
+                    <Gamepad2 className={`w-6 h-6 ${sim.color}`} />
+                    <span className={`text-xs font-bold uppercase tracking-wider ${sim.color}`}>模拟游戏</span>
+                  </div>
+                  <h3 className="text-xl font-black text-white mb-1">亲身体验 {content?.title}</h3>
+                  <p className="text-slate-300 text-sm mb-1">{sim.desc}</p>
+                  <p className="text-slate-400 text-xs">无需真实资金 · 模拟真实市场 · 即时反馈</p>
+                </div>
+                <Link href={sim.path}>
+                  <button className={`px-8 py-4 rounded-2xl font-black text-lg transition-all hover:scale-105 bg-gradient-to-r ${sim.color.replace('text-', 'from-').replace('-400', '-500')} to-transparent border-2 ${sim.color.replace('text-', 'border-')} text-white whitespace-nowrap flex items-center gap-3`}>
+                    <Gamepad2 className="w-5 h-5" />
+                    进入模拟游戏 →
+                  </button>
+                </Link>
+              </div>
+            </section>
+          );
+        })()}
 
         {/* 底部 CTA */}
         <section className="bg-gradient-to-br from-yellow-500/10 to-orange-500/5 border border-yellow-500/20 rounded-2xl p-6 sm:p-8 text-center">
