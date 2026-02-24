@@ -1,0 +1,8 @@
+{
+  "query": "SELECT slug, name_zh FROM exchange_feature_categories;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2MiaQpkmM6oaaZ3.root --database Eu4gfEEBL6vbxsxR6cJGm2 --execute SELECT slug, name_zh FROM exchange_feature_categories;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'name_zh' in 'field list'"
+  ]
+}

@@ -47,3 +47,7 @@
 - [x] 在各详情页测验下方添加「进入模拟渃8戏」入口按鈕
 - [x] 注册6条路由到 App.tsx
 - [x] 验证全流程并保存检查点
+
+## Bug 修复
+- [x] 修复 /exchange-guide 详情页缺少「进入模拟游戏」入口按鈕的问题（入口加到了 ExchangeGuideIndex.tsx 的 FeatureDetail 组件中）
+- [x] 验证6个交易模块详情页均能正确跳转对应模拟游戏

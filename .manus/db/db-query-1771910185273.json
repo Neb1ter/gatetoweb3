@@ -1,0 +1,62 @@
+{
+  "query": "SELECT slug, nameZh FROM exchange_feature_categories ORDER BY sortOrder;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2MiaQpkmM6oaaZ3.root --database Eu4gfEEBL6vbxsxR6cJGm2 --execute SELECT slug, nameZh FROM exchange_feature_categories ORDER BY sortOrder;",
+  "rows": [
+    {
+      "slug": "spot",
+      "nameZh": "现货交易"
+    },
+    {
+      "slug": "futures",
+      "nameZh": "合约交易"
+    },
+    {
+      "slug": "margin",
+      "nameZh": "杠杆交易"
+    },
+    {
+      "slug": "tradfi",
+      "nameZh": "传统金融(TradFi)"
+    },
+    {
+      "slug": "earn",
+      "nameZh": "理财产品"
+    },
+    {
+      "slug": "web3",
+      "nameZh": "Web3 / DeFi"
+    },
+    {
+      "slug": "options",
+      "nameZh": "期权交易"
+    },
+    {
+      "slug": "copy",
+      "nameZh": "跟单交易"
+    },
+    {
+      "slug": "community",
+      "nameZh": "社区与广场"
+    },
+    {
+      "slug": "bot",
+      "nameZh": "交易机器人"
+    },
+    {
+      "slug": "otc",
+      "nameZh": "OTC 大宗交易"
+    },
+    {
+      "slug": "launchpad",
+      "nameZh": "打新 / Launchpad"
+    },
+    {
+      "slug": "ecosystem",
+      "nameZh": "生态与平台币"
+    }
+  ],
+  "messages": [],
+  "stdout": "slug\tnameZh\nspot\t现货交易\nfutures\t合约交易\nmargin\t杠杆交易\ntradfi\t传统金融(TradFi)\nearn\t理财产品\nweb3\tWeb3 / DeFi\noptions\t期权交易\ncopy\t跟单交易\ncommunity\t社区与广场\nbot\t交易机器人\notc\tOTC 大宗交易\nlaunchpad\t打新 / Launchpad\necosystem\t生态与平台币\n",
+  "stderr": "",
+  "execution_time_ms": 1492
+}

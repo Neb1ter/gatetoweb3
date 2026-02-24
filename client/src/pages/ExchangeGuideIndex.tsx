@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ChevronRight, ArrowLeft, BookOpen, TrendingUp, Zap, Shield, Coins, Globe, BarChart2, Bot, Users, Repeat, Star, Layers, Gift } from "lucide-react";
+import { ChevronRight, ArrowLeft, BookOpen, TrendingUp, Zap, Shield, Coins, Globe, BarChart2, Bot, Users, Repeat, Star, Layers, Gift, Gamepad2 } from "lucide-react";
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   "📊": <BarChart2 className="w-5 h-5" />,
@@ -331,7 +331,7 @@ function FeatureDetail({ category, zh }: {
       )}
 
       {/* Pro Tips */}
-      <div className="rounded-2xl border border-yellow-500/20 bg-yellow-500/5 p-5">
+      <div className="rounded-2xl border border-yellow-500/20 bg-yellow-500/5 p-5 mb-6">
         <h3 className="text-sm font-black text-yellow-400 mb-3">
           💡 {zh ? "新手必知" : "Pro Tips"}
         </h3>
@@ -344,6 +344,46 @@ function FeatureDetail({ category, zh }: {
           ))}
         </ul>
       </div>
+
+      {/* Simulation Game Entry */}
+      {(() => {
+        const SIM_MAP: Record<string, { path: string; labelZh: string; labelEn: string; descZh: string; descEn: string; color: string; borderColor: string; bgColor: string }> = {
+          spot:    { path: "/sim/spot",    labelZh: "现货交易模拟器",     labelEn: "Spot Trading Sim",    descZh: "实时K线 · 买卖操作 · 盈亏统计",     descEn: "Live chart · Buy/Sell · P&L tracking",  color: "text-green-400",  borderColor: "border-green-500/40",  bgColor: "bg-green-500/10" },
+          futures: { path: "/sim/futures", labelZh: "合约交易模拟器",     labelEn: "Futures Trading Sim", descZh: "多空方向 · 杠杆选择 · 爆仓体验",     descEn: "Long/Short · Leverage · Liquidation",  color: "text-red-400",    borderColor: "border-red-500/40",    bgColor: "bg-red-500/10" },
+          tradfi:  { path: "/sim/tradfi",  labelZh: "传统金融对比模拟器", labelEn: "TradFi vs Crypto",   descZh: "股票/债券/加密 · 对比体验",         descEn: "Stocks/Bonds/Crypto · Side-by-side",  color: "text-blue-400",   borderColor: "border-blue-500/40",   bgColor: "bg-blue-500/10" },
+          margin:  { path: "/sim/margin",  labelZh: "杠杆交易模拟器",     labelEn: "Margin Trading Sim",  descZh: "借贷利息 · 追保通知 · 强平体验",     descEn: "Borrow interest · Margin call · Liq", color: "text-orange-400", borderColor: "border-orange-500/40", bgColor: "bg-orange-500/10" },
+          options: { path: "/sim/options", labelZh: "期权交易模拟器",     labelEn: "Options Trading Sim", descZh: "行权价 · 到期日 · Greeks展示",       descEn: "Strike · Expiry · Greeks display",    color: "text-purple-400", borderColor: "border-purple-500/40", bgColor: "bg-purple-500/10" },
+          bot:     { path: "/sim/bot",     labelZh: "交易机器人模拟器",   labelEn: "Trading Bot Sim",    descZh: "网格/DCA/均线/RSI · 自动执行",         descEn: "Grid/DCA/MA/RSI · Auto-execute",      color: "text-cyan-400",   borderColor: "border-cyan-500/40",   bgColor: "bg-cyan-500/10" },
+        };
+        const sim = SIM_MAP[category.slug];
+        if (!sim) return null;
+        return (
+          <div className={`rounded-2xl border ${sim.borderColor} ${sim.bgColor} p-6`}>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <Gamepad2 className={`w-5 h-5 ${sim.color}`} />
+                  <span className={`text-xs font-bold uppercase tracking-wider ${sim.color}`}>
+                    {zh ? "模拟游戏" : "Simulation"}
+                  </span>
+                </div>
+                <h3 className="text-lg font-black text-white mb-1">
+                  {zh ? `亲身体验 ${category.nameZh}` : `Try ${category.nameEn}`}
+                </h3>
+                <p className={`text-sm mb-1 ${sim.color}`}>{zh ? sim.labelZh : sim.labelEn}</p>
+                <p className="text-slate-400 text-xs">{zh ? sim.descZh : sim.descEn}</p>
+                <p className="text-slate-500 text-xs mt-1">{zh ? "无需真实资金 · 模拟真实市场 · 即时反馈" : "No real money · Real market sim · Instant feedback"}</p>
+              </div>
+              <Link href={sim.path}>
+                <button className={`w-full sm:w-auto px-6 py-3 rounded-xl font-black text-sm transition-all hover:scale-105 active:scale-95 border ${sim.borderColor} ${sim.bgColor} ${sim.color} hover:brightness-125 flex items-center justify-center gap-2 whitespace-nowrap`}>
+                  <Gamepad2 className="w-4 h-4" />
+                  {zh ? "进入模拟游戏 →" : "Play Simulation →"}
+                </button>
+              </Link>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
