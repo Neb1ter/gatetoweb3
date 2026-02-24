@@ -127,20 +127,28 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-24 px-4 bg-gradient-to-b from-background to-card/30 text-center">
-        <div className="container mx-auto">
-          <div className="inline-block bg-accent/10 border border-accent/30 text-accent text-sm px-4 py-2 rounded-full mb-6">
+      <section className="relative py-28 px-4 text-center overflow-hidden" style={{ background: 'linear-gradient(160deg, #0a192f 0%, #0f2744 40%, #0a1f38 70%, #0a192f 100%)' }}>
+        {/* 背景装饰光晕 */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full" style={{ background: 'radial-gradient(ellipse, rgba(255,215,0,0.07) 0%, transparent 70%)' }} />
+          <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(ellipse, rgba(255,165,0,0.05) 0%, transparent 70%)' }} />
+          <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(ellipse, rgba(255,215,0,0.05) 0%, transparent 70%)' }} />
+        </div>
+        <div className="container mx-auto relative">
+          <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold px-4 py-2 rounded-full mb-8 uppercase tracking-widest">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
             {texts.hero.badge}
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
+          <h1 className="text-5xl md:text-7xl font-black text-white mb-5 leading-tight tracking-tight">
             {texts.hero.title}
           </h1>
-          <p className="text-2xl text-accent font-semibold mb-4">{texts.hero.subtitle}</p>
-          <p className="text-muted-foreground text-lg mb-10 max-w-2xl mx-auto">{texts.hero.description}</p>
+          <p className="text-2xl md:text-3xl font-bold mb-4" style={{ color: '#FFD700', textShadow: '0 0 30px rgba(255,215,0,0.3)' }}>{texts.hero.subtitle}</p>
+          <p className="text-slate-400 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">{texts.hero.description}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              className="bg-accent text-accent-foreground hover:bg-accent/90 text-lg px-8"
+              className="text-lg px-8 font-bold shadow-lg transition-all hover:scale-105"
+              style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)', color: '#0A192F', boxShadow: '0 4px 20px rgba(255,215,0,0.35)' }}
               onClick={() => insightRef.current?.scrollIntoView({ behavior: 'smooth' })}
             >
               {texts.hero.startBtn}
@@ -148,56 +156,60 @@ export default function Home() {
             <Button
               size="lg"
               variant="outline"
-              className="border-accent text-accent hover:bg-accent/10 text-lg px-8"
+              className="border-amber-500/50 text-amber-400 hover:bg-amber-500/10 text-lg px-8 font-bold"
               onClick={() => comparisonRef.current?.scrollIntoView({ behavior: 'smooth' })}
             >
               {texts.hero.caseBtn}
             </Button>
           </div>
-          <div className="mt-12 animate-bounce">
-            <ChevronDown className="text-accent mx-auto" size={32} />
+          <div className="mt-14 animate-bounce">
+            <ChevronDown className="text-amber-400/60 mx-auto" size={28} />
           </div>
         </div>
       </section>
 
       {/* Newbie 3-Step Guide */}
-      <section className="py-20 px-4 bg-card/20">
+      <section className="py-20 px-4" style={{ background: 'linear-gradient(180deg, rgba(23,42,69,0.4) 0%, rgba(10,25,47,0.8) 100%)' }}>
         <div className="container mx-auto">
-          <h2 className="text-4xl font-bold mb-2 text-accent text-center">{texts.newbieGuide.title}</h2>
-          <p className="text-muted-foreground mb-12 text-lg text-center">{texts.newbieGuide.subtitle}</p>
-          <div className="grid md:grid-cols-3 gap-8 mb-10">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.newbieGuide.title}</h2>
+            <p className="text-slate-400 text-lg max-w-xl mx-auto">{texts.newbieGuide.subtitle}</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 mb-10">
             {[
               { num: '1', title: texts.newbieGuide.step1, desc: texts.newbieGuide.step1Desc },
               { num: '2', title: texts.newbieGuide.step2, desc: texts.newbieGuide.step2Desc },
               { num: '3', title: texts.newbieGuide.step3, desc: texts.newbieGuide.step3Desc },
             ].map((step) => (
-              <div key={step.num} className="bg-card p-8 rounded-lg border border-border text-center">
-                <div className="bg-accent text-accent-foreground rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+              <div key={step.num} className="group bg-card/60 backdrop-blur-sm p-8 rounded-2xl border border-amber-500/15 hover:border-amber-500/40 hover:bg-card/80 transition-all duration-300 text-center" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
+                <div className="w-14 h-14 flex items-center justify-center mx-auto mb-5 rounded-2xl text-xl font-black text-black group-hover:scale-110 transition-transform" style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)', boxShadow: '0 4px 12px rgba(255,215,0,0.3)' }}>
                   {step.num}
                 </div>
-                <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-                <p className="text-muted-foreground">{step.desc}</p>
+                <h3 className="text-lg font-black text-white mb-3">{step.title}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>
-          <div className="bg-accent/10 border border-accent rounded-lg p-4 text-center mb-8">
-            <p className="text-accent font-semibold">{texts.newbieGuide.warning}</p>
+          <div className="flex items-center gap-3 bg-amber-500/8 border border-amber-500/25 rounded-xl p-4 text-center mb-8">
+            <span className="text-amber-400 text-xl shrink-0">⚠️</span>
+            <p className="text-amber-300 font-semibold text-sm">{texts.newbieGuide.warning}</p>
           </div>
 
           {/* Beginner Guide CTA */}
-          <div className="bg-card border border-border rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="bg-card/60 border border-amber-500/20 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
             <div className="flex items-center gap-4">
-              <div className="bg-accent/10 rounded-full p-4">
-                <BookOpen className="text-accent" size={32} />
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0" style={{ background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.25)' }}>
+                <BookOpen style={{ color: '#FFD700' }} size={28} />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white mb-1">{texts.newbieGuide.learnMore}</h3>
-                <p className="text-muted-foreground">{texts.newbieGuide.learnMoreDesc}</p>
+                <h3 className="text-lg font-black text-white mb-1">{texts.newbieGuide.learnMore}</h3>
+                <p className="text-slate-400 text-sm">{texts.newbieGuide.learnMoreDesc}</p>
               </div>
             </div>
             <Button
               size="lg"
-              className="bg-accent text-accent-foreground hover:bg-accent/90 whitespace-nowrap"
+              className="whitespace-nowrap font-bold hover:scale-105 transition-transform"
+              style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)', color: '#0A192F', boxShadow: '0 4px 16px rgba(255,215,0,0.25)' }}
               onClick={() => navigate('/beginner')}
             >
               {texts.newbieGuide.learnMoreBtn}
@@ -252,9 +264,10 @@ export default function Home() {
       {/* Exchange Download Section */}
       <section ref={downloadRef as React.RefObject<HTMLElement>} className="py-20 px-4 bg-background">
         <div className="container mx-auto">
-          <h2 className="text-4xl font-bold mb-2 text-accent text-center">{texts.exchangeDownload.title}</h2>
-          <p className="text-muted-foreground mb-12 text-lg text-center">{texts.exchangeDownload.subtitle}</p>
-
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.exchangeDownload.title}</h2>
+            <p className="text-slate-400 text-lg">{texts.exchangeDownload.subtitle}</p>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
             {(exchangeLinksData ?? []).map((ex) => {
               const meta = EXCHANGE_META[ex.slug] ?? { emoji: '💱', color: 'from-gray-800 to-gray-900' };
@@ -264,12 +277,13 @@ export default function Home() {
                 href={ex.referralLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`bg-gradient-to-b ${meta.color} border border-border rounded-xl p-6 flex flex-col items-center gap-3 hover:border-accent transition group`}
+                className={`group relative bg-gradient-to-b ${meta.color} border border-amber-500/15 rounded-2xl p-6 flex flex-col items-center gap-3 hover:border-amber-500/50 transition-all duration-300 hover:-translate-y-1`}
+                style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.25)' }}
               >
-                <div className="text-4xl group-hover:scale-110 transition">{meta.emoji}</div>
-                <span className="text-lg font-bold text-white">{ex.name}</span>
-                <span className="text-xs bg-accent/20 text-accent px-2 py-1 rounded-full font-semibold">返佣 {ex.rebateRate}</span>
-                <span className="text-xs text-accent font-medium">{texts.exchangeDownload.download} ↗</span>
+                <div className="text-4xl group-hover:scale-110 transition-transform duration-300">{meta.emoji}</div>
+                <span className="text-base font-black text-white">{ex.name}</span>
+                <span className="text-xs px-2.5 py-1 rounded-full font-bold" style={{ background: 'rgba(255,215,0,0.15)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.25)' }}>返佣 {ex.rebateRate}</span>
+                <span className="text-xs font-semibold" style={{ color: '#FFA500' }}>{texts.exchangeDownload.download} ↗</span>
               </a>
               );
             })}
@@ -301,26 +315,28 @@ export default function Home() {
       </section>
 
       {/* What is Rebate */}
-      <section ref={insightRef as React.RefObject<HTMLElement>} className="py-20 px-4 bg-card/30">
+      <section ref={insightRef as React.RefObject<HTMLElement>} className="py-20 px-4" style={{ background: 'linear-gradient(180deg, rgba(23,42,69,0.5) 0%, rgba(10,25,47,0.9) 100%)' }}>
         <div className="container mx-auto text-center">
-          <h2 className="text-5xl font-bold text-accent mb-4">
+          <h2 className="text-5xl font-black mb-4" style={{ color: '#FFD700', textShadow: '0 0 40px rgba(255,215,0,0.2)' }}>
             {language === 'zh' ? '什么是返佣？' : 'What is Rebate?'}
           </h2>
-          <p className="text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">
+          <p className="text-slate-300 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
             {language === 'zh'
               ? '返佣是交易所为了吸引新用户而提供的激励机制。当您通过邀请码注册时，交易所会自动将您的交易手续费的一部分返还给您，这就是返佣。'
               : 'Rebates are incentive mechanisms provided by exchanges to attract new users. When you register with a referral code, the exchange automatically returns a portion of your trading fees to you.'}
           </p>
           <div className="grid md:grid-cols-3 gap-6 mt-8">
             {[
-              { icon: <Gift className="text-accent mx-auto mb-3" size={32} />, title: language === 'zh' ? '自动返还' : 'Auto Return', desc: language === 'zh' ? '每笔交易手续费的一部分自动返还到您的账户' : 'A portion of each trade fee is automatically returned to your account' },
-              { icon: <TrendingUp className="text-accent mx-auto mb-3" size={32} />, title: language === 'zh' ? '持续收益' : 'Ongoing Income', desc: language === 'zh' ? '只要您继续交易，就能持续获得返佣' : 'As long as you keep trading, you keep earning rebates' },
-              { icon: <CheckCircle2 className="text-accent mx-auto mb-3" size={32} />, title: language === 'zh' ? '官方支持' : 'Official Support', desc: language === 'zh' ? '这是交易所官方的正规激励机制' : 'This is the official legitimate incentive mechanism of exchanges' },
+              { icon: <Gift size={28} />, title: language === 'zh' ? '自动返还' : 'Auto Return', desc: language === 'zh' ? '每笔交易手续费的一部分自动返还到您的账户' : 'A portion of each trade fee is automatically returned to your account' },
+              { icon: <TrendingUp size={28} />, title: language === 'zh' ? '持续收益' : 'Ongoing Income', desc: language === 'zh' ? '只要您继续交易，就能持续获得返佣' : 'As long as you keep trading, you keep earning rebates' },
+              { icon: <CheckCircle2 size={28} />, title: language === 'zh' ? '官方支持' : 'Official Support', desc: language === 'zh' ? '这是交易所官方的正规激励机制' : 'This is the official legitimate incentive mechanism of exchanges' },
             ].map((item, i) => (
-              <div key={i} className="bg-card p-6 rounded-lg border border-border hover:border-accent transition">
-                {item.icon}
-                <h3 className="font-bold mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">{item.desc}</p>
+              <div key={i} className="group bg-card/60 backdrop-blur-sm p-7 rounded-2xl border border-amber-500/15 hover:border-amber-500/40 hover:bg-card/80 transition-all duration-300" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform" style={{ background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.2)', color: '#FFD700' }}>
+                  {item.icon}
+                </div>
+                <h3 className="font-black text-white mb-2">{item.title}</h3>
+                <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -330,45 +346,46 @@ export default function Home() {
       {/* Core Insight */}
       <section className="py-20 px-4 bg-background">
         <div className="container mx-auto">
-          <h2 className="text-4xl font-bold mb-4 text-accent">{texts.insight.title}</h2>
-          <p className="text-muted-foreground mb-12 text-lg">{texts.insight.subtitle}</p>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-card p-8 rounded-lg border border-border">
-              <TrendingUp className="text-accent mb-4" size={32} />
-              <h3 className="text-xl font-bold mb-3">{texts.insight.cost.title}</h3>
-              <p className="text-muted-foreground">{texts.insight.cost.desc}</p>
-            </div>
-            <div className="bg-card p-8 rounded-lg border border-border">
-              <CheckCircle2 className="text-accent mb-4" size={32} />
-              <h3 className="text-xl font-bold mb-3">{texts.insight.reduce.title}</h3>
-              <p className="text-muted-foreground">{texts.insight.reduce.desc}</p>
-            </div>
-            <div className="bg-card p-8 rounded-lg border border-border">
-              <Shield className="text-accent mb-4" size={32} />
-              <h3 className="text-xl font-bold mb-3">{texts.insight.profit.title}</h3>
-              <p className="text-muted-foreground">{texts.insight.profit.desc}</p>
-            </div>
+          <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.insight.title}</h2>
+          <p className="text-slate-400 mb-12 text-lg">{texts.insight.subtitle}</p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { icon: <TrendingUp size={26} />, title: texts.insight.cost.title, desc: texts.insight.cost.desc },
+              { icon: <CheckCircle2 size={26} />, title: texts.insight.reduce.title, desc: texts.insight.reduce.desc },
+              { icon: <Shield size={26} />, title: texts.insight.profit.title, desc: texts.insight.profit.desc },
+            ].map((item, i) => (
+              <div key={i} className="group bg-card/60 p-7 rounded-2xl border border-amber-500/15 hover:border-amber-500/35 hover:bg-card/80 transition-all duration-300" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform" style={{ background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.2)', color: '#FFD700' }}>
+                  {item.icon}
+                </div>
+                <h3 className="text-lg font-black text-white mb-2">{item.title}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Mechanism */}
-      <section id="mechanism" className="py-20 px-4 bg-card/30">
+      <section id="mechanism" className="py-20 px-4" style={{ background: 'linear-gradient(180deg, rgba(23,42,69,0.4) 0%, rgba(10,25,47,0.8) 100%)' }}>
         <div className="container mx-auto">
-          <h2 className="text-4xl font-bold mb-4 text-accent">{texts.mechanism.title}</h2>
-          <p className="text-muted-foreground mb-12 text-lg">{texts.mechanism.subtitle}</p>
+          <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.mechanism.title}</h2>
+          <p className="text-slate-400 mb-12 text-lg">{texts.mechanism.subtitle}</p>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { icon: <Users className="text-accent" size={32} />, title: texts.mechanism.demand.title, desc: texts.mechanism.demand.desc },
-              { icon: <Gift className="text-accent" size={32} />, title: texts.mechanism.incentive.title, desc: texts.mechanism.incentive.desc },
-              { icon: <CheckCircle2 className="text-accent" size={32} />, title: texts.mechanism.winwin.title, desc: texts.mechanism.winwin.desc },
+              { icon: <Users size={28} />, title: texts.mechanism.demand.title, desc: texts.mechanism.demand.desc, step: '01' },
+              { icon: <Gift size={28} />, title: texts.mechanism.incentive.title, desc: texts.mechanism.incentive.desc, step: '02' },
+              { icon: <CheckCircle2 size={28} />, title: texts.mechanism.winwin.title, desc: texts.mechanism.winwin.desc, step: '03' },
             ].map((item, i) => (
-              <div key={i} className="text-center">
-                <div className="bg-accent/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 border border-accent">
+              <div key={i} className="group text-center relative">
+                {/* 连接线 */}
+                {i < 2 && <div className="hidden md:block absolute top-8 left-full w-full h-px z-0" style={{ background: 'linear-gradient(90deg, rgba(255,215,0,0.3), transparent)' }} />}
+                <div className="relative z-10 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform" style={{ background: 'linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,165,0,0.08))', border: '1px solid rgba(255,215,0,0.3)', color: '#FFD700' }}>
                   {item.icon}
+                  <span className="absolute -top-2 -right-2 text-xs font-black rounded-full w-5 h-5 flex items-center justify-center" style={{ background: '#FFD700', color: '#0A192F', fontSize: '9px' }}>{item.step}</span>
                 </div>
-                <h3 className="text-xl font-bold mb-3">{item.title}</h3>
-                <p className="text-muted-foreground">{item.desc}</p>
+                <h3 className="text-lg font-black text-white mb-3">{item.title}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -378,28 +395,28 @@ export default function Home() {
       {/* Comparison - New vs Old Users */}
       <section id="comparison" ref={comparisonRef as React.RefObject<HTMLElement>} className="py-20 px-4 bg-background">
         <div className="container mx-auto">
-          <h2 className="text-4xl font-bold mb-4 text-accent">{texts.comparison.title}</h2>
-          <p className="text-muted-foreground mb-12 text-lg">{texts.comparison.subtitle}</p>
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* New User */}
-            <div className="bg-card p-8 rounded-lg border border-accent">
+          <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.comparison.title}</h2>
+          <p className="text-slate-400 mb-12 text-lg">{texts.comparison.subtitle}</p>
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* New User — 黄色高亮 */}
+            <div className="bg-card/60 p-8 rounded-2xl border" style={{ borderColor: 'rgba(255,215,0,0.4)', boxShadow: '0 4px 24px rgba(255,215,0,0.08)' }}>
               <div className="text-4xl mb-4">👤</div>
-              <h3 className="text-2xl font-bold mb-6 text-accent">{texts.comparison.newUser}</h3>
+              <h3 className="text-xl font-black mb-6" style={{ color: '#FFD700' }}>{texts.comparison.newUser}</h3>
               {[texts.comparison.step1New, texts.comparison.step2New, texts.comparison.step3New].map((step, i) => (
                 <div key={i} className="flex items-start gap-3 mb-4">
-                  <div className="bg-accent text-accent-foreground rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">{i + 1}</div>
-                  <p className="text-muted-foreground">{step}</p>
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-black shrink-0 mt-0.5" style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)', color: '#0A192F' }}>{i + 1}</div>
+                  <p className="text-slate-300 text-sm leading-relaxed">{step}</p>
                 </div>
               ))}
             </div>
             {/* Old User */}
-            <div className="bg-card p-8 rounded-lg border border-border">
+            <div className="bg-card/60 p-8 rounded-2xl border border-white/10">
               <div className="text-4xl mb-4">👥</div>
-              <h3 className="text-2xl font-bold mb-6">{texts.comparison.oldUser}</h3>
+              <h3 className="text-xl font-black text-slate-300 mb-6">{texts.comparison.oldUser}</h3>
               {[texts.comparison.step1Old, texts.comparison.step2Old, texts.comparison.step3Old].map((step, i) => (
                 <div key={i} className="flex items-start gap-3 mb-4">
-                  <div className="bg-accent/20 text-accent rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">{i + 1}</div>
-                  <p className="text-muted-foreground">{step}</p>
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold shrink-0 mt-0.5" style={{ background: 'rgba(255,215,0,0.15)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.25)' }}>{i + 1}</div>
+                  <p className="text-slate-400 text-sm leading-relaxed">{step}</p>
                 </div>
               ))}
             </div>
@@ -408,29 +425,29 @@ export default function Home() {
       </section>
 
       {/* Case Study */}
-      <section className="py-20 px-4 bg-card/30">
+      <section className="py-20 px-4" style={{ background: 'linear-gradient(180deg, rgba(23,42,69,0.4) 0%, rgba(10,25,47,0.8) 100%)' }}>
         <div className="container mx-auto">
-          <h2 className="text-4xl font-bold mb-4 text-accent">{texts.caseStudy.title}</h2>
-          <p className="text-muted-foreground mb-12 text-lg">{texts.caseStudy.subtitle}</p>
-          <div className="bg-card rounded-xl border border-accent p-8">
-            <div className="grid md:grid-cols-4 gap-6 text-center mb-8">
+          <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.caseStudy.title}</h2>
+          <p className="text-slate-400 mb-12 text-lg">{texts.caseStudy.subtitle}</p>
+          <div className="bg-card/60 rounded-2xl border p-8" style={{ borderColor: 'rgba(255,215,0,0.25)', boxShadow: '0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,215,0,0.05)' }}>
+            <div className="grid md:grid-cols-4 gap-4 text-center mb-8">
               {[
-                { label: texts.caseStudy.monthlyVolume, value: '$1,000,000', color: 'text-white' },
-                { label: texts.caseStudy.standardFee, value: '$1,000', color: 'text-destructive' },
-                { label: texts.caseStudy.rebateAmount, value: '$600', color: 'text-accent' },
-                { label: texts.caseStudy.actualFee, value: '$400', color: 'text-green-400' },
+                { label: texts.caseStudy.monthlyVolume, value: '$1,000,000', color: '#ffffff' },
+                { label: texts.caseStudy.standardFee, value: '$1,000', color: '#f87171' },
+                { label: texts.caseStudy.rebateAmount, value: '$600', color: '#FFD700' },
+                { label: texts.caseStudy.actualFee, value: '$400', color: '#4ade80' },
               ].map((item, i) => (
-                <div key={i} className="bg-background/50 rounded-lg p-4">
-                  <p className="text-muted-foreground text-sm mb-2">{item.label}</p>
-                  <p className={`text-3xl font-bold ${item.color}`}>{item.value}</p>
+                <div key={i} className="bg-background/40 rounded-xl p-5 border border-white/5">
+                  <p className="text-slate-500 text-xs font-medium mb-2 uppercase tracking-wider">{item.label}</p>
+                  <p className="text-3xl font-black" style={{ color: item.color }}>{item.value}</p>
                 </div>
               ))}
             </div>
-            <div className="text-center border-t border-border pt-6">
-              <p className="text-2xl font-bold text-accent mb-2">
-                {texts.caseStudy.summary} <span className="text-4xl">$600</span>，{texts.caseStudy.yearly} <span className="text-4xl">$7,200</span>
+            <div className="text-center border-t pt-6" style={{ borderColor: 'rgba(255,215,0,0.15)' }}>
+              <p className="text-xl font-black mb-2" style={{ color: '#FFD700' }}>
+                {texts.caseStudy.summary} <span className="text-3xl">$600</span>，{texts.caseStudy.yearly} <span className="text-3xl">$7,200</span>
               </p>
-              <p className="text-muted-foreground">{texts.caseStudy.profit}</p>
+              <p className="text-slate-400 text-sm">{texts.caseStudy.profit}</p>
             </div>
           </div>
         </div>
@@ -439,50 +456,48 @@ export default function Home() {
       {/* Scenarios */}
       <section className="py-20 px-4 bg-background">
         <div className="container mx-auto">
-          <h2 className="text-4xl font-bold mb-4 text-accent">{texts.scenarios.title}</h2>
-          <p className="text-muted-foreground mb-12 text-lg">{texts.scenarios.subtitle}</p>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-card p-8 rounded-lg border border-border">
-              <h3 className="text-2xl font-bold mb-6 text-accent">{texts.scenarios.spot}</h3>
-              {[texts.scenarios.spotPoint1, texts.scenarios.spotPoint2, texts.scenarios.spotPoint3].map((p, i) => (
-                <div key={i} className="flex items-start gap-3 mb-3">
-                  <CheckCircle2 className="text-accent flex-shrink-0 mt-0.5" size={18} />
-                  <p className="text-muted-foreground">{p}</p>
-                </div>
-              ))}
-            </div>
-            <div className="bg-card p-8 rounded-lg border border-border">
-              <h3 className="text-2xl font-bold mb-6 text-accent">{texts.scenarios.futures}</h3>
-              {[texts.scenarios.futuresPoint1, texts.scenarios.futuresPoint2, texts.scenarios.futuresPoint3].map((p, i) => (
-                <div key={i} className="flex items-start gap-3 mb-3">
-                  <CheckCircle2 className="text-accent flex-shrink-0 mt-0.5" size={18} />
-                  <p className="text-muted-foreground">{p}</p>
-                </div>
-              ))}
-            </div>
+          <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.scenarios.title}</h2>
+          <p className="text-slate-400 mb-12 text-lg">{texts.scenarios.subtitle}</p>
+          <div className="grid md:grid-cols-2 gap-6">
+            {[
+              { title: texts.scenarios.spot, points: [texts.scenarios.spotPoint1, texts.scenarios.spotPoint2, texts.scenarios.spotPoint3] },
+              { title: texts.scenarios.futures, points: [texts.scenarios.futuresPoint1, texts.scenarios.futuresPoint2, texts.scenarios.futuresPoint3] },
+            ].map((card, ci) => (
+              <div key={ci} className="bg-card/60 p-8 rounded-2xl border border-amber-500/15 hover:border-amber-500/30 transition-all" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
+                <h3 className="text-xl font-black mb-6" style={{ color: '#FFD700' }}>{card.title}</h3>
+                {card.points.map((p, i) => (
+                  <div key={i} className="flex items-start gap-3 mb-3">
+                    <CheckCircle2 className="shrink-0 mt-0.5" size={16} style={{ color: '#FFD700' }} />
+                    <p className="text-slate-300 text-sm leading-relaxed">{p}</p>
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
-          <p className="text-center text-accent font-semibold mt-8 text-lg">{texts.scenarios.note}</p>
+          <p className="text-center font-bold mt-8 text-base" style={{ color: '#FFD700' }}>{texts.scenarios.note}</p>
         </div>
       </section>
 
       {/* Security */}
-      <section id="security" className="py-20 px-4 bg-card/30">
+      <section id="security" className="py-20 px-4" style={{ background: 'linear-gradient(180deg, rgba(23,42,69,0.4) 0%, rgba(10,25,47,0.8) 100%)' }}>
         <div className="container mx-auto">
-          <h2 className="text-4xl font-bold mb-4 text-accent">{texts.security.title}</h2>
-          <p className="text-muted-foreground mb-12 text-lg">{texts.security.subtitle}</p>
-          <div className="grid md:grid-cols-2 gap-8">
+          <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.security.title}</h2>
+          <p className="text-slate-400 mb-12 text-lg">{texts.security.subtitle}</p>
+          <div className="grid md:grid-cols-2 gap-5">
             {[
-              { icon: <CheckCircle2 className="text-accent mr-3" size={28} />, title: texts.security.official, desc: texts.security.officialDesc },
-              { icon: <Shield className="text-accent mr-3" size={28} />, title: texts.security.settlement, desc: texts.security.settlementDesc },
-              { icon: <Shield className="text-accent mr-3" size={28} />, title: texts.security.security1, desc: texts.security.security1Desc },
-              { icon: <CheckCircle2 className="text-accent mr-3" size={28} />, title: texts.security.standard, desc: texts.security.standardDesc },
+              { icon: <CheckCircle2 size={22} />, title: texts.security.official, desc: texts.security.officialDesc },
+              { icon: <Shield size={22} />, title: texts.security.settlement, desc: texts.security.settlementDesc },
+              { icon: <Shield size={22} />, title: texts.security.security1, desc: texts.security.security1Desc },
+              { icon: <CheckCircle2 size={22} />, title: texts.security.standard, desc: texts.security.standardDesc },
             ].map((item, i) => (
-              <div key={i} className="bg-card p-8 rounded-lg border border-border">
-                <div className="flex items-center mb-4">
-                  {item.icon}
-                  <h3 className="text-xl font-bold">{item.title}</h3>
+              <div key={i} className="group bg-card/60 p-7 rounded-2xl border border-amber-500/15 hover:border-amber-500/30 transition-all" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.2)', color: '#FFD700' }}>
+                    {item.icon}
+                  </div>
+                  <h3 className="text-base font-black text-white">{item.title}</h3>
                 </div>
-                <p className="text-muted-foreground">{item.desc}</p>
+                <p className="text-slate-400 text-sm leading-relaxed pl-13">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -492,40 +507,43 @@ export default function Home() {
       {/* Summary & CTA */}
       <section className="py-20 px-4 bg-background">
         <div className="container mx-auto">
-          <h2 className="text-4xl font-bold mb-4 text-accent">{texts.summary.title}</h2>
-          <p className="text-muted-foreground mb-12 text-lg">{texts.summary.subtitle}</p>
-          <div className="space-y-6 mb-12">
+          <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.summary.title}</h2>
+          <p className="text-slate-400 mb-12 text-lg">{texts.summary.subtitle}</p>
+          <div className="space-y-5 mb-12">
             {[
               { title: texts.summary.point1, sub: texts.summary.point1Sub },
               { title: texts.summary.point2, sub: texts.summary.point2Sub },
               { title: texts.summary.point3, sub: texts.summary.point3Sub },
             ].map((item, i) => (
-              <div key={i} className="flex items-start">
-                <CheckCircle2 className="text-accent mr-4 flex-shrink-0 mt-1" size={24} />
+              <div key={i} className="flex items-start gap-4 bg-card/40 rounded-2xl p-5 border border-amber-500/10 hover:border-amber-500/25 transition-all">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5" style={{ background: 'rgba(255,215,0,0.12)', color: '#FFD700' }}>
+                  <CheckCircle2 size={18} />
+                </div>
                 <div>
-                  <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.sub}</p>
+                  <h3 className="text-base font-black text-white mb-1">{item.title}</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">{item.sub}</p>
                 </div>
               </div>
             ))}
           </div>
-          <div className="bg-card p-8 rounded-lg border-t-4 border-accent mb-12">
+          <div className="bg-card/60 p-8 rounded-2xl mb-12" style={{ borderTop: '3px solid #FFD700', boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
             <div className="grid md:grid-cols-2 gap-8 text-center">
               <div>
-                <p className="text-accent font-semibold text-sm mb-2">{texts.summary.step1}</p>
-                <p className="text-2xl font-bold">{texts.summary.step1Title}</p>
+                <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#FFD700' }}>{texts.summary.step1}</p>
+                <p className="text-xl font-black text-white">{texts.summary.step1Title}</p>
               </div>
               <div>
-                <p className="text-accent font-semibold text-sm mb-2">{texts.summary.step2}</p>
-                <p className="text-2xl font-bold">{texts.summary.step2Title}</p>
+                <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#FFD700' }}>{texts.summary.step2}</p>
+                <p className="text-xl font-black text-white">{texts.summary.step2Title}</p>
               </div>
             </div>
           </div>
           <div className="text-center">
-            <p className="text-lg text-muted-foreground italic mb-8">{texts.summary.cta}</p>
+            <p className="text-lg text-slate-400 italic mb-8">{texts.summary.cta}</p>
             <Button
               size="lg"
-              className="bg-accent text-accent-foreground hover:bg-accent/90"
+              className="font-bold hover:scale-105 transition-transform"
+              style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)', color: '#0A192F', boxShadow: '0 4px 20px rgba(255,215,0,0.3)' }}
               onClick={() => navigate('/contact')}
             >
               {texts.summary.contactBtn}
@@ -535,20 +553,20 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 bg-card/50 border-t border-border">
+      <footer className="py-12 px-4 border-t" style={{ background: 'rgba(10,25,47,0.95)', borderColor: 'rgba(255,215,0,0.1)' }}>
         <div className="container mx-auto text-center">
-          <h3 className="text-2xl font-bold text-white mb-4">
-            {language === 'zh' ? '让每一笔交易都更具价值' : 'Make Every Trade More Valuable'}
+          <h3 className="text-2xl font-black text-white mb-3">
+            {language === 'zh' ? '让每一笔交易都更具价値' : 'Make Every Trade More Valuable'}
           </h3>
-          <p className="text-muted-foreground mb-8">
-            {language === 'zh' ? '智慧交易，从省钱开始' : 'Smart Trading Starts with Savings'}
+          <p className="text-slate-500 mb-8 text-sm">
+            {language === 'zh' ? '智慧交易，从省錢开始' : 'Smart Trading Starts with Savings'}
           </p>
-          <div className="flex justify-center gap-6 text-sm text-muted-foreground">
-            <button onClick={() => navigate('/exchanges')} className="hover:text-accent transition">{texts.nav.exchanges}</button>
-            <button onClick={() => navigate('/contact')} className="hover:text-accent transition">{texts.nav.contact}</button>
-            <button onClick={() => navigate('/beginner')} className="hover:text-accent transition">{texts.nav.beginnerGuide}</button>
+          <div className="flex justify-center gap-6 text-sm">
+            <button onClick={() => navigate('/exchanges')} className="text-slate-500 hover:text-amber-400 transition font-medium">{texts.nav.exchanges}</button>
+            <button onClick={() => navigate('/contact')} className="text-slate-500 hover:text-amber-400 transition font-medium">{texts.nav.contact}</button>
+            <button onClick={() => navigate('/beginner')} className="text-slate-500 hover:text-amber-400 transition font-medium">{texts.nav.beginnerGuide}</button>
           </div>
-          <p className="text-muted-foreground text-sm mt-6">
+          <p className="text-slate-600 text-xs mt-6">
             {language === 'zh' ? '祝您在币圈稳健获利，财富自由！' : 'Wishing you stable profits and financial freedom in crypto!'}
           </p>
         </div>

@@ -24,7 +24,7 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   beginner: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
-  intermediate: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
+  intermediate: "bg-blue-500/20 text-blue-300 border-blue-500/30",
   advanced: "bg-red-500/20 text-red-300 border-red-500/30",
 };
 
@@ -61,7 +61,7 @@ export default function ExchangeGuideIndex() {
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
           {/* Left: Back */}
           <Link href="/portal">
-            <button className="flex items-center gap-2 text-slate-400 hover:text-yellow-400 transition-colors text-sm font-medium">
+            <button className="flex items-center gap-2 text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium">
               <ArrowLeft className="w-4 h-4" />
               <span className="hidden sm:inline">{zh ? "返回主页" : "Back"}</span>
             </button>
@@ -69,7 +69,7 @@ export default function ExchangeGuideIndex() {
 
           {/* Center: Title */}
           <div className="flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-yellow-400" />
+            <BookOpen className="w-4 h-4 text-blue-400" />
             <span className="font-black text-sm sm:text-base text-white">
               {zh ? "交易所扫盲指南" : "Exchange Guide"}
             </span>
@@ -79,13 +79,13 @@ export default function ExchangeGuideIndex() {
           <div className="flex items-center gap-1 bg-white/5 rounded-lg p-1">
             <button
               onClick={() => setActiveTab("features")}
-              className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${activeTab === "features" ? "bg-yellow-500 text-black" : "text-slate-400 hover:text-white"}`}
+              className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${activeTab === "features" ? "bg-blue-500 text-white" : "text-slate-400 hover:text-white"}`}
             >
               {zh ? "功能介绍" : "Features"}
             </button>
             <button
               onClick={() => setActiveTab("compare")}
-              className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${activeTab === "compare" ? "bg-yellow-500 text-black" : "text-slate-400 hover:text-white"}`}
+              className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${activeTab === "compare" ? "bg-blue-500 text-white" : "text-slate-400 hover:text-white"}`}
             >
               {zh ? "交易所对比" : "Compare"}
             </button>
@@ -102,7 +102,7 @@ export default function ExchangeGuideIndex() {
         )}
 
         {/* Bottom CTA */}
-        <div className="mt-16 rounded-2xl border border-yellow-500/30 bg-gradient-to-br from-yellow-500/10 to-amber-500/5 p-8 text-center">
+        <div className="mt-16 rounded-2xl border border-blue-500/30 bg-gradient-to-br from-blue-500/10 to-blue-600/5 p-8 text-center">
           <h3 className="text-2xl font-black text-white mb-3">
             {zh ? "了解完了，准备开始了吗？" : "Ready to get started?"}
           </h3>
@@ -113,12 +113,12 @@ export default function ExchangeGuideIndex() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/crypto-saving">
-              <button className="bg-yellow-500 hover:bg-yellow-400 text-black font-black px-7 py-3 rounded-xl transition-all hover:scale-105 text-sm">
+              <button className="bg-blue-500 hover:bg-blue-400 text-white font-black px-7 py-3 rounded-xl transition-all hover:scale-105 text-sm">
                 {zh ? "🎁 查看合作伙伴链接" : "🎁 View Partner Links"}
               </button>
             </Link>
             <Link href="/beginner">
-              <button className="border border-white/20 hover:border-yellow-500/50 text-white hover:text-yellow-300 font-bold px-7 py-3 rounded-xl transition-all text-sm">
+              <button className="border border-white/20 hover:border-blue-500/50 text-white hover:text-blue-300 font-bold px-7 py-3 rounded-xl transition-all text-sm">
                 {zh ? "💬 前往新手问答" : "💬 FAQ Page"}
               </button>
             </Link>
@@ -126,7 +126,7 @@ export default function ExchangeGuideIndex() {
         </div>
       </div>
       {/* 右下角回到顶部按钮 */}
-      <ScrollToTopButton color="yellow" />
+      <ScrollToTopButton color="blue" />
 
       {/* 浮动章节菜单：仅在 features tab 且有内容时显示 */}
       {activeTab === "features" && categories.length > 0 && (
@@ -159,7 +159,7 @@ function FeaturesTab({ categories, isLoading, zh, activeCategory, setActiveCateg
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -181,7 +181,7 @@ function FeaturesTab({ categories, isLoading, zh, activeCategory, setActiveCateg
                 onClick={() => setActiveCategory(cat.slug)}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all whitespace-nowrap lg:whitespace-normal w-full ${
                   (activeCategory ?? categories[0]?.slug) === cat.slug
-                    ? "bg-yellow-500/20 border border-yellow-500/40 text-yellow-300"
+                    ? "bg-blue-500/20 border border-blue-500/40 text-blue-300"
                     : "hover:bg-white/5 border border-transparent text-slate-400 hover:text-white"
                 }`}
               >
@@ -189,7 +189,7 @@ function FeaturesTab({ categories, isLoading, zh, activeCategory, setActiveCateg
                 <span className="text-sm font-semibold truncate">
                   {zh ? cat.nameZh : cat.nameEn}
                 </span>
-                <ChevronRight className={`w-3 h-3 ml-auto shrink-0 hidden lg:block transition-transform ${(activeCategory ?? categories[0]?.slug) === cat.slug ? "rotate-90 text-yellow-400" : ""}`} />
+                <ChevronRight className={`w-3 h-3 ml-auto shrink-0 hidden lg:block transition-transform ${(activeCategory ?? categories[0]?.slug) === cat.slug ? "rotate-90 text-blue-400" : ""}`} />
               </button>
             ))}
           </nav>
@@ -258,13 +258,13 @@ function FeatureDetail({ category, zh, prevCategory, nextCategory, onNavigate }:
       <div className="space-y-6 mb-10">
         {FEATURE_CONTENT.sections.map((section, i) => (
           <div key={i} className="rounded-2xl border border-white/10 bg-white/3 p-6">
-            <h2 className="text-lg font-black text-yellow-300 mb-3">{section.title}</h2>
+            <h2 className="text-lg font-black text-blue-300 mb-3">{section.title}</h2>
             <p className="text-slate-300 text-sm leading-relaxed mb-4">{section.body}</p>
             {section.tips && (
               <ul className="space-y-2">
                 {section.tips.map((tip, j) => (
                   <li key={j} className="flex items-start gap-2 text-sm text-slate-400">
-                    <span className="text-yellow-400 mt-0.5 shrink-0">▸</span>
+                    <span className="text-blue-400 mt-0.5 shrink-0">▸</span>
                     <span>{tip}</span>
                   </li>
                 ))}
@@ -302,7 +302,7 @@ function FeatureDetail({ category, zh, prevCategory, nextCategory, onNavigate }:
                           {ex && <span className={`w-2 h-2 rounded-full ${ex.dot}`} />}
                           <span className="font-bold text-white">{ex?.name ?? s.exchangeSlug}</span>
                           {s.highlight === 1 && (
-                            <span className="text-xs bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 px-1.5 py-0.5 rounded-full font-bold">
+                            <span className="text-xs bg-blue-500/20 text-blue-300 border border-blue-500/30 px-1.5 py-0.5 rounded-full font-bold">
                               {zh ? "推荐" : "Top"}
                             </span>
                           )}
@@ -352,7 +352,7 @@ function FeatureDetail({ category, zh, prevCategory, nextCategory, onNavigate }:
                       : opt.value === quizAnswer
                         ? "bg-red-500/20 border-red-500/40 text-red-300"
                         : "border-white/10 text-slate-500"
-                    : "border-white/10 hover:border-yellow-500/40 hover:bg-yellow-500/5 text-slate-300 hover:text-white"
+                    : "border-white/10 hover:border-blue-500/40 hover:bg-blue-500/5 text-slate-300 hover:text-white"
                 }`}
               >
                 {opt.label}
@@ -370,14 +370,14 @@ function FeatureDetail({ category, zh, prevCategory, nextCategory, onNavigate }:
       )}
 
       {/* Pro Tips */}
-      <div className="rounded-2xl border border-yellow-500/20 bg-yellow-500/5 p-5 mb-6">
-        <h3 className="text-sm font-black text-yellow-400 mb-3">
+      <div className="rounded-2xl border border-blue-500/20 bg-blue-500/5 p-5 mb-6">
+        <h3 className="text-sm font-black text-blue-400 mb-3">
           💡 {zh ? "新手必知" : "Pro Tips"}
         </h3>
         <ul className="space-y-2">
           {FEATURE_CONTENT.proTips.map((tip, i) => (
             <li key={i} className="text-sm text-slate-300 flex items-start gap-2">
-              <span className="text-yellow-400 shrink-0 mt-0.5">•</span>
+              <span className="text-blue-400 shrink-0 mt-0.5">•</span>
               <span>{tip}</span>
             </li>
           ))}
@@ -432,13 +432,13 @@ function FeatureDetail({ category, zh, prevCategory, nextCategory, onNavigate }:
             {prevCategory ? (
               <button
                 onClick={() => { onNavigate?.(prevCategory.slug); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                className="w-full group flex flex-col items-start gap-1 px-4 py-3 rounded-xl border border-white/10 bg-white/3 hover:border-yellow-500/40 hover:bg-yellow-500/5 transition-all text-left"
+                className="w-full group flex flex-col items-start gap-1 px-4 py-3 rounded-xl border border-white/10 bg-white/3 hover:border-blue-500/40 hover:bg-blue-500/5 transition-all text-left"
               >
                 <span className="text-xs text-slate-500 font-medium flex items-center gap-1">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                   {zh ? '上一篇' : 'Previous'}
                 </span>
-                <span className="text-sm font-bold text-white group-hover:text-yellow-300 transition-colors flex items-center gap-1.5">
+                <span className="text-sm font-bold text-white group-hover:text-blue-300 transition-colors flex items-center gap-1.5">
                   <span className="text-base">{prevCategory.icon}</span>
                   {zh ? prevCategory.nameZh : prevCategory.nameEn}
                 </span>
@@ -450,13 +450,13 @@ function FeatureDetail({ category, zh, prevCategory, nextCategory, onNavigate }:
             {nextCategory ? (
               <button
                 onClick={() => { onNavigate?.(nextCategory.slug); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                className="w-full group flex flex-col items-end gap-1 px-4 py-3 rounded-xl border border-white/10 bg-white/3 hover:border-yellow-500/40 hover:bg-yellow-500/5 transition-all text-right"
+                className="w-full group flex flex-col items-end gap-1 px-4 py-3 rounded-xl border border-white/10 bg-white/3 hover:border-blue-500/40 hover:bg-blue-500/5 transition-all text-right"
               >
                 <span className="text-xs text-slate-500 font-medium flex items-center gap-1 justify-end">
                   {zh ? '下一篇' : 'Next'}
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                 </span>
-                <span className="text-sm font-bold text-white group-hover:text-yellow-300 transition-colors flex items-center gap-1.5 justify-end">
+                <span className="text-sm font-bold text-white group-hover:text-blue-300 transition-colors flex items-center gap-1.5 justify-end">
                   {zh ? nextCategory.nameZh : nextCategory.nameEn}
                   <span className="text-base">{nextCategory.icon}</span>
                 </span>
@@ -519,7 +519,7 @@ function CompareTab({ zh, selectedExchange, setSelectedExchange }: {
       {/* Feature Grid */}
       {isLoading ? (
         <div className="flex items-center justify-center h-40">
-          <div className="w-8 h-8 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -531,7 +531,7 @@ function CompareTab({ zh, selectedExchange, setSelectedExchange }: {
                 className={`rounded-xl border p-4 transition-all ${
                   f.supported === 1
                     ? f.highlight === 1
-                      ? "border-yellow-500/40 bg-yellow-500/5"
+                      ? "border-blue-500/40 bg-blue-500/5"
                       : "border-white/10 bg-white/3"
                     : "border-white/5 bg-white/1 opacity-50"
                 }`}
@@ -540,7 +540,7 @@ function CompareTab({ zh, selectedExchange, setSelectedExchange }: {
                   <span className="text-xl">{cat?.icon ?? "📌"}</span>
                   <span className="font-bold text-white text-sm">{zh ? (cat?.nameZh ?? f.featureSlug) : (cat?.nameEn ?? f.featureSlug)}</span>
                   {f.highlight === 1 && (
-                    <span className="ml-auto text-xs bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 px-1.5 py-0.5 rounded-full font-bold">
+                    <span className="ml-auto text-xs bg-blue-500/20 text-blue-300 border border-blue-500/30 px-1.5 py-0.5 rounded-full font-bold">
                       {zh ? "亮点" : "★"}
                     </span>
                   )}
@@ -552,7 +552,7 @@ function CompareTab({ zh, selectedExchange, setSelectedExchange }: {
                 </span>
                 <p className="text-slate-400 text-xs leading-relaxed">{zh ? f.detailZh : f.detailEn}</p>
                 {f.feeInfo && (
-                  <p className="text-yellow-400/70 text-xs mt-2 font-medium">💰 {f.feeInfo}</p>
+                  <p className="text-blue-400/70 text-xs mt-2 font-medium">💰 {f.feeInfo}</p>
                 )}
               </div>
             );
@@ -581,7 +581,7 @@ function CompareTab({ zh, selectedExchange, setSelectedExchange }: {
         </div>
         <div className="mt-6 text-center">
           <Link href="/beginner">
-            <button className="border border-yellow-500/40 hover:bg-yellow-500/10 text-yellow-300 font-bold px-6 py-2.5 rounded-xl transition-all text-sm">
+            <button className="border border-blue-500/40 hover:bg-blue-500/10 text-blue-300 font-bold px-6 py-2.5 rounded-xl transition-all text-sm">
               {zh ? "💬 还有疑问？前往新手问答 →" : "💬 Still confused? Visit FAQ →"}
             </button>
           </Link>
@@ -649,18 +649,18 @@ function FloatChapterMenu({
             background: 'rgba(10, 20, 40, 0.82)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid rgba(234,179,8,0.25)',
+            border: '1px solid rgba(59,130,246,0.25)',
             borderRadius: '16px',
             padding: '12px',
             width: '220px',
             maxHeight: '60vh',
             overflowY: 'auto',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(234,179,8,0.1), inset 0 1px 0 rgba(255,255,255,0.05)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(59,130,246,0.1), inset 0 1px 0 rgba(255,255,255,0.05)',
           }}
         >
           {/* 菜单标题 */}
           <div style={{ padding: '4px 8px 10px', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: '8px' }}>
-            <p style={{ fontSize: '10px', fontWeight: 700, color: 'rgba(234,179,8,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>
+            <p style={{ fontSize: '10px', fontWeight: 700, color: 'rgba(59,130,246,0.8)', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>
               {zh ? `章节导航 · ${currentIdx + 1} / ${total}` : `Chapters · ${currentIdx + 1} / ${total}`}
             </p>
           </div>
@@ -679,8 +679,8 @@ function FloatChapterMenu({
                     gap: '10px',
                     padding: '8px 10px',
                     borderRadius: '10px',
-                    border: isActive ? '1px solid rgba(234,179,8,0.4)' : '1px solid transparent',
-                    background: isActive ? 'rgba(234,179,8,0.12)' : 'transparent',
+                    border: isActive ? '1px solid rgba(59,130,246,0.4)' : '1px solid transparent',
+                    background: isActive ? 'rgba(59,130,246,0.12)' : 'transparent',
                     cursor: 'pointer',
                     transition: 'all 0.15s ease',
                     textAlign: 'left',
@@ -697,7 +697,7 @@ function FloatChapterMenu({
                   <span style={{
                     fontSize: '10px',
                     fontWeight: 700,
-                    color: isActive ? 'rgba(234,179,8,0.8)' : 'rgba(100,116,139,0.8)',
+                    color: isActive ? 'rgba(93,169,255,0.9)' : 'rgba(100,116,139,0.8)',
                     minWidth: '16px',
                     textAlign: 'right',
                     flexShrink: 0,
@@ -710,7 +710,7 @@ function FloatChapterMenu({
                   <span style={{
                     fontSize: '12px',
                     fontWeight: isActive ? 700 : 500,
-                    color: isActive ? '#fde68a' : 'rgba(148,163,184,0.9)',
+                    color: isActive ? '#93c5fd' : 'rgba(148,163,184,0.9)',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
@@ -725,8 +725,8 @@ function FloatChapterMenu({
                       width: '6px',
                       height: '6px',
                       borderRadius: '50%',
-                      background: '#eab308',
-                      boxShadow: '0 0 6px 2px rgba(234,179,8,0.6)',
+                      background: '#3b82f6',
+                      boxShadow: '0 0 6px 2px rgba(59,130,246,0.6)',
                       flexShrink: 0,
                     }} />
                   )}
@@ -747,15 +747,15 @@ function FloatChapterMenu({
             gap: '8px',
             padding: '8px 14px 8px 10px',
             borderRadius: '40px',
-            border: open ? '1px solid rgba(234,179,8,0.5)' : '1px solid rgba(234,179,8,0.25)',
-            background: open ? 'rgba(234,179,8,0.15)' : 'rgba(10,20,40,0.75)',
+            border: open ? '1px solid rgba(59,130,246,0.5)' : '1px solid rgba(59,130,246,0.25)',
+            background: open ? 'rgba(59,130,246,0.15)' : 'rgba(10,20,40,0.75)',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
             cursor: 'pointer',
             transition: 'all 0.2s ease',
             boxShadow: open
-              ? '0 0 0 3px rgba(234,179,8,0.15), 0 4px 16px rgba(0,0,0,0.4)'
-              : '0 0 0 1px rgba(234,179,8,0.08), 0 4px 16px rgba(0,0,0,0.4)',
+              ? '0 0 0 3px rgba(59,130,246,0.15), 0 4px 16px rgba(0,0,0,0.4)'
+              : '0 0 0 1px rgba(59,130,246,0.08), 0 4px 16px rgba(0,0,0,0.4)',
             maxWidth: '200px',
           }}
         >
@@ -767,7 +767,7 @@ function FloatChapterMenu({
             <span style={{
               fontSize: '11px',
               fontWeight: 700,
-              color: '#fde68a',
+              color: '#93c5fd',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
@@ -786,7 +786,7 @@ function FloatChapterMenu({
             height="14"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="rgba(234,179,8,0.8)"
+            stroke="rgba(59,130,246,0.8)"
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"

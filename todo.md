@@ -97,3 +97,9 @@
 - [ ] 检查并修复 ExchangeGuideIndex.tsx 的 ScrollToTopButton 显示问题（是否被 opacity 遮蔽）
 - [ ] 将当前网站设计风格保存为技能模板（供日后参考）
 - [ ] 验证并保存检查点
+
+## 主题色统一与 UI 整体优化
+- [x] 梳理两个页面的现有配色和组件结构
+- [x] 币圈省钱指南（/crypto-saving）黄色主题全面优化（Hero、卡片、section、footer 等）
+- [x] 交易所扫盲指南（/exchange-guide）蓝色主题全面优化（header、Tab、侧边栏、Pro Tips、上下篇导航、FloatChapterMenu、CompareTab、ScrollToTopButton 等）
+- [x] 验证 TypeScript 0 错误，23 个单元测试全部通过
