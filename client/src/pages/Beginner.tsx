@@ -2,7 +2,8 @@ import { useState, useDeferredValue } from 'react';
 import { Link } from 'wouter';
 import { trpc } from '@/lib/trpc';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { ChevronDown, ChevronUp, Search, BookOpen, Newspaper } from 'lucide-react';
+import { ChevronDown, ChevronUp, Search, BookOpen, Newspaper, ArrowLeft } from 'lucide-react';
+import { useScrollMemory, goBack } from '@/hooks/useScrollMemory';
 
 const CATEGORY_MAP: Record<string, { zh: string; en: string }> = {
   basic:    { zh: '区块链基础', en: 'Blockchain Basics' },
@@ -20,6 +21,8 @@ export default function Beginner() {
   const deferredSearch = useDeferredValue(searchInput);
   const [openId, setOpenId] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('all');
+
+  useScrollMemory();
 
   const { data: faqs = [], isLoading } = trpc.faq.list.useQuery(
     { search: deferredSearch.trim() || undefined }
@@ -41,12 +44,10 @@ export default function Beginner() {
       {/* Sticky header */}
       <header className="sticky top-0 z-40 border-b border-yellow-500/20 backdrop-blur-md" style={{ background: 'rgba(10,25,47,0.92)' }}>
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-          <Link href="/portal">
-            <button className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-yellow-400 transition-colors flex-shrink-0">
-              <span>←</span>
-              <span className="hidden sm:inline">{zh ? '返回主页' : 'Home'}</span>
-            </button>
-          </Link>
+          <button onClick={goBack} className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-yellow-400 transition-colors flex-shrink-0">
+            <ArrowLeft size={15} />
+            <span className="hidden sm:inline">{zh ? '返回上一页' : 'Back'}</span>
+          </button>
           <h1 className="text-base sm:text-lg font-bold text-yellow-400 flex items-center gap-2 flex-shrink-0">
             <BookOpen size={18} />
             <span>{zh ? '新手问答' : 'Beginner Q&A'}</span>

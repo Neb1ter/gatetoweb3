@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
+import { useScrollMemory, goBack } from '@/hooks/useScrollMemory';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trpc } from '@/lib/trpc';
@@ -9,6 +10,7 @@ import { Send, ArrowLeft, MessageCircle, Twitter, Phone, Mail } from 'lucide-rea
 export default function Contact() {
   const { language, setLanguage } = useLanguage();
   const [, navigate] = useLocation();
+  useScrollMemory();
 
   const [platform, setPlatform] = useState('');
   const [accountName, setAccountName] = useState('');
@@ -32,7 +34,7 @@ export default function Contact() {
 
   const texts = {
     zh: {
-      nav: { title: '💰 币圈省钱指南', back: '返回首页' },
+      nav: { title: '💰 币圈省錢指南', back: '返回上一页' },
       hero: {
         title: '联系我们',
         subtitle: '获取专属手续费折扣',
@@ -79,7 +81,7 @@ export default function Contact() {
       },
     },
     en: {
-      nav: { title: '💰 Crypto Savings Guide', back: 'Back to Home' },
+      nav: { title: '💰 Crypto Savings Guide', back: 'Back' },
       hero: {
         title: 'Contact Us',
         subtitle: 'Get Exclusive Fee Discounts',
@@ -143,8 +145,8 @@ export default function Contact() {
       {/* Navigation */}
       <nav className="sticky top-0 z-30 bg-background/95 backdrop-blur border-b border-border">
         <div className="container mx-auto flex items-center justify-between py-4">
-          <button onClick={() => navigate('/portal')} className="text-xl font-bold text-accent hover:opacity-80 transition">
-            {t.nav.title}
+          <button onClick={goBack} className="flex items-center gap-1.5 text-accent hover:opacity-80 transition font-bold text-sm">
+            ← {t.nav.back}
           </button>
           <div className="flex items-center gap-2">
             <button
@@ -281,7 +283,7 @@ export default function Contact() {
         <div className="container mx-auto text-center">
           <h3 className="text-2xl font-bold text-white mb-4">{t.footer.title}</h3>
           <p className="text-muted-foreground mb-4">{t.footer.subtitle}</p>
-          <button onClick={() => navigate('/portal')} className="text-accent hover:text-accent/80 transition flex items-center gap-2 mx-auto">
+          <button onClick={goBack} className="text-accent hover:text-accent/80 transition flex items-center gap-2 mx-auto">
             <ArrowLeft size={16} /> {t.nav.back}
           </button>
         </div>

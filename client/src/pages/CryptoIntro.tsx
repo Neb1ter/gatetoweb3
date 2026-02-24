@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "wouter";
+import { useScrollMemory, goBack } from "@/hooks/useScrollMemory";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { trpc } from "@/lib/trpc";
@@ -219,6 +220,7 @@ const AMOUNTS = [100, 500, 1000, 5000];
 // ─── Main Component ────────────────────────────────────────────────────────────
 export default function CryptoIntro() {
   const [, navigate] = useLocation();
+  useScrollMemory();
   const { language } = useLanguage();
   const zh = language === "zh";
   const comparisons = zh ? COMPARISONS_ZH : COMPARISONS_EN;
@@ -297,9 +299,9 @@ export default function CryptoIntro() {
     <div className="min-h-screen bg-background text-foreground">
       {/* ── Top Nav ── */}
       <nav className="sticky top-0 z-40 bg-background/95 backdrop-blur border-b border-border px-4 py-3 flex items-center justify-between">
-        <Button variant="ghost" size="sm" onClick={() => navigate("/portal")} className="text-muted-foreground hover:text-foreground gap-1">
+        <Button variant="ghost" size="sm" onClick={goBack} className="text-muted-foreground hover:text-foreground gap-1">
           <ArrowLeft size={16} />
-          {zh ? "返回首页" : "Back"}
+          {zh ? "返回上一页" : "Back"}
         </Button>
         <h1 className="text-sm font-bold text-accent truncate">
           {zh ? "🔥 新手互动指南" : "🔥 Beginner Interactive Guide"}

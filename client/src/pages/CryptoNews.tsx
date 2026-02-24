@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { ArrowLeft } from "lucide-react";
+import { useScrollMemory, goBack } from "@/hooks/useScrollMemory";
 
 const CATEGORY_LABELS: Record<string, { zh: string; en: string; color: string }> = {
   market:   { zh: "行情",   en: "Market",   color: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30" },
@@ -47,6 +49,7 @@ function formatDate(date: Date | string, lang: string): string {
 export default function CryptoNews() {
   const { language } = useLanguage();
   const zh = language === "zh";
+  useScrollMemory();
   const [activeFilter, setActiveFilter] = useState<CategoryFilter>("all");
 
   const { data: newsItems = [], isLoading } = trpc.news.list.useQuery({ limit: 20 });
@@ -69,12 +72,10 @@ export default function CryptoNews() {
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-yellow-500/20 backdrop-blur-md" style={{ background: "rgba(10,25,47,0.92)" }}>
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-          <Link href="/portal">
-            <button className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-yellow-400 transition-colors">
-              <span>←</span>
-              <span className="hidden sm:inline">{zh ? "返回主页" : "Home"}</span>
-            </button>
-          </Link>
+          <button onClick={goBack} className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-yellow-400 transition-colors">
+            <ArrowLeft size={15} />
+            <span className="hidden sm:inline">{zh ? "返回上一页" : "Back"}</span>
+          </button>
           <h1 className="text-base sm:text-lg font-bold text-yellow-400 flex items-center gap-2">
             <span>📡</span>
             <span>{zh ? "币圈资讯" : "Crypto News"}</span>

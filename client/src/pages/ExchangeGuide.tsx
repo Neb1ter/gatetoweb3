@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'wouter';
+import { useScrollMemory, goBack } from '@/hooks/useScrollMemory';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trpc } from '@/lib/trpc';
 import {
@@ -254,6 +255,7 @@ const COMPARISON_FEATURES = [
 
 export default function ExchangeGuide() {
   const [, navigate] = useLocation();
+  useScrollMemory();
   const { language, setLanguage } = useLanguage();
   const { data: dbLinks } = trpc.exchanges.list.useQuery();
   const zh = language === 'zh';
@@ -314,12 +316,12 @@ export default function ExchangeGuide() {
               <Menu size={20} />
             </button>
             <button
-              onClick={() => navigate('/portal')}
+              onClick={goBack}
               className="flex items-center gap-2 text-yellow-400 hover:opacity-80 transition"
             >
               <ArrowLeft size={18} />
               <span className="text-sm font-medium hidden sm:block">
-                {zh ? '返回首页' : 'Back to Home'}
+                {zh ? '返回上一页' : 'Back'}
               </span>
             </button>
           </div>

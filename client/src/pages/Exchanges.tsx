@@ -3,6 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { trpc } from "@/lib/trpc";
 import { ArrowLeft, ExternalLink, MessageCircle, Gift, Key } from "lucide-react";
 import { useLocation } from "wouter";
+import { useScrollMemory, goBack } from "@/hooks/useScrollMemory";
 
 
 // Static metadata (fees, descriptions) — only referralLink & inviteCode come from DB
@@ -22,6 +23,7 @@ const EXCHANGE_STATIC: Record<string, {
 
 export default function Exchanges() {
   const [, navigate] = useLocation();
+  useScrollMemory();
   const { language, setLanguage } = useLanguage();
 
   // Fetch live referral links and invite codes from database
@@ -37,7 +39,7 @@ export default function Exchanges() {
     zh: {
       title: '交易所对比',
       subtitle: '了解各大平台的手续费率和返佣机制',
-      back: '返回首页',
+      back: '返回上一页',
       spotFee: '现货手续费',
       futuresFee: '合约手续费',
       maker: 'Maker',
@@ -61,7 +63,7 @@ export default function Exchanges() {
     en: {
       title: 'Exchange Comparison',
       subtitle: 'Understand fee rates and rebate mechanisms of major platforms',
-      back: 'Back to Home',
+      back: 'Back',
       spotFee: 'Spot Trading Fees',
       futuresFee: 'Futures Trading Fees',
       maker: 'Maker',
@@ -91,7 +93,7 @@ export default function Exchanges() {
       {/* Navigation */}
       <nav className="sticky top-0 w-full bg-background/95 backdrop-blur border-b border-border z-30">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-center gap-8">
-          <button onClick={() => navigate('/portal')} className="text-xl font-bold text-accent hover:opacity-80 transition whitespace-nowrap">
+          <button onClick={goBack} className="text-xl font-bold text-accent hover:opacity-80 transition whitespace-nowrap">
             💰 {language === 'zh' ? '币圈省钱指南' : 'Crypto Savings Guide'}
           </button>
           <div className="flex items-center gap-1 bg-card/60 rounded-full px-1 py-1 border border-border">
@@ -108,7 +110,7 @@ export default function Exchanges() {
               EN
             </button>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => navigate('/portal')} className="text-accent hover:text-accent/80 whitespace-nowrap">
+          <Button variant="ghost" size="sm" onClick={goBack} className="text-accent hover:text-accent/80 whitespace-nowrap">
             <ArrowLeft className="mr-1" size={16} />
             {texts.back}
           </Button>
@@ -272,7 +274,7 @@ export default function Exchanges() {
               ? '选择适合您的交易所，开始享受手续费折扣吧！'
               : 'Choose the right exchange and start enjoying fee discounts!'}
           </p>
-          <Button onClick={() => navigate('/portal')} className="bg-accent text-accent-foreground hover:bg-accent/90">
+          <Button onClick={goBack} className="bg-accent text-accent-foreground hover:bg-accent/90">
             {texts.back}
           </Button>
         </div>

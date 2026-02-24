@@ -60,3 +60,9 @@
 - [x] 扫描全站所有页面中指向非 /portal 的返回主页链接
 - [x] 批量将所有「返回主页」链接统一改为 /portal（涉及 Beginner/Contact/CryptoIntro/CryptoNews/ExchangeGuide/Exchanges/Web3Guide/ExchangeGuideIndex 共 13 处）
 - [x] 验证效果并保存检查点
+
+## 二级页面返回逻辑优化
+- [x] 分析从 /crypto-saving 进入的所有二级页面
+- [x] 创建滚动位置记忆 Hook（useScrollMemory）
+- [x] 将二级页面「返回主页」改为「返回上一页」并实现滚动位置恢复
+- [x] 验证效果并保存检查点
