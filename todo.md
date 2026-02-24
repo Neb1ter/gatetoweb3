@@ -51,3 +51,7 @@
 ## Bug 修复
 - [x] 修复 /exchange-guide 详情页缺少「进入模拟游戏」入口按鈕的问题（入口加到了 ExchangeGuideIndex.tsx 的 FeatureDetail 组件中）
 - [x] 验证6个交易模块详情页均能正确跳转对应模拟游戏
+
+## TradFi 模拟游戏修改
+- [x] 重写 TradFiSim.tsx：核心体验改为中心化交易所实时交易代币化真实资产（TSLA/AAPL/黄金/原油），突出 T+0 即时结算 vs 传统金融 T+2 延迟结算的效率差异
+- [x] 验证效果并保存检查点
