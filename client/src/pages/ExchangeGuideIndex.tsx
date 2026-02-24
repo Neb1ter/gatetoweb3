@@ -587,6 +587,51 @@ function CompareTab({ zh, selectedExchange, setSelectedExchange }: {
           </Link>
         </div>
       </div>
+
+      {/* ── 跳转交易所中心提示卡片 ── */}
+      <div className="mt-8 rounded-2xl border border-blue-500/30 bg-gradient-to-br from-blue-900/30 to-slate-900/60 p-6 relative overflow-hidden">
+        <div className="absolute -top-8 -right-8 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative z-10">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center flex-shrink-0 text-2xl">
+              🏦
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg font-black text-white mb-1">
+                {zh ? "不了解这些交易所？这里有详细说明" : "Not familiar with these exchanges? We've got you covered"}
+              </h3>
+              <p className="text-slate-400 text-sm leading-relaxed mb-4">
+                {zh
+                  ? "前往「交易所中心」，查看每家交易所的深度介绍、功能对比矩阵、适合人群分析，以及 CEX / DEX / 合约所的科普解读，帮助你从零建立对交易所的完整认知。"
+                  : "Visit the Exchange Hub for in-depth profiles, feature comparison matrix, user suitability analysis, and a beginner guide to CEX / DEX / derivatives exchanges."}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/exchanges">
+                  <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-2.5 rounded-xl transition-all text-sm flex items-center gap-2 shadow-lg shadow-blue-900/40">
+                    <span>🔍</span>
+                    <span>{zh ? "查看各交易所详情" : "View Exchange Details"}</span>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </Link>
+                <Link href="/exchanges">
+                  <button className="border border-blue-500/40 hover:bg-blue-500/10 text-blue-300 font-bold px-5 py-2.5 rounded-xl transition-all text-sm flex items-center gap-2">
+                    <span>📚</span>
+                    <span>{zh ? "交易所科普入门" : "Exchange Basics"}</span>
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {(zh
+              ? ["CEX 中心化交易所", "DEX 去中心化交易所", "合约交易所", "功能对比矩阵", "K 线模拟器"]
+              : ["CEX", "DEX", "Derivatives", "Feature Matrix", "K-line Simulator"]
+            ).map(tag => (
+              <span key={tag} className="text-xs bg-blue-500/10 border border-blue-500/20 text-blue-300 px-2.5 py-1 rounded-full">{tag}</span>
+            ))}
+          </div>
+        </div>
+      </div>
      </div>
   );
 }

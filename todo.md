@@ -113,3 +113,12 @@
 - [ ] 制作醒目的信任感 banner（监管牌照 + 储备金证明 + 用户规模）
 - [ ] 确保移动端适配和 Tab 菜单可访问性
 - [ ] 验证全页面 UI 一致性并保存检查点
+
+## 综合改版（2026-02-24）
+- [ ] /exchange-guide 交易所对比 Tab 增加跳转交易所中心的提示卡片
+- [ ] 新建 ExchangeDownload.tsx 次级页面（新手下载 + 三步上手）并注册路由
+- [ ] /crypto-saving 增加「新手不知道怎么下载？」入口跳转到 ExchangeDownload
+- [ ] 重写 /crypto-saving 为自然阅读顺序的返佣科普长页面（含手续费计算器）
+- [ ] /crypto-saving 增加滚动感知浮动菜单
+- [ ] /web3-guide 增加滚动感知浮动章节菜单（参考 exchange-guide 样式）
+- [ ] /web3-guide 移除原有旧菜单

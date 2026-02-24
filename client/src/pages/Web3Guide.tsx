@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "wouter";
 import { useScrollMemory } from "@/hooks/useScrollMemory";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
+import { Menu, X } from 'lucide-react';
 
 // ============================================================
 // 数据定义
@@ -216,6 +217,84 @@ const startSteps = [
     tip: "持续学习是在加密市场长期生存的关键",
   },
 ];
+
+// ============================================================
+// 浮动章节菜单（绿色主题）
+// ============================================================
+function FloatChapterMenu({ activeId }: { activeId: string }) {
+  const [open, setOpen] = useState(false);
+  const active = navSections.find(s => s.id === activeId) ?? navSections[0];
+
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setOpen(false);
+  };
+
+  return (
+    <>
+      {open && (
+        <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+      )}
+      <div className="fixed bottom-24 left-4 z-50">
+        {open && (
+          <div
+            className="mb-3 rounded-2xl border border-emerald-500/25 overflow-hidden"
+            style={{
+              background: 'rgba(5,13,26,0.95)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(16,185,129,0.08)',
+              width: '220px',
+            }}
+          >
+            <div className="px-4 py-3 border-b border-emerald-500/15">
+              <p className="text-xs font-black text-emerald-400 uppercase tracking-widest">章节导航</p>
+            </div>
+            <div className="py-2">
+              {navSections.map(sec => (
+                <button
+                  key={sec.id}
+                  onClick={() => scrollTo(sec.id)}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-all ${
+                    sec.id === activeId
+                      ? 'bg-emerald-500/12 text-emerald-300'
+                      : 'text-slate-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <span className="text-base shrink-0 w-6 text-center">{sec.icon}</span>
+                  <span className="text-sm font-semibold truncate">{sec.label}</span>
+                  {sec.id === activeId && (
+                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        <button
+          onClick={() => setOpen(v => !v)}
+          className="flex items-center gap-2.5 rounded-2xl border border-emerald-500/30 px-3.5 py-2.5 transition-all hover:border-emerald-500/60"
+          style={{
+            background: 'rgba(5,13,26,0.92)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.4), 0 0 12px rgba(16,185,129,0.08)',
+          }}
+          title="点击切换章节"
+        >
+          <span className="text-lg">{active.icon}</span>
+          <div className="hidden sm:block">
+            <p className="text-xs font-black text-emerald-400 leading-none mb-0.5">{active.label}</p>
+            <p className="text-[10px] text-slate-500 leading-none">点击切换章节</p>
+          </div>
+          <span className="text-slate-500">
+            {open ? <X className="w-3.5 h-3.5" /> : <Menu className="w-3.5 h-3.5" />}
+          </span>
+        </button>
+      </div>
+    </>
+  );
+}
 
 // ============================================================
 // 工具 Hook：滚动进入视野触发动画
@@ -1479,6 +1558,8 @@ export default function Web3Guide() {
     </div>
     {/* 右下角回到顶部按钮（在渐入 div 外部，避免被 opacity 遮蔽）*/}
     <ScrollToTopButton color="emerald" />
+    {/* 左下角浮动章节菜单 */}
+    <FloatChapterMenu activeId={activeSection} />
     </>
   );
 }

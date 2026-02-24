@@ -1,4 +1,9 @@
-import { useState, useRef, useEffect } from 'react';
+/**
+ * Home.tsx — /crypto-saving
+ * 币圈省钱指南：自然阅读顺序返佣科普长页面
+ * 章节顺序：Hero → 什么是返佣 → 返佣来源 → 机制揭秘 → 安全合规 → 实战案例（含计算器）→ 全场景覆盖 → 新老用户如何获得 → 总结与行动
+ */
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { WelcomeGuide } from '@/components/WelcomeGuide';
@@ -7,44 +12,267 @@ import { translations } from '@/lib/i18n';
 import { trpc } from '@/lib/trpc';
 import {
   TrendingUp, Shield, CheckCircle2, Users, Gift, Zap,
-  ChevronDown, BookOpen,
+  ChevronDown, BookOpen, Calculator, ChevronRight,
+  Lock, Globe, AlertTriangle, ExternalLink, Menu, X,
 } from 'lucide-react';
 import { useScrollMemory } from '@/hooks/useScrollMemory';
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 
-// Emoji map for each exchange slug
+// ─── 交易所 emoji 映射 ────────────────────────────────────────────────────────
 const EXCHANGE_META: Record<string, { emoji: string; color: string }> = {
-  gate:    { emoji: '🟢', color: 'from-blue-900 to-gray-900' },
+  gate:    { emoji: '🟢', color: 'from-emerald-900 to-gray-900' },
   okx:     { emoji: '🔷', color: 'from-gray-800 to-gray-900' },
   binance: { emoji: '🟡', color: 'from-yellow-900 to-gray-900' },
   bybit:   { emoji: '🔵', color: 'from-orange-900 to-gray-900' },
   bitget:  { emoji: '🟣', color: 'from-teal-900 to-gray-900' },
 };
 
+// ─── 章节定义 ─────────────────────────────────────────────────────────────────
+const CHAPTERS = [
+  { id: 'what-is-rebate',  icon: '💡', zh: '什么是返佣',    en: 'What is Rebate'      },
+  { id: 'rebate-source',   icon: '🏦', zh: '返佣来源',      en: 'Rebate Source'       },
+  { id: 'mechanism',       icon: '⚙️', zh: '机制揭秘',      en: 'How It Works'        },
+  { id: 'security',        icon: '🛡️', zh: '安全合规',      en: 'Safety & Compliance' },
+  { id: 'case-study',      icon: '📊', zh: '实战案例',      en: 'Case Study'          },
+  { id: 'scenarios',       icon: '🌐', zh: '全场景覆盖',    en: 'All Scenarios'       },
+  { id: 'how-to-get',      icon: '🎁', zh: '如何获得返佣',  en: 'How to Get Rebates'  },
+  { id: 'action',          icon: '🚀', zh: '总结与行动',    en: 'Summary & Action'    },
+];
+
+// ─── 浮动章节菜单 ─────────────────────────────────────────────────────────────
+function FloatChapterMenu({ activeId, zh }: { activeId: string; zh: boolean }) {
+  const [open, setOpen] = useState(false);
+  const active = CHAPTERS.find(c => c.id === activeId) ?? CHAPTERS[0];
+
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setOpen(false);
+  };
+
+  return (
+    <>
+      {/* 遮罩 */}
+      {open && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setOpen(false)}
+        />
+      )}
+
+      {/* 浮动按钮 + 菜单面板 */}
+      <div className="fixed bottom-24 left-4 z-50">
+        {/* 展开的菜单面板 */}
+        {open && (
+          <div
+            className="mb-3 rounded-2xl border border-amber-500/25 overflow-hidden"
+            style={{
+              background: 'rgba(10,25,47,0.92)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,215,0,0.08)',
+              width: '220px',
+            }}
+          >
+            <div className="px-4 py-3 border-b border-amber-500/15">
+              <p className="text-xs font-black text-amber-400 uppercase tracking-widest">
+                {zh ? '章节导航' : 'Chapters'}
+              </p>
+            </div>
+            <div className="py-2">
+              {CHAPTERS.map((c, i) => (
+                <button
+                  key={c.id}
+                  onClick={() => scrollTo(c.id)}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-all ${
+                    c.id === activeId
+                      ? 'bg-amber-500/12 text-amber-300'
+                      : 'text-slate-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <span className="text-base shrink-0 w-6 text-center">{c.icon}</span>
+                  <span className="text-sm font-semibold truncate">{zh ? c.zh : c.en}</span>
+                  {c.id === activeId && (
+                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 触发按钮 */}
+        <button
+          onClick={() => setOpen(v => !v)}
+          className="flex items-center gap-2.5 rounded-2xl border border-amber-500/30 px-3.5 py-2.5 transition-all hover:border-amber-500/60"
+          style={{
+            background: 'rgba(10,25,47,0.92)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.4), 0 0 12px rgba(255,215,0,0.08)',
+          }}
+          title={zh ? '点击切换章节' : 'Switch chapter'}
+        >
+          <span className="text-lg">{active.icon}</span>
+          <div className="hidden sm:block">
+            <p className="text-xs font-black text-amber-400 leading-none mb-0.5">
+              {zh ? active.zh : active.en}
+            </p>
+            <p className="text-[10px] text-slate-500 leading-none">
+              {zh ? '点击切换章节' : 'Tap to switch'}
+            </p>
+          </div>
+          <span className="text-slate-500">
+            {open ? <X className="w-3.5 h-3.5" /> : <Menu className="w-3.5 h-3.5" />}
+          </span>
+        </button>
+      </div>
+    </>
+  );
+}
+
+// ─── 手续费计算器 ─────────────────────────────────────────────────────────────
+function FeeCalculator({ zh }: { zh: boolean }) {
+  const [volume, setVolume] = useState(100000);
+  const [feeRate, setFeeRate] = useState(0.1);
+  const [rebateRate, setRebateRate] = useState(60);
+
+  const fee = volume * (feeRate / 100);
+  const rebate = fee * (rebateRate / 100);
+  const actual = fee - rebate;
+  const yearly = rebate * 12;
+
+  const fmt = (n: number) =>
+    n >= 1000 ? `$${(n / 1000).toFixed(1)}K` : `$${n.toFixed(0)}`;
+
+  return (
+    <div className="rounded-2xl border border-amber-500/25 p-6" style={{ background: 'rgba(10,25,47,0.7)', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}>
+      <div className="flex items-center gap-2 mb-5">
+        <Calculator className="w-5 h-5 text-amber-400" />
+        <h3 className="text-base font-black text-white">
+          {zh ? '手续费 & 返佣计算器' : 'Fee & Rebate Calculator'}
+        </h3>
+      </div>
+
+      <div className="space-y-5 mb-6">
+        {/* 月交易量 */}
+        <div>
+          <div className="flex justify-between mb-2">
+            <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+              {zh ? '月交易量' : 'Monthly Volume'}
+            </label>
+            <span className="text-sm font-black text-white">${volume.toLocaleString()}</span>
+          </div>
+          <input
+            type="range" min={10000} max={10000000} step={10000}
+            value={volume}
+            onChange={e => setVolume(Number(e.target.value))}
+            className="w-full h-2 rounded-full appearance-none cursor-pointer"
+            style={{ accentColor: '#FFD700' }}
+          />
+          <div className="flex justify-between text-xs text-slate-600 mt-1">
+            <span>$10K</span><span>$1M</span><span>$10M</span>
+          </div>
+        </div>
+
+        {/* 手续费率 */}
+        <div>
+          <div className="flex justify-between mb-2">
+            <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+              {zh ? '手续费率' : 'Fee Rate'}
+            </label>
+            <span className="text-sm font-black text-white">{feeRate}%</span>
+          </div>
+          <input
+            type="range" min={0.02} max={0.2} step={0.01}
+            value={feeRate}
+            onChange={e => setFeeRate(Number(e.target.value))}
+            className="w-full h-2 rounded-full appearance-none cursor-pointer"
+            style={{ accentColor: '#FFD700' }}
+          />
+          <div className="flex justify-between text-xs text-slate-600 mt-1">
+            <span>0.02%</span><span>0.1%</span><span>0.2%</span>
+          </div>
+        </div>
+
+        {/* 返佣比例 */}
+        <div>
+          <div className="flex justify-between mb-2">
+            <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+              {zh ? '返佣比例' : 'Rebate Rate'}
+            </label>
+            <span className="text-sm font-black" style={{ color: '#FFD700' }}>{rebateRate}%</span>
+          </div>
+          <input
+            type="range" min={10} max={70} step={5}
+            value={rebateRate}
+            onChange={e => setRebateRate(Number(e.target.value))}
+            className="w-full h-2 rounded-full appearance-none cursor-pointer"
+            style={{ accentColor: '#FFD700' }}
+          />
+          <div className="flex justify-between text-xs text-slate-600 mt-1">
+            <span>10%</span><span>40%</span><span>70%</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 结果展示 */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { label: zh ? '月手续费' : 'Monthly Fee',   value: fmt(fee),    color: '#f87171' },
+          { label: zh ? '月返佣额' : 'Monthly Rebate', value: fmt(rebate), color: '#FFD700' },
+          { label: zh ? '实付手续费' : 'Actual Fee',  value: fmt(actual), color: '#4ade80' },
+          { label: zh ? '年省金额' : 'Annual Savings', value: fmt(yearly), color: '#a78bfa' },
+        ].map((item, i) => (
+          <div key={i} className="rounded-xl bg-white/4 border border-white/8 p-3 text-center">
+            <p className="text-xs text-slate-500 mb-1.5 leading-tight">{item.label}</p>
+            <p className="text-xl font-black" style={{ color: item.color }}>{item.value}</p>
+          </div>
+        ))}
+      </div>
+
+      <p className="text-center text-xs text-slate-600 mt-4">
+        {zh ? '* 仅供参考，实际费率以交易所为准' : '* For reference only. Actual rates may vary.'}
+      </p>
+    </div>
+  );
+}
+
+// ─── 主组件 ───────────────────────────────────────────────────────────────────
 export default function Home() {
   useScrollMemory();
   const { language, setLanguage } = useLanguage();
   const [, navigate] = useLocation();
   const texts = translations[language as keyof typeof translations];
+  const zh = language === 'zh';
 
-  // Fetch exchange links from database
   const { data: exchangeLinksData } = trpc.exchanges.list.useQuery();
 
   const [showGuide, setShowGuide] = useState(() => {
     try { return !localStorage.getItem('crypto_guide_seen'); } catch { return true; }
   });
-  const downloadRef = useRef<HTMLElement>(null);
-  const comparisonRef = useRef<HTMLElement>(null);
-  const insightRef = useRef<HTMLElement>(null);
+
+  // 滚动感知：当前章节
+  const [activeChapter, setActiveChapter] = useState(CHAPTERS[0].id);
+
+  useEffect(() => {
+    const handler = () => {
+      let current = CHAPTERS[0].id;
+      for (const c of CHAPTERS) {
+        const el = document.getElementById(c.id);
+        if (el && el.getBoundingClientRect().top <= 120) current = c.id;
+      }
+      setActiveChapter(current);
+    };
+    window.addEventListener('scroll', handler, { passive: true });
+    return () => window.removeEventListener('scroll', handler);
+  }, []);
 
   const handleGuideSelection = (type: 'new' | 'old') => {
     setShowGuide(false);
     try { localStorage.setItem('crypto_guide_seen', '1'); } catch {}
-    if (type === 'new') {
-      setTimeout(() => downloadRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
-    } else {
-      setTimeout(() => comparisonRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
-    }
+    const targetId = type === 'new' ? 'how-to-get' : 'how-to-get';
+    setTimeout(() => document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' }), 100);
   };
 
   const handleGuideClose = () => {
@@ -53,7 +281,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen text-white" style={{ background: 'linear-gradient(180deg, #0a192f 0%, #0d1f35 100%)' }}>
       {/* Welcome Guide Modal */}
       {showGuide && (
         <WelcomeGuide
@@ -63,103 +291,75 @@ export default function Home() {
         />
       )}
 
-
-
-      {/* Navigation */}
-      <nav className="sticky top-0 z-30 bg-background/95 backdrop-blur border-b border-border">
-        <div className="container mx-auto flex items-center justify-between py-4">
+      {/* ── 顶部导航 ── */}
+      <nav className="sticky top-0 z-50 border-b backdrop-blur-sm" style={{ background: 'rgba(10,25,47,0.95)', borderColor: 'rgba(255,215,0,0.12)' }}>
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => navigate('/portal')}
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-accent transition text-sm"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              <span className="hidden sm:inline">主页</span>
+            <button onClick={() => navigate('/')} className="text-slate-500 hover:text-amber-400 transition text-sm font-medium hidden sm:block">
+              ← <span className="hidden sm:inline">主页</span>
             </button>
-            <div className="w-px h-4 bg-border" />
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="text-xl font-bold text-accent hover:opacity-80 transition"
-            >
+            <div className="w-px h-4 bg-border hidden sm:block" />
+            <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-lg font-bold text-amber-400 hover:opacity-80 transition">
               {texts.nav.title}
             </button>
           </div>
-          <div className="hidden md:flex items-center gap-6">
-            <a href="#mechanism" className="text-muted-foreground hover:text-accent transition text-sm">{texts.nav.mechanism}</a>
-            <a href="#comparison" className="text-muted-foreground hover:text-accent transition text-sm">{texts.nav.comparison}</a>
-            <a href="#security" className="text-muted-foreground hover:text-accent transition text-sm">{texts.nav.security}</a>
-            <button
-              onClick={() => downloadRef.current?.scrollIntoView({ behavior: 'smooth' })}
-              className="text-muted-foreground hover:text-accent transition text-sm"
-            >
-              {texts.nav.download}
-            </button>
-            <button
-              onClick={() => navigate('/beginner')}
-              className="text-muted-foreground hover:text-accent transition text-sm"
-            >
-              {texts.nav.beginnerGuide}
-            </button>
-            <button
-              onClick={() => navigate('/exchanges')}
-              className="text-muted-foreground hover:text-accent transition text-sm"
-            >
-              {texts.nav.exchanges}
-            </button>
+          {/* 桌面端章节快捷导航 */}
+          <div className="hidden lg:flex items-center gap-5">
+            {CHAPTERS.slice(0, 5).map(c => (
+              <button
+                key={c.id}
+                onClick={() => document.getElementById(c.id)?.scrollIntoView({ behavior: 'smooth' })}
+                className={`text-xs font-semibold transition ${activeChapter === c.id ? 'text-amber-400' : 'text-slate-500 hover:text-amber-400'}`}
+              >
+                {zh ? c.zh : c.en}
+              </button>
+            ))}
           </div>
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => setLanguage('zh')}
-              className={`px-3 py-1 rounded text-sm font-medium transition ${language === 'zh' ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:text-accent'}`}
-            >
-              中文
-            </button>
-            <button
-              onClick={() => setLanguage('en')}
-              className={`px-3 py-1 rounded text-sm font-medium transition ${language === 'en' ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:text-accent'}`}
-            >
-              EN
-            </button>
+            <button onClick={() => setLanguage('zh')} className={`px-3 py-1 rounded text-sm font-medium transition ${language === 'zh' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'text-slate-500 hover:text-amber-400'}`}>中文</button>
+            <button onClick={() => setLanguage('en')} className={`px-3 py-1 rounded text-sm font-medium transition ${language === 'en' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'text-slate-500 hover:text-amber-400'}`}>EN</button>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative py-28 px-4 text-center overflow-hidden" style={{ background: 'linear-gradient(160deg, #0a192f 0%, #0f2744 40%, #0a1f38 70%, #0a192f 100%)' }}>
-        {/* 背景装饰光晕 */}
+      {/* ══════════════════════════════════════════════════════════════════════
+          HERO
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section className="relative py-24 sm:py-32 px-4 text-center overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full" style={{ background: 'radial-gradient(ellipse, rgba(255,215,0,0.07) 0%, transparent 70%)' }} />
-          <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(ellipse, rgba(255,165,0,0.05) 0%, transparent 70%)' }} />
-          <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(ellipse, rgba(255,215,0,0.05) 0%, transparent 70%)' }} />
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[350px] rounded-full" style={{ background: 'radial-gradient(ellipse, rgba(255,215,0,0.07) 0%, transparent 70%)' }} />
+          <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full" style={{ background: 'radial-gradient(ellipse, rgba(255,165,0,0.04) 0%, transparent 70%)' }} />
         </div>
-        <div className="container mx-auto relative">
+        <div className="container mx-auto relative max-w-3xl">
           <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold px-4 py-2 rounded-full mb-8 uppercase tracking-widest">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
             {texts.hero.badge}
           </div>
-          <h1 className="text-5xl md:text-7xl font-black text-white mb-5 leading-tight tracking-tight">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white mb-5 leading-tight tracking-tight">
             {texts.hero.title}
           </h1>
-          <p className="text-2xl md:text-3xl font-bold mb-4" style={{ color: '#FFD700', textShadow: '0 0 30px rgba(255,215,0,0.3)' }}>{texts.hero.subtitle}</p>
-          <p className="text-slate-400 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">{texts.hero.description}</p>
+          <p className="text-xl sm:text-2xl font-bold mb-4" style={{ color: '#FFD700', textShadow: '0 0 30px rgba(255,215,0,0.25)' }}>
+            {texts.hero.subtitle}
+          </p>
+          <p className="text-slate-400 text-base sm:text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
+            {texts.hero.description}
+          </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              className="text-lg px-8 font-bold shadow-lg transition-all hover:scale-105"
+              className="text-base sm:text-lg px-8 font-black shadow-lg transition-all hover:scale-105"
               style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)', color: '#0A192F', boxShadow: '0 4px 20px rgba(255,215,0,0.35)' }}
-              onClick={() => insightRef.current?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => document.getElementById('what-is-rebate')?.scrollIntoView({ behavior: 'smooth' })}
             >
               {texts.hero.startBtn}
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="border-amber-500/50 text-amber-400 hover:bg-amber-500/10 text-lg px-8 font-bold"
-              onClick={() => comparisonRef.current?.scrollIntoView({ behavior: 'smooth' })}
+              className="border-amber-500/50 text-amber-400 hover:bg-amber-500/10 text-base sm:text-lg px-8 font-bold"
+              onClick={() => navigate('/exchange-download')}
             >
-              {texts.hero.caseBtn}
+              {zh ? '新手不知道怎么下载？' : 'How to Download an Exchange?'}
             </Button>
           </div>
           <div className="mt-14 animate-bounce">
@@ -168,410 +368,556 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Newbie 3-Step Guide */}
-      <section className="py-20 px-4" style={{ background: 'linear-gradient(180deg, rgba(23,42,69,0.4) 0%, rgba(10,25,47,0.8) 100%)' }}>
-        <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.newbieGuide.title}</h2>
-            <p className="text-slate-400 text-lg max-w-xl mx-auto">{texts.newbieGuide.subtitle}</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6 mb-10">
-            {[
-              { num: '1', title: texts.newbieGuide.step1, desc: texts.newbieGuide.step1Desc },
-              { num: '2', title: texts.newbieGuide.step2, desc: texts.newbieGuide.step2Desc },
-              { num: '3', title: texts.newbieGuide.step3, desc: texts.newbieGuide.step3Desc },
-            ].map((step) => (
-              <div key={step.num} className="group bg-card/60 backdrop-blur-sm p-8 rounded-2xl border border-amber-500/15 hover:border-amber-500/40 hover:bg-card/80 transition-all duration-300 text-center" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
-                <div className="w-14 h-14 flex items-center justify-center mx-auto mb-5 rounded-2xl text-xl font-black text-black group-hover:scale-110 transition-transform" style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)', boxShadow: '0 4px 12px rgba(255,215,0,0.3)' }}>
-                  {step.num}
-                </div>
-                <h3 className="text-lg font-black text-white mb-3">{step.title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="flex items-center gap-3 bg-amber-500/8 border border-amber-500/25 rounded-xl p-4 text-center mb-8">
-            <span className="text-amber-400 text-xl shrink-0">⚠️</span>
-            <p className="text-amber-300 font-semibold text-sm">{texts.newbieGuide.warning}</p>
-          </div>
-
-          {/* Beginner Guide CTA */}
-          <div className="bg-card/60 border border-amber-500/20 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0" style={{ background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.25)' }}>
-                <BookOpen style={{ color: '#FFD700' }} size={28} />
-              </div>
-              <div>
-                <h3 className="text-lg font-black text-white mb-1">{texts.newbieGuide.learnMore}</h3>
-                <p className="text-slate-400 text-sm">{texts.newbieGuide.learnMoreDesc}</p>
-              </div>
-            </div>
-            <Button
-              size="lg"
-              className="whitespace-nowrap font-bold hover:scale-105 transition-transform"
-              style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)', color: '#0A192F', boxShadow: '0 4px 16px rgba(255,215,0,0.25)' }}
-              onClick={() => navigate('/beginner')}
-            >
-              {texts.newbieGuide.learnMoreBtn}
-            </Button>
-          </div>
-
-          {/* 🔥 Interactive Crypto Intro CTA - prominent banner */}
-          <div
-            className="mt-6 relative overflow-hidden rounded-2xl cursor-pointer group"
-            onClick={() => navigate('/crypto-intro')}
-            style={{ background: 'linear-gradient(135deg, #0f2744 0%, #1a3a5c 40%, #0f2744 100%)' }}
-          >
-            {/* animated glow border */}
-            <div className="absolute inset-0 rounded-2xl border-2 border-accent/60 group-hover:border-accent transition-colors duration-300" />
-            {/* pulsing dot */}
-            <span className="absolute top-4 right-4 flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-accent" />
+      {/* ══════════════════════════════════════════════════════════════════════
+          §1 什么是返佣
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section id="what-is-rebate" className="py-20 px-4" style={{ background: 'linear-gradient(180deg, rgba(23,42,69,0.4) 0%, rgba(10,25,47,0.8) 100%)' }}>
+        <div className="container mx-auto max-w-3xl">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-2xl">💡</span>
+            <span className="text-xs font-black text-amber-400 uppercase tracking-widest">
+              {zh ? '第一章' : 'Chapter 1'}
             </span>
-            <div className="flex flex-col md:flex-row items-center gap-6 p-6 md:p-8">
-              <div className="text-6xl select-none">📈</div>
-              <div className="flex-1 text-center md:text-left">
-                <div className="inline-flex items-center gap-2 bg-accent/20 text-accent text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
-                  <span className="animate-pulse">●</span>
-                  {language === 'zh' ? '新手必看' : 'MUST READ FOR BEGINNERS'}
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                  {language === 'zh' ? '🔥 新手看这里！币圈交易 vs 传统交易' : '🔥 Beginners! Crypto vs Traditional Trading'}
-                </h3>
-                <p className="text-muted-foreground text-base">
-                  {language === 'zh'
-                    ? '3 分钟了解币圈独特优势，亲手模拟一笔永续合约交易，感受杠杆的魔力 ——完全免费，无需注册'
-                    : '3 min to understand crypto advantages, simulate a perpetual contract trade, feel the power of leverage — free, no registration'}
-                </p>
-              </div>
-              <div className="flex flex-col items-center gap-2 shrink-0">
-                <Button
-                  size="lg"
-                  className="bg-accent text-accent-foreground hover:bg-accent/90 font-bold text-lg px-8 py-6 shadow-lg shadow-accent/30 group-hover:scale-105 transition-transform"
-                >
-                  {language === 'zh' ? '立即体验模拟交易 →' : 'Try Simulated Trading →'}
-                </Button>
-                <span className="text-xs text-muted-foreground">
-                  {language === 'zh' ? '已有 2,847 名新手体验过' : '2,847 beginners have tried'}
-                </span>
-              </div>
-            </div>
           </div>
-        </div>
-      </section>
-
-      {/* Exchange Download Section */}
-      <section ref={downloadRef as React.RefObject<HTMLElement>} className="py-20 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.exchangeDownload.title}</h2>
-            <p className="text-slate-400 text-lg">{texts.exchangeDownload.subtitle}</p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-            {(exchangeLinksData ?? []).map((ex) => {
-              const meta = EXCHANGE_META[ex.slug] ?? { emoji: '💱', color: 'from-gray-800 to-gray-900' };
-              return (
-              <a
-                key={ex.slug}
-                href={ex.referralLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`group relative bg-gradient-to-b ${meta.color} border border-amber-500/15 rounded-2xl p-6 flex flex-col items-center gap-3 hover:border-amber-500/50 transition-all duration-300 hover:-translate-y-1`}
-                style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.25)' }}
-              >
-                <div className="text-4xl group-hover:scale-110 transition-transform duration-300">{meta.emoji}</div>
-                <span className="text-base font-black text-white">{ex.name}</span>
-                <span className="text-xs px-2.5 py-1 rounded-full font-bold" style={{ background: 'rgba(255,215,0,0.15)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.25)' }}>返佣 {ex.rebateRate}</span>
-                <span className="text-xs font-semibold" style={{ color: '#FFA500' }}>{texts.exchangeDownload.download} ↗</span>
-              </a>
-              );
-            })}
-          </div>
-
-          <div className="text-center space-y-4">
-            <p className="text-muted-foreground text-sm">{texts.exchangeDownload.official}</p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-              <Button
-                size="lg"
-                className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto"
-                onClick={() => navigate('/exchanges')}
-              >
-                <Zap className="mr-2" size={20} />
-                {language === 'zh' ? '查看详细费率对比' : 'View Detailed Fee Comparison'}
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-accent/60 text-accent hover:bg-accent/10 w-full sm:w-auto"
-                onClick={() => navigate('/exchange-guide')}
-              >
-                <span className="mr-2">📖</span>
-                {language === 'zh' ? '不了解这几个交易所？点这里学习' : 'Not familiar? Learn about each exchange'}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* What is Rebate */}
-      <section ref={insightRef as React.RefObject<HTMLElement>} className="py-20 px-4" style={{ background: 'linear-gradient(180deg, rgba(23,42,69,0.5) 0%, rgba(10,25,47,0.9) 100%)' }}>
-        <div className="container mx-auto text-center">
-          <h2 className="text-5xl font-black mb-4" style={{ color: '#FFD700', textShadow: '0 0 40px rgba(255,215,0,0.2)' }}>
-            {language === 'zh' ? '什么是返佣？' : 'What is Rebate?'}
+          <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
+            {zh ? '什么是返佣？' : 'What is a Rebate?'}
           </h2>
-          <p className="text-slate-300 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
-            {language === 'zh'
-              ? '返佣是交易所为了吸引新用户而提供的激励机制。当您通过邀请码注册时，交易所会自动将您的交易手续费的一部分返还给您，这就是返佣。'
-              : 'Rebates are incentive mechanisms provided by exchanges to attract new users. When you register with a referral code, the exchange automatically returns a portion of your trading fees to you.'}
+          <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8">
+            {zh
+              ? '返佣（Rebate）是交易所为了吸引新用户而提供的激励机制。当你通过专属邀请码注册时，交易所会自动将你每笔交易手续费的一部分返还到你的账户——这笔钱是真实的、可提取的资产，不是积分或优惠券。'
+              : 'A rebate is an incentive mechanism provided by exchanges to attract new users. When you register with a referral code, the exchange automatically returns a portion of your trading fees to your account — this is real, withdrawable money, not points or coupons.'}
           </p>
-          <div className="grid md:grid-cols-3 gap-6 mt-8">
-            {[
-              { icon: <Gift size={28} />, title: language === 'zh' ? '自动返还' : 'Auto Return', desc: language === 'zh' ? '每笔交易手续费的一部分自动返还到您的账户' : 'A portion of each trade fee is automatically returned to your account' },
-              { icon: <TrendingUp size={28} />, title: language === 'zh' ? '持续收益' : 'Ongoing Income', desc: language === 'zh' ? '只要您继续交易，就能持续获得返佣' : 'As long as you keep trading, you keep earning rebates' },
-              { icon: <CheckCircle2 size={28} />, title: language === 'zh' ? '官方支持' : 'Official Support', desc: language === 'zh' ? '这是交易所官方的正规激励机制' : 'This is the official legitimate incentive mechanism of exchanges' },
-            ].map((item, i) => (
-              <div key={i} className="group bg-card/60 backdrop-blur-sm p-7 rounded-2xl border border-amber-500/15 hover:border-amber-500/40 hover:bg-card/80 transition-all duration-300" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform" style={{ background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.2)', color: '#FFD700' }}>
+
+          {/* 三个核心特点 */}
+          <div className="grid sm:grid-cols-3 gap-4 mb-8">
+            {(zh ? [
+              { icon: <Gift className="w-5 h-5" />, title: '自动返还', desc: '每笔交易手续费的一部分自动打入账户，无需手动申请。' },
+              { icon: <Zap className="w-5 h-5" />, title: '终身有效', desc: '只要账户存在，返佣就持续生效，不会过期。' },
+              { icon: <TrendingUp className="w-5 h-5" />, title: '无风险收益', desc: '省下的手续费是纯利润，不受市场涨跌影响。' },
+            ] : [
+              { icon: <Gift className="w-5 h-5" />, title: 'Auto Return', desc: 'A portion of each trade fee is automatically credited to your account.' },
+              { icon: <Zap className="w-5 h-5" />, title: 'Lifetime Valid', desc: 'Rebates remain active as long as your account exists.' },
+              { icon: <TrendingUp className="w-5 h-5" />, title: 'Risk-Free Profit', desc: 'Saved fees are pure profit, unaffected by market movements.' },
+            ]).map((item, i) => (
+              <div key={i} className="rounded-2xl border border-amber-500/15 bg-white/3 p-5 hover:border-amber-500/30 transition-all">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: 'rgba(255,215,0,0.1)', color: '#FFD700' }}>
                   {item.icon}
                 </div>
-                <h3 className="font-black text-white mb-2">{item.title}</h3>
-                <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
+                <h3 className="text-sm font-black text-white mb-2">{item.title}</h3>
+                <p className="text-slate-400 text-xs leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* 一句话总结 */}
+          <div className="rounded-2xl border border-amber-500/25 p-5" style={{ background: 'rgba(255,215,0,0.04)' }}>
+            <p className="text-amber-300 font-bold text-sm sm:text-base leading-relaxed">
+              {zh
+                ? '💬 简单来说：不填邀请码 = 每笔交易损失 20%–60% 的返佣。这笔钱本来就属于你，只是你不知道而已。'
+                : '💬 Simply put: not using a referral code = losing 20%–60% rebate on every trade. This money was always yours — you just didn\'t know it.'}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          §2 返佣来源
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section id="rebate-source" className="py-20 px-4 bg-background">
+        <div className="container mx-auto max-w-3xl">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-2xl">🏦</span>
+            <span className="text-xs font-black text-amber-400 uppercase tracking-widest">
+              {zh ? '第二章' : 'Chapter 2'}
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
+            {zh ? '返佣从哪里来？' : 'Where Does the Rebate Come From?'}
+          </h2>
+          <p className="text-slate-400 text-base leading-relaxed mb-10">
+            {zh
+              ? '很多人担心"返佣是不是骗局"。事实上，返佣资金 100% 来自交易所本身的手续费收入，是交易所为了获客主动让利的营销成本。'
+              : 'Many people worry that "rebates are a scam." In fact, rebate funds come 100% from the exchange\'s own fee revenue — it\'s marketing spend that exchanges willingly give up to acquire users.'}
+          </p>
+
+          {/* 资金流向图 */}
+          <div className="rounded-2xl border border-white/10 bg-white/3 p-6 mb-8">
+            <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest mb-5">
+              {zh ? '资金流向' : 'Money Flow'}
+            </h3>
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              {(zh ? [
+                { label: '你的每笔交易', sub: '产生手续费', color: 'border-slate-500/40 bg-slate-800/40', textColor: 'text-slate-300' },
+                { label: '→', sub: '', color: '', textColor: 'text-amber-400 text-2xl font-black' },
+                { label: '交易所收取', sub: '0.1% 手续费', color: 'border-red-500/30 bg-red-900/20', textColor: 'text-red-300' },
+                { label: '→', sub: '', color: '', textColor: 'text-amber-400 text-2xl font-black' },
+                { label: '60% 返还给你', sub: '直接入账', color: 'border-amber-500/40 bg-amber-900/20', textColor: 'text-amber-300' },
+              ] : [
+                { label: 'Your Trade', sub: 'Generates fee', color: 'border-slate-500/40 bg-slate-800/40', textColor: 'text-slate-300' },
+                { label: '→', sub: '', color: '', textColor: 'text-amber-400 text-2xl font-black' },
+                { label: 'Exchange Takes', sub: '0.1% fee', color: 'border-red-500/30 bg-red-900/20', textColor: 'text-red-300' },
+                { label: '→', sub: '', color: '', textColor: 'text-amber-400 text-2xl font-black' },
+                { label: '60% Returned', sub: 'To your account', color: 'border-amber-500/40 bg-amber-900/20', textColor: 'text-amber-300' },
+              ]).map((item, i) => (
+                item.label === '→'
+                  ? <div key={i} className={`${item.textColor} hidden sm:block`}>{item.label}</div>
+                  : <div key={i} className={`flex-1 rounded-xl border ${item.color} p-4 text-center`}>
+                      <p className={`text-sm font-black ${item.textColor}`}>{item.label}</p>
+                      <p className="text-xs text-slate-500 mt-1">{item.sub}</p>
+                    </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 三方共赢 */}
+          <h3 className="text-lg font-black text-white mb-4">{zh ? '三方共赢模型' : 'Win-Win-Win Model'}</h3>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {(zh ? [
+              { icon: '🏢', who: '交易所', benefit: '获得活跃用户，提升交易流动性和市场深度' },
+              { icon: '👤', who: '你（用户）', benefit: '享受手续费折扣，每笔交易都在为你积累无风险收益' },
+              { icon: '🤝', who: '邀请人', benefit: '获得推广奖励，实现低成本用户增长' },
+            ] : [
+              { icon: '🏢', who: 'Exchange', benefit: 'Gains active users, improves liquidity and market depth' },
+              { icon: '👤', who: 'You (User)', benefit: 'Enjoy fee discounts, accumulate risk-free returns on every trade' },
+              { icon: '🤝', who: 'Referrer', benefit: 'Earns promotion rewards, achieves low-cost user growth' },
+            ]).map((item, i) => (
+              <div key={i} className="rounded-2xl border border-white/8 bg-white/3 p-5 text-center">
+                <div className="text-3xl mb-3">{item.icon}</div>
+                <h4 className="text-sm font-black text-white mb-2">{item.who}</h4>
+                <p className="text-slate-400 text-xs leading-relaxed">{item.benefit}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Core Insight */}
-      <section className="py-20 px-4 bg-background">
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.insight.title}</h2>
-          <p className="text-slate-400 mb-12 text-lg">{texts.insight.subtitle}</p>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { icon: <TrendingUp size={26} />, title: texts.insight.cost.title, desc: texts.insight.cost.desc },
-              { icon: <CheckCircle2 size={26} />, title: texts.insight.reduce.title, desc: texts.insight.reduce.desc },
-              { icon: <Shield size={26} />, title: texts.insight.profit.title, desc: texts.insight.profit.desc },
-            ].map((item, i) => (
-              <div key={i} className="group bg-card/60 p-7 rounded-2xl border border-amber-500/15 hover:border-amber-500/35 hover:bg-card/80 transition-all duration-300" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform" style={{ background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.2)', color: '#FFD700' }}>
-                  {item.icon}
-                </div>
-                <h3 className="text-lg font-black text-white mb-2">{item.title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Mechanism */}
+      {/* ══════════════════════════════════════════════════════════════════════
+          §3 机制揭秘
+      ══════════════════════════════════════════════════════════════════════ */}
       <section id="mechanism" className="py-20 px-4" style={{ background: 'linear-gradient(180deg, rgba(23,42,69,0.4) 0%, rgba(10,25,47,0.8) 100%)' }}>
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.mechanism.title}</h2>
-          <p className="text-slate-400 mb-12 text-lg">{texts.mechanism.subtitle}</p>
-          <div className="grid md:grid-cols-3 gap-8">
+        <div className="container mx-auto max-w-3xl">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-2xl">⚙️</span>
+            <span className="text-xs font-black text-amber-400 uppercase tracking-widest">
+              {zh ? '第三章' : 'Chapter 3'}
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
+            {texts.mechanism.title}
+          </h2>
+          <p className="text-slate-400 text-base leading-relaxed mb-10">{texts.mechanism.subtitle}</p>
+
+          <div className="space-y-4">
             {[
-              { icon: <Users size={28} />, title: texts.mechanism.demand.title, desc: texts.mechanism.demand.desc, step: '01' },
-              { icon: <Gift size={28} />, title: texts.mechanism.incentive.title, desc: texts.mechanism.incentive.desc, step: '02' },
-              { icon: <CheckCircle2 size={28} />, title: texts.mechanism.winwin.title, desc: texts.mechanism.winwin.desc, step: '03' },
+              { icon: <Users className="w-6 h-6" />, step: '01', title: texts.mechanism.demand.title, desc: texts.mechanism.demand.desc },
+              { icon: <Gift className="w-6 h-6" />, step: '02', title: texts.mechanism.incentive.title, desc: texts.mechanism.incentive.desc },
+              { icon: <TrendingUp className="w-6 h-6" />, step: '03', title: texts.mechanism.winwin.title, desc: texts.mechanism.winwin.desc },
             ].map((item, i) => (
-              <div key={i} className="group text-center relative">
-                {/* 连接线 */}
-                {i < 2 && <div className="hidden md:block absolute top-8 left-full w-full h-px z-0" style={{ background: 'linear-gradient(90deg, rgba(255,215,0,0.3), transparent)' }} />}
-                <div className="relative z-10 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform" style={{ background: 'linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,165,0,0.08))', border: '1px solid rgba(255,215,0,0.3)', color: '#FFD700' }}>
+              <div key={i} className="flex items-start gap-4 rounded-2xl border border-amber-500/12 bg-white/3 p-5 hover:border-amber-500/25 transition-all">
+                <div className="relative w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,165,0,0.08))', border: '1px solid rgba(255,215,0,0.3)', color: '#FFD700' }}>
                   {item.icon}
-                  <span className="absolute -top-2 -right-2 text-xs font-black rounded-full w-5 h-5 flex items-center justify-center" style={{ background: '#FFD700', color: '#0A192F', fontSize: '9px' }}>{item.step}</span>
+                  <span className="absolute -top-2 -right-2 text-[9px] font-black rounded-full w-5 h-5 flex items-center justify-center" style={{ background: '#FFD700', color: '#0A192F' }}>{item.step}</span>
                 </div>
-                <h3 className="text-lg font-black text-white mb-3">{item.title}</h3>
+                <div>
+                  <h3 className="text-base font-black text-white mb-2">{item.title}</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* 核心洞察 */}
+          <div className="mt-10 rounded-2xl border border-amber-500/20 p-6" style={{ background: 'rgba(255,215,0,0.03)' }}>
+            <h3 className="text-lg font-black mb-4" style={{ color: '#FFD700' }}>
+              {texts.insight.title} — {texts.insight.subtitle}
+            </h3>
+            <div className="space-y-4">
+              {[
+                { title: texts.insight.cost.title, desc: texts.insight.cost.desc },
+                { title: texts.insight.reduce.title, desc: texts.insight.reduce.desc },
+                { title: texts.insight.profit.title, desc: texts.insight.profit.desc },
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" style={{ color: '#FFD700' }} />
+                  <div>
+                    <span className="text-sm font-black text-white">{item.title}：</span>
+                    <span className="text-slate-400 text-sm leading-relaxed">{item.desc}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          §4 安全合规
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section id="security" className="py-20 px-4 bg-background">
+        <div className="container mx-auto max-w-3xl">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-2xl">🛡️</span>
+            <span className="text-xs font-black text-amber-400 uppercase tracking-widest">
+              {zh ? '第四章' : 'Chapter 4'}
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
+            {texts.security.title}
+          </h2>
+          <p className="text-slate-400 text-base leading-relaxed mb-10">{texts.security.subtitle}</p>
+
+          <div className="grid sm:grid-cols-2 gap-5">
+            {[
+              { icon: <CheckCircle2 className="w-5 h-5" />, title: texts.security.official, desc: texts.security.officialDesc },
+              { icon: <Shield className="w-5 h-5" />, title: texts.security.settlement, desc: texts.security.settlementDesc },
+              { icon: <Lock className="w-5 h-5" />, title: texts.security.security1, desc: texts.security.security1Desc },
+              { icon: <Globe className="w-5 h-5" />, title: texts.security.standard, desc: texts.security.standardDesc },
+            ].map((item, i) => (
+              <div key={i} className="group bg-white/3 p-6 rounded-2xl border border-amber-500/12 hover:border-amber-500/28 transition-all">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.2)', color: '#FFD700' }}>
+                    {item.icon}
+                  </div>
+                  <h3 className="text-sm font-black text-white">{item.title}</h3>
+                </div>
                 <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Comparison - New vs Old Users */}
-      <section id="comparison" ref={comparisonRef as React.RefObject<HTMLElement>} className="py-20 px-4 bg-background">
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.comparison.title}</h2>
-          <p className="text-slate-400 mb-12 text-lg">{texts.comparison.subtitle}</p>
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* New User — 黄色高亮 */}
-            <div className="bg-card/60 p-8 rounded-2xl border" style={{ borderColor: 'rgba(255,215,0,0.4)', boxShadow: '0 4px 24px rgba(255,215,0,0.08)' }}>
-              <div className="text-4xl mb-4">👤</div>
-              <h3 className="text-xl font-black mb-6" style={{ color: '#FFD700' }}>{texts.comparison.newUser}</h3>
-              {[texts.comparison.step1New, texts.comparison.step2New, texts.comparison.step3New].map((step, i) => (
-                <div key={i} className="flex items-start gap-3 mb-4">
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-black shrink-0 mt-0.5" style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)', color: '#0A192F' }}>{i + 1}</div>
-                  <p className="text-slate-300 text-sm leading-relaxed">{step}</p>
+          {/* 官方背书 */}
+          <div className="mt-8 rounded-2xl border border-emerald-500/20 bg-emerald-900/10 p-5">
+            <h3 className="text-sm font-black text-emerald-400 mb-3">
+              {zh ? '✅ 权威数据背书' : '✅ Authority Data'}
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+              {[
+                { val: '7亿+', label: zh ? '全球持币用户' : 'Global Users' },
+                { val: '$86.2T', label: zh ? '2025年交易量' : '2025 Volume' },
+                { val: '50+', label: zh ? '国家持牌运营' : 'Licensed Countries' },
+                { val: '100%+', label: zh ? '主流交易所储备率' : 'Reserve Ratio' },
+              ].map((item, i) => (
+                <div key={i} className="rounded-xl bg-white/4 border border-white/8 p-3">
+                  <p className="text-lg font-black text-white">{item.val}</p>
+                  <p className="text-xs text-slate-500 mt-1">{item.label}</p>
                 </div>
               ))}
             </div>
-            {/* Old User */}
-            <div className="bg-card/60 p-8 rounded-2xl border border-white/10">
-              <div className="text-4xl mb-4">👥</div>
-              <h3 className="text-xl font-black text-slate-300 mb-6">{texts.comparison.oldUser}</h3>
-              {[texts.comparison.step1Old, texts.comparison.step2Old, texts.comparison.step3Old].map((step, i) => (
-                <div key={i} className="flex items-start gap-3 mb-4">
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold shrink-0 mt-0.5" style={{ background: 'rgba(255,215,0,0.15)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.25)' }}>{i + 1}</div>
-                  <p className="text-slate-400 text-sm leading-relaxed">{step}</p>
-                </div>
-              ))}
-            </div>
+            <p className="text-xs text-slate-600 mt-3 text-center">
+              {zh ? '数据来源：CoinGecko 2025年报、CoinGlass、各交易所官方公告' : 'Sources: CoinGecko 2025 Annual Report, CoinGlass, official exchange announcements'}
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Case Study */}
-      <section className="py-20 px-4" style={{ background: 'linear-gradient(180deg, rgba(23,42,69,0.4) 0%, rgba(10,25,47,0.8) 100%)' }}>
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.caseStudy.title}</h2>
-          <p className="text-slate-400 mb-12 text-lg">{texts.caseStudy.subtitle}</p>
-          <div className="bg-card/60 rounded-2xl border p-8" style={{ borderColor: 'rgba(255,215,0,0.25)', boxShadow: '0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,215,0,0.05)' }}>
-            <div className="grid md:grid-cols-4 gap-4 text-center mb-8">
+      {/* ══════════════════════════════════════════════════════════════════════
+          §5 实战案例 + 计算器
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section id="case-study" className="py-20 px-4" style={{ background: 'linear-gradient(180deg, rgba(23,42,69,0.4) 0%, rgba(10,25,47,0.8) 100%)' }}>
+        <div className="container mx-auto max-w-3xl">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-2xl">📊</span>
+            <span className="text-xs font-black text-amber-400 uppercase tracking-widest">
+              {zh ? '第五章' : 'Chapter 5'}
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
+            {texts.caseStudy.title}
+          </h2>
+          <p className="text-slate-400 text-base leading-relaxed mb-8">{texts.caseStudy.subtitle}</p>
+
+          {/* 静态案例 */}
+          <div className="rounded-2xl border p-6 mb-8" style={{ borderColor: 'rgba(255,215,0,0.25)', background: 'rgba(10,25,47,0.6)', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mb-6">
               {[
                 { label: texts.caseStudy.monthlyVolume, value: '$1,000,000', color: '#ffffff' },
                 { label: texts.caseStudy.standardFee, value: '$1,000', color: '#f87171' },
                 { label: texts.caseStudy.rebateAmount, value: '$600', color: '#FFD700' },
                 { label: texts.caseStudy.actualFee, value: '$400', color: '#4ade80' },
               ].map((item, i) => (
-                <div key={i} className="bg-background/40 rounded-xl p-5 border border-white/5">
-                  <p className="text-slate-500 text-xs font-medium mb-2 uppercase tracking-wider">{item.label}</p>
-                  <p className="text-3xl font-black" style={{ color: item.color }}>{item.value}</p>
+                <div key={i} className="rounded-xl bg-white/4 border border-white/8 p-4">
+                  <p className="text-xs text-slate-500 mb-2 uppercase tracking-wider leading-tight">{item.label}</p>
+                  <p className="text-2xl font-black" style={{ color: item.color }}>{item.value}</p>
                 </div>
               ))}
             </div>
-            <div className="text-center border-t pt-6" style={{ borderColor: 'rgba(255,215,0,0.15)' }}>
-              <p className="text-xl font-black mb-2" style={{ color: '#FFD700' }}>
-                {texts.caseStudy.summary} <span className="text-3xl">$600</span>，{texts.caseStudy.yearly} <span className="text-3xl">$7,200</span>
+            <div className="text-center border-t pt-5" style={{ borderColor: 'rgba(255,215,0,0.12)' }}>
+              <p className="text-lg font-black mb-1" style={{ color: '#FFD700' }}>
+                {texts.caseStudy.summary} <span className="text-2xl">$600</span>，{texts.caseStudy.yearly} <span className="text-2xl">$7,200</span>
               </p>
               <p className="text-slate-400 text-sm">{texts.caseStudy.profit}</p>
             </div>
           </div>
+
+          {/* 交互计算器 */}
+          <FeeCalculator zh={zh} />
         </div>
       </section>
 
-      {/* Scenarios */}
-      <section className="py-20 px-4 bg-background">
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.scenarios.title}</h2>
-          <p className="text-slate-400 mb-12 text-lg">{texts.scenarios.subtitle}</p>
-          <div className="grid md:grid-cols-2 gap-6">
+      {/* ══════════════════════════════════════════════════════════════════════
+          §6 全场景覆盖
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section id="scenarios" className="py-20 px-4 bg-background">
+        <div className="container mx-auto max-w-3xl">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-2xl">🌐</span>
+            <span className="text-xs font-black text-amber-400 uppercase tracking-widest">
+              {zh ? '第六章' : 'Chapter 6'}
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
+            {texts.scenarios.title}
+          </h2>
+          <p className="text-slate-400 text-base leading-relaxed mb-10">{texts.scenarios.subtitle}</p>
+
+          <div className="grid sm:grid-cols-2 gap-5 mb-8">
             {[
-              { title: texts.scenarios.spot, points: [texts.scenarios.spotPoint1, texts.scenarios.spotPoint2, texts.scenarios.spotPoint3] },
-              { title: texts.scenarios.futures, points: [texts.scenarios.futuresPoint1, texts.scenarios.futuresPoint2, texts.scenarios.futuresPoint3] },
+              { title: texts.scenarios.spot, icon: '📈', points: [texts.scenarios.spotPoint1, texts.scenarios.spotPoint2, texts.scenarios.spotPoint3] },
+              { title: texts.scenarios.futures, icon: '⚡', points: [texts.scenarios.futuresPoint1, texts.scenarios.futuresPoint2, texts.scenarios.futuresPoint3] },
             ].map((card, ci) => (
-              <div key={ci} className="bg-card/60 p-8 rounded-2xl border border-amber-500/15 hover:border-amber-500/30 transition-all" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-                <h3 className="text-xl font-black mb-6" style={{ color: '#FFD700' }}>{card.title}</h3>
+              <div key={ci} className="bg-white/3 p-6 rounded-2xl border border-amber-500/12 hover:border-amber-500/28 transition-all">
+                <div className="flex items-center gap-2 mb-5">
+                  <span className="text-2xl">{card.icon}</span>
+                  <h3 className="text-base font-black" style={{ color: '#FFD700' }}>{card.title}</h3>
+                </div>
                 {card.points.map((p, i) => (
-                  <div key={i} className="flex items-start gap-3 mb-3">
-                    <CheckCircle2 className="shrink-0 mt-0.5" size={16} style={{ color: '#FFD700' }} />
+                  <div key={i} className="flex items-start gap-2.5 mb-3 last:mb-0">
+                    <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" style={{ color: '#FFD700' }} />
                     <p className="text-slate-300 text-sm leading-relaxed">{p}</p>
                   </div>
                 ))}
               </div>
             ))}
           </div>
-          <p className="text-center font-bold mt-8 text-base" style={{ color: '#FFD700' }}>{texts.scenarios.note}</p>
-        </div>
-      </section>
 
-      {/* Security */}
-      <section id="security" className="py-20 px-4" style={{ background: 'linear-gradient(180deg, rgba(23,42,69,0.4) 0%, rgba(10,25,47,0.8) 100%)' }}>
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.security.title}</h2>
-          <p className="text-slate-400 mb-12 text-lg">{texts.security.subtitle}</p>
-          <div className="grid md:grid-cols-2 gap-5">
-            {[
-              { icon: <CheckCircle2 size={22} />, title: texts.security.official, desc: texts.security.officialDesc },
-              { icon: <Shield size={22} />, title: texts.security.settlement, desc: texts.security.settlementDesc },
-              { icon: <Shield size={22} />, title: texts.security.security1, desc: texts.security.security1Desc },
-              { icon: <CheckCircle2 size={22} />, title: texts.security.standard, desc: texts.security.standardDesc },
-            ].map((item, i) => (
-              <div key={i} className="group bg-card/60 p-7 rounded-2xl border border-amber-500/15 hover:border-amber-500/30 transition-all" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.2)', color: '#FFD700' }}>
-                    {item.icon}
-                  </div>
-                  <h3 className="text-base font-black text-white">{item.title}</h3>
-                </div>
-                <p className="text-slate-400 text-sm leading-relaxed pl-13">{item.desc}</p>
-              </div>
-            ))}
+          <div className="rounded-2xl border border-amber-500/20 p-4 text-center" style={{ background: 'rgba(255,215,0,0.04)' }}>
+            <p className="font-bold text-sm sm:text-base" style={{ color: '#FFD700' }}>{texts.scenarios.note}</p>
           </div>
         </div>
       </section>
 
-      {/* Summary & CTA */}
-      <section className="py-20 px-4 bg-background">
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-black mb-3" style={{ color: '#FFD700' }}>{texts.summary.title}</h2>
-          <p className="text-slate-400 mb-12 text-lg">{texts.summary.subtitle}</p>
-          <div className="space-y-5 mb-12">
+      {/* ══════════════════════════════════════════════════════════════════════
+          §7 如何获得返佣（新老用户）
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section id="how-to-get" className="py-20 px-4" style={{ background: 'linear-gradient(180deg, rgba(23,42,69,0.4) 0%, rgba(10,25,47,0.8) 100%)' }}>
+        <div className="container mx-auto max-w-3xl">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-2xl">🎁</span>
+            <span className="text-xs font-black text-amber-400 uppercase tracking-widest">
+              {zh ? '第七章' : 'Chapter 7'}
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
+            {texts.comparison.title}
+          </h2>
+          <p className="text-slate-400 text-base leading-relaxed mb-10">{texts.comparison.subtitle}</p>
+
+          <div className="grid sm:grid-cols-2 gap-5 mb-10">
+            {/* 新用户 */}
+            <div className="bg-white/3 p-6 rounded-2xl border" style={{ borderColor: 'rgba(255,215,0,0.35)', boxShadow: '0 4px 24px rgba(255,215,0,0.06)' }}>
+              <div className="text-3xl mb-3">👤</div>
+              <h3 className="text-lg font-black mb-5" style={{ color: '#FFD700' }}>{texts.comparison.newUser}</h3>
+              {[texts.comparison.step1New, texts.comparison.step2New, texts.comparison.step3New].map((step, i) => (
+                <div key={i} className="flex items-start gap-3 mb-4 last:mb-0">
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-black shrink-0 mt-0.5" style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)', color: '#0A192F' }}>{i + 1}</div>
+                  <p className="text-slate-300 text-sm leading-relaxed">{step}</p>
+                </div>
+              ))}
+              <button
+                onClick={() => navigate('/exchange-download')}
+                className="mt-5 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-black transition-all hover:scale-[1.02]"
+                style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)', color: '#0A192F' }}
+              >
+                {zh ? '立即下载交易所 →' : 'Download Exchange Now →'}
+              </button>
+            </div>
+
+            {/* 老用户 */}
+            <div className="bg-white/3 p-6 rounded-2xl border border-white/10">
+              <div className="text-3xl mb-3">👥</div>
+              <h3 className="text-lg font-black text-slate-300 mb-5">{texts.comparison.oldUser}</h3>
+              {[texts.comparison.step1Old, texts.comparison.step2Old, texts.comparison.step3Old].map((step, i) => (
+                <div key={i} className="flex items-start gap-3 mb-4 last:mb-0">
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold shrink-0 mt-0.5" style={{ background: 'rgba(255,215,0,0.12)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.25)' }}>{i + 1}</div>
+                  <p className="text-slate-400 text-sm leading-relaxed">{step}</p>
+                </div>
+              ))}
+              <button
+                onClick={() => navigate('/contact')}
+                className="mt-5 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold border border-amber-500/40 text-amber-400 hover:bg-amber-500/10 transition-all"
+              >
+                {zh ? '联系我们配置返佣 →' : 'Contact Us to Configure →'}
+              </button>
+            </div>
+          </div>
+
+          {/* 交易所下载区 */}
+          <div className="rounded-2xl border border-amber-500/20 p-6" style={{ background: 'rgba(10,25,47,0.6)' }}>
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-base font-black text-white">
+                {texts.exchangeDownload.title}
+              </h3>
+              <button
+                onClick={() => navigate('/exchange-download')}
+                className="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1 transition-colors"
+              >
+                {zh ? '新手下载指南' : 'Beginner Guide'}
+                <ChevronRight className="w-3 h-3" />
+              </button>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-5">
+              {(exchangeLinksData ?? []).map((ex) => {
+                const meta = EXCHANGE_META[ex.slug] ?? { emoji: '💱', color: 'from-gray-800 to-gray-900' };
+                return (
+                  <a
+                    key={ex.slug}
+                    href={ex.referralLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`group relative bg-gradient-to-b ${meta.color} border border-amber-500/12 rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-amber-500/45 transition-all hover:-translate-y-0.5`}
+                  >
+                    <div className="text-3xl group-hover:scale-110 transition-transform">{meta.emoji}</div>
+                    <span className="text-xs font-black text-white capitalize">{ex.name}</span>
+                    {ex.rebateRate && (
+                      <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(255,215,0,0.12)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.2)' }}>
+                        {ex.rebateRate}
+                      </span>
+                    )}
+                    <span className="text-xs font-semibold" style={{ color: '#FFA500' }}>
+                      {texts.exchangeDownload.download} ↗
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+            <p className="text-center text-xs text-slate-600">{texts.exchangeDownload.official}</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          §8 总结与行动
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section id="action" className="py-20 px-4 bg-background">
+        <div className="container mx-auto max-w-3xl">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-2xl">🚀</span>
+            <span className="text-xs font-black text-amber-400 uppercase tracking-widest">
+              {zh ? '第八章' : 'Chapter 8'}
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
+            {texts.summary.title}
+          </h2>
+          <p className="text-slate-400 text-base leading-relaxed mb-10">{texts.summary.subtitle}</p>
+
+          {/* 三个核心结论 */}
+          <div className="space-y-4 mb-10">
             {[
               { title: texts.summary.point1, sub: texts.summary.point1Sub },
               { title: texts.summary.point2, sub: texts.summary.point2Sub },
               { title: texts.summary.point3, sub: texts.summary.point3Sub },
             ].map((item, i) => (
-              <div key={i} className="flex items-start gap-4 bg-card/40 rounded-2xl p-5 border border-amber-500/10 hover:border-amber-500/25 transition-all">
+              <div key={i} className="flex items-start gap-4 bg-white/3 rounded-2xl p-5 border border-amber-500/10 hover:border-amber-500/22 transition-all">
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5" style={{ background: 'rgba(255,215,0,0.12)', color: '#FFD700' }}>
-                  <CheckCircle2 size={18} />
+                  <CheckCircle2 className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-white mb-1">{item.title}</h3>
+                  <h3 className="text-sm font-black text-white mb-1">{item.title}</h3>
                   <p className="text-slate-400 text-sm leading-relaxed">{item.sub}</p>
                 </div>
               </div>
             ))}
           </div>
-          <div className="bg-card/60 p-8 rounded-2xl mb-12" style={{ borderTop: '3px solid #FFD700', boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
-            <div className="grid md:grid-cols-2 gap-8 text-center">
+
+          {/* 两步行动 */}
+          <div className="rounded-2xl p-6 mb-10" style={{ borderTop: '3px solid #FFD700', background: 'rgba(10,25,47,0.6)', boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
+            <div className="grid sm:grid-cols-2 gap-6 text-center">
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#FFD700' }}>{texts.summary.step1}</p>
-                <p className="text-xl font-black text-white">{texts.summary.step1Title}</p>
+                <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#FFD700' }}>{texts.summary.step1}</p>
+                <p className="text-lg font-black text-white">{texts.summary.step1Title}</p>
               </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#FFD700' }}>{texts.summary.step2}</p>
-                <p className="text-xl font-black text-white">{texts.summary.step2Title}</p>
+                <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#FFD700' }}>{texts.summary.step2}</p>
+                <p className="text-lg font-black text-white">{texts.summary.step2Title}</p>
               </div>
             </div>
           </div>
-          <div className="text-center">
-            <p className="text-lg text-slate-400 italic mb-8">{texts.summary.cta}</p>
+
+          {/* CTA 按钮组 */}
+          <p className="text-base text-slate-400 italic mb-8 text-center">{texts.summary.cta}</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
             <Button
               size="lg"
-              className="font-bold hover:scale-105 transition-transform"
+              className="font-black hover:scale-105 transition-transform"
               style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)', color: '#0A192F', boxShadow: '0 4px 20px rgba(255,215,0,0.3)' }}
               onClick={() => navigate('/contact')}
             >
               {texts.summary.contactBtn}
             </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-amber-500/40 text-amber-400 hover:bg-amber-500/10 font-bold"
+              onClick={() => navigate('/exchanges')}
+            >
+              {zh ? '查看交易所返佣对比' : 'View Exchange Rebate Comparison'}
+            </Button>
+          </div>
+
+          {/* 相关页面推荐 */}
+          <div className="grid sm:grid-cols-3 gap-4">
+            {(zh ? [
+              { icon: '📱', title: '下载交易所', desc: '新手下载 + 三步注册指南', href: '/exchange-download' },
+              { icon: '📖', title: '交易所扫盲', desc: '现货/合约/杠杆功能详解', href: '/exchange-guide' },
+              { icon: '🌐', title: 'Web3 入圈', desc: '区块链/钱包/DeFi 基础', href: '/web3-guide' },
+            ] : [
+              { icon: '📱', title: 'Download Guide', desc: 'Beginner download + 3-step registration', href: '/exchange-download' },
+              { icon: '📖', title: 'Exchange Guide', desc: 'Spot/Futures/Margin explained', href: '/exchange-guide' },
+              { icon: '🌐', title: 'Web3 Guide', desc: 'Blockchain/Wallet/DeFi basics', href: '/web3-guide' },
+            ]).map((item, i) => (
+              <button
+                key={i}
+                onClick={() => navigate(item.href)}
+                className="flex items-start gap-3 rounded-2xl border border-white/8 bg-white/3 p-4 text-left hover:border-amber-500/25 hover:bg-white/5 transition-all group"
+              >
+                <span className="text-2xl shrink-0">{item.icon}</span>
+                <div>
+                  <h4 className="text-sm font-black text-white mb-1 group-hover:text-amber-400 transition-colors">{item.title}</h4>
+                  <p className="text-xs text-slate-500">{item.desc}</p>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-4 border-t" style={{ background: 'rgba(10,25,47,0.95)', borderColor: 'rgba(255,215,0,0.1)' }}>
-        <div className="container mx-auto text-center">
-          <h3 className="text-2xl font-black text-white mb-3">
-            {language === 'zh' ? '让每一笔交易都更具价値' : 'Make Every Trade More Valuable'}
+      {/* ── Footer ── */}
+      <footer className="py-12 px-4 border-t" style={{ background: 'rgba(10,25,47,0.98)', borderColor: 'rgba(255,215,0,0.1)' }}>
+        <div className="container mx-auto text-center max-w-2xl">
+          <h3 className="text-xl font-black text-white mb-2">
+            {zh ? '让每一笔交易都更具价值' : 'Make Every Trade More Valuable'}
           </h3>
           <p className="text-slate-500 mb-8 text-sm">
-            {language === 'zh' ? '智慧交易，从省錢开始' : 'Smart Trading Starts with Savings'}
+            {zh ? '智慧交易，从省钱开始' : 'Smart Trading Starts with Savings'}
           </p>
-          <div className="flex justify-center gap-6 text-sm">
+          <div className="flex justify-center flex-wrap gap-6 text-sm mb-6">
             <button onClick={() => navigate('/exchanges')} className="text-slate-500 hover:text-amber-400 transition font-medium">{texts.nav.exchanges}</button>
+            <button onClick={() => navigate('/exchange-download')} className="text-slate-500 hover:text-amber-400 transition font-medium">{zh ? '下载指南' : 'Download Guide'}</button>
+            <button onClick={() => navigate('/exchange-guide')} className="text-slate-500 hover:text-amber-400 transition font-medium">{zh ? '交易所扫盲' : 'Exchange Guide'}</button>
             <button onClick={() => navigate('/contact')} className="text-slate-500 hover:text-amber-400 transition font-medium">{texts.nav.contact}</button>
             <button onClick={() => navigate('/beginner')} className="text-slate-500 hover:text-amber-400 transition font-medium">{texts.nav.beginnerGuide}</button>
           </div>
-          <p className="text-slate-600 text-xs mt-6">
-            {language === 'zh' ? '祝您在币圈稳健获利，财富自由！' : 'Wishing you stable profits and financial freedom in crypto!'}
+          <p className="text-slate-700 text-xs">
+            {zh ? '祝您在币圈稳健获利，财富自由！' : 'Wishing you stable profits and financial freedom in crypto!'}
           </p>
         </div>
       </footer>
-      {/* 右下角回到顶部按钮 */}
+
+      {/* 浮动章节菜单 */}
+      <FloatChapterMenu activeId={activeChapter} zh={zh} />
+
+      {/* 回到顶部 */}
       <ScrollToTopButton color="yellow" />
     </div>
   );
