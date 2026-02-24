@@ -103,3 +103,13 @@
 - [x] 币圈省钱指南（/crypto-saving）黄色主题全面优化（Hero、卡片、section、footer 等）
 - [x] 交易所扫盲指南（/exchange-guide）蓝色主题全面优化（header、Tab、侧边栏、Pro Tips、上下篇导航、FloatChapterMenu、CompareTab、ScrollToTopButton 等）
 - [x] 验证 TypeScript 0 错误，23 个单元测试全部通过
+
+## 交易所对比中心整合
+- [ ] 升级 Exchanges.tsx 为三 Tab 交易所中心（返佣对比 / 各交易所详情 / 交易所科普）
+- [ ] 注册 pages/ExchangeGuide.tsx 的路由（/exchange-compare）
+- [ ] 在 Exchanges.tsx 中嵌入 ExchangeGuide 内容（各类交易所对比）
+- [ ] 在 Exchanges.tsx 中嵌入 CryptoIntro 内容（不了解这几类交易所？）
+- [ ] 添加官方权威数据背书区块（CoinGecko/Hacken/Armanino 审计数据）
+- [ ] 制作醒目的信任感 banner（监管牌照 + 储备金证明 + 用户规模）
+- [ ] 确保移动端适配和 Tab 菜单可访问性
+- [ ] 验证全页面 UI 一致性并保存检查点
