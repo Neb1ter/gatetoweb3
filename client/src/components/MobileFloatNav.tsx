@@ -110,6 +110,9 @@ export default function MobileFloatNav() {
   const [repelling,    setRepelling]    = useState(false);
   const [hasLearningPath, setHasLearningPath] = useState(false);
   const [learningIncomplete, setLearningIncomplete] = useState(false);
+  const [learningMenuOpen, setLearningMenuOpen] = useState(false);
+  const [pathSteps, setPathSteps] = useState<{ id: string; icon: string; title: string; path: string }[]>([]);
+  const [pathCompleted, setPathCompleted] = useState<string[]>([]);
 
   const posRef      = useRef({ x: 0, y: 0 });
   const ballRef     = useRef<HTMLDivElement>(null);
@@ -131,8 +134,10 @@ export default function MobileFloatNav() {
       try {
         const raw = localStorage.getItem("web3_learning_path");
         if (raw) {
-          setHasLearningPath(true);
           const data = JSON.parse(raw);
+          setHasLearningPath(true);
+          setPathSteps(Array.isArray(data.steps) ? data.steps : []);
+          setPathCompleted(Array.isArray(data.completedSteps) ? data.completedSteps : []);
           if (data.steps && data.completedSteps && data.completedSteps.length < data.steps.length) {
             setLearningIncomplete(true);
           } else {
@@ -140,15 +145,19 @@ export default function MobileFloatNav() {
           }
         } else {
           setHasLearningPath(false);
+          setPathSteps([]);
+          setPathCompleted([]);
           setLearningIncomplete(false);
         }
       } catch {
         setHasLearningPath(false);
+        setPathSteps([]);
+        setPathCompleted([]);
       }
     };
     checkPath();
     window.addEventListener("storage", checkPath);
-    const interval = setInterval(checkPath, 5000);
+    const interval = setInterval(checkPath, 2000);
     return () => { window.removeEventListener("storage", checkPath); clearInterval(interval); };
   }, []);
 
@@ -233,18 +242,31 @@ export default function MobileFloatNav() {
 
   const handleNavClick = useCallback((path: string, key: string) => {
     if (key === "learn") {
-      navigate(hasLearningPath ? "/learning-path" : "/web3-quiz");
+      if (hasLearningPath) {
+        setLearningMenuOpen(prev => !prev);
+        return;
+      }
+      navigate("/web3-quiz");
     } else {
       navigate(path);
+      setLearningMenuOpen(false);
     }
     setTimeout(() => triggerCollapse(), 150);
   }, [hasLearningPath, navigate, triggerCollapse]);
+
+  const handleLearningStepClick = useCallback((stepPath: string) => {
+    navigate(stepPath);
+    setLearningMenuOpen(false);
+    setTimeout(() => triggerCollapse(), 150);
+  }, [navigate, triggerCollapse]);
 
   // ── 点击页面任意处收缩 ───────────────────────────────────────────────────
   useEffect(() => {
     if (!expanded) return;
     const onDocClick = (e: MouseEvent | TouchEvent) => {
-      if ((e.target as Element).closest("[data-float-nav]")) return;
+      const target = e.target as Element;
+      if (target.closest("[data-float-nav]")) return;
+      setLearningMenuOpen(false);
       triggerCollapse();
     };
     const t = setTimeout(() => {
@@ -511,8 +533,105 @@ export default function MobileFloatNav() {
       }
     })();
 
+    const showLearningPanel = expanded && learningMenuOpen && hasLearningPath && pathSteps.length > 0;
+    const currentPath = location.split("?")[0];
+    const nextStepIndex = pathSteps.findIndex(s => !pathCompleted.includes(s.id));
+    const allDone = pathCompleted.length >= pathSteps.length;
+
     return (
       <div style={expandedStyle} data-float-nav>
+        {/* 学习路径步骤菜单 */}
+        {showLearningPanel && (
+          <div
+            style={{
+              position: "absolute",
+              ...(edge === "bottom"
+                ? { bottom: "100%", left: "50%", transform: "translateX(-50%)", marginBottom: 8 }
+                : edge === "top"
+                  ? { top: "100%", left: "50%", transform: "translateX(-50%)", marginTop: 8 }
+                  : edge === "left"
+                    ? { left: "100%", top: "50%", transform: "translateY(-50%)", marginLeft: 8 }
+                    : { right: "100%", top: "50%", transform: "translateY(-50%)", marginRight: 8 }
+              ),
+              width: edge === "left" || edge === "right" ? 220 : 280,
+              maxHeight: edge === "left" || edge === "right" ? "70vh" : 320,
+              overflowY: "auto",
+              borderRadius: 12,
+              background: "rgba(10, 15, 28, 0.95)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: "1px solid rgba(6,182,212,0.25)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06)",
+              padding: "8px 0",
+              zIndex: 1,
+            }}
+          >
+            <div className="px-3 py-2 border-b border-white/10 mb-1">
+              <p className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                {zh ? "学习路径" : "Learning Path"}
+              </p>
+              <p className="text-[10px] text-slate-500 mt-0.5">
+                {allDone
+                  ? (zh ? "全部完成" : "All done")
+                  : zh ? `下一步：按顺序学习` : `Next: learn in order`}
+              </p>
+            </div>
+            {pathSteps.map((step, index) => {
+              const done = pathCompleted.includes(step.id);
+              const isNext = nextStepIndex === index;
+              const isCurrent = currentPath === step.path || currentPath.startsWith(step.path + "/");
+              return (
+                <button
+                  key={step.id}
+                  onClick={() => handleLearningStepClick(step.path)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    width: "100%",
+                    padding: "10px 12px",
+                    border: "none",
+                    background: isCurrent ? "rgba(6,182,212,0.15)" : isNext ? "rgba(6,182,212,0.06)" : "transparent",
+                    color: done ? "rgba(255,255,255,0.5)" : "rgb(255,255,255)",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    fontSize: 13,
+                    borderLeft: isCurrent ? "3px solid #06b6d4" : "3px solid transparent",
+                    transition: "background 0.15s ease",
+                  }}
+                >
+                  <span className="text-lg shrink-0">{step.icon}</span>
+                  <span className="flex-1 truncate font-medium">{step.title}</span>
+                  {done ? (
+                    <span className="shrink-0 text-[10px] font-bold text-emerald-400">✓</span>
+                  ) : isNext ? (
+                    <span className="shrink-0 text-[10px] font-bold text-cyan-400">{zh ? "下一步" : "Next"}</span>
+                  ) : null}
+                </button>
+              );
+            })}
+            {allDone && (
+              <button
+                onClick={() => { navigate("/learning-complete"); setLearningMenuOpen(false); setTimeout(() => triggerCollapse(), 150); }}
+                style={{
+                  width: "100%",
+                  marginTop: 4,
+                  padding: "8px 12px",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: "#4ade80",
+                  background: "rgba(74,222,128,0.1)",
+                  border: "none",
+                  cursor: "pointer",
+                  borderRadius: 8,
+                }}
+              >
+                {zh ? "查看完成总结 →" : "View summary →"}
+              </button>
+            )}
+          </div>
+        )}
+
         <div
           style={{
             display: "flex",

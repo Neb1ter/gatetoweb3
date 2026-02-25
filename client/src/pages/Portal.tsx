@@ -61,6 +61,17 @@ const LANG = {
       { icon: "🔐", title: "Web3 安全手册", desc: "钱包安全、防骗指南与资产保护" },
       { icon: "🌐", title: "NFT 与元宇宙", desc: "数字资产、NFT 投资与元宇宙入门" },
     ],
+    footer: {
+      tagline: "探索 Web3 世界 · 从入门到精通",
+      columns: [
+        { title: "学习与指南", links: [{ label: "Web3 入圈指南", href: "/web3-guide" }, { label: "币圈省钱指南", href: "/crypto-saving" }, { label: "交易所扫盲", href: "/exchange-guide" }, { label: "下载交易所", href: "/exchange-download" }, { label: "知识测评", href: "/web3-quiz" }] },
+        { title: "交易与工具", links: [{ label: "交易所对比", href: "/exchanges" }, { label: "现货模拟", href: "/sim/spot" }, { label: "合约模拟", href: "/sim/futures" }, { label: "杠杆模拟", href: "/sim/margin" }] },
+        { title: "支持与关于", links: [{ label: "联系我们", href: "/contact" }, { label: "新手入门", href: "/beginner" }, { label: "加密货币科普", href: "/crypto-intro" }] },
+        { title: "法律与合规", links: [{ label: "免责声明", href: "/legal#disclaimer" }, { label: "风险提示", href: "/legal#risk" }] },
+      ],
+      copyright: "© 2026 Web3 导航中心",
+      disclaimer: "内容仅供参考，不构成投资建议。投资有风险，入市需谨慎。",
+    },
   },
   en: {
     badge: "Your Web3 Navigation Hub",
@@ -116,6 +127,17 @@ const LANG = {
       { icon: "🔐", title: "Web3 Security Manual", desc: "Wallet safety, scam prevention, and asset protection" },
       { icon: "🌐", title: "NFT & Metaverse", desc: "Digital assets, NFT investing, and metaverse intro" },
     ],
+    footer: {
+      tagline: "Explore Web3 · From Beginner to Expert",
+      columns: [
+        { title: "Learn & Guide", links: [{ label: "Web3 Guide", href: "/web3-guide" }, { label: "Crypto Saving", href: "/crypto-saving" }, { label: "Exchange Tutorial", href: "/exchange-guide" }, { label: "Download Exchange", href: "/exchange-download" }, { label: "Knowledge Quiz", href: "/web3-quiz" }] },
+        { title: "Trade & Tools", links: [{ label: "Exchange Compare", href: "/exchanges" }, { label: "Spot Sim", href: "/sim/spot" }, { label: "Futures Sim", href: "/sim/futures" }, { label: "Margin Sim", href: "/sim/margin" }] },
+        { title: "Support & About", links: [{ label: "Contact Us", href: "/contact" }, { label: "Beginner Guide", href: "/beginner" }, { label: "Crypto Intro", href: "/crypto-intro" }] },
+        { title: "Legal", links: [{ label: "Disclaimer", href: "/legal#disclaimer" }, { label: "Risk Notice", href: "/legal#risk" }] },
+      ],
+      copyright: "© 2026 Web3 Navigation Hub",
+      disclaimer: "Content is for reference only and does not constitute investment advice. Invest responsibly.",
+    },
   },
 };
 
@@ -654,25 +676,59 @@ export default function Portal() {
           </div>
         </div>
 
-        {/* ===== 底部 ===== */}
-        <div className="border-t border-slate-800 py-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-slate-500 text-sm text-center sm:text-left">
-              {t.footerCopy}
-            </p>
-            <Link href="/contact">
-              <span className="flex items-center gap-1.5 text-slate-400 hover:text-yellow-400 transition-colors text-sm cursor-pointer whitespace-nowrap">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                {t.contactUs}
-              </span>
-            </Link>
+        {/* ===== 页脚（大厂/OKX 风格多列） ===== */}
+        {t.footer ? (
+        <footer className="border-t border-slate-800/80 bg-slate-900/40">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-10">
+              <div className="col-span-2 sm:col-span-3 lg:col-span-2">
+                <Link href="/" className="inline-flex items-center gap-2 mb-4">
+                  <span className="text-2xl font-black text-white tracking-tight">
+                    Web3<span className="text-yellow-400">导航</span>
+                  </span>
+                </Link>
+                <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
+                  {t.footer.tagline}
+                </p>
+              </div>
+              {t.footer.columns.map((col, i) => (
+                <div key={i}>
+                  <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">
+                    {col.title}
+                  </h4>
+                  <ul className="space-y-3">
+                    {col.links.map((link, j) => (
+                      <li key={j}>
+                        <Link href={link.href}>
+                          <span className="text-sm text-slate-400 hover:text-yellow-400 transition-colors cursor-pointer">
+                            {link.label}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p className="text-slate-500 text-sm">
+                {t.footer.copyright}
+              </p>
+              <p id="disclaimer" className="text-slate-600 text-xs max-w-xl text-center sm:text-right">
+                {t.footer.disclaimer}
+              </p>
+            </div>
           </div>
-          <p className="text-slate-600 text-xs mt-3 text-center">
-            {t.footerDisclaimer}
-          </p>
+        </footer>
+        ) : (
+        <div className="border-t border-slate-800 py-8">
+          <div className="max-w-6xl mx-auto px-4 text-center">
+            <p className="text-slate-500 text-sm">{t.footerCopy}</p>
+            <p className="text-slate-600 text-xs mt-2">{t.footerDisclaimer}</p>
+            <Link href="/contact"><span className="text-slate-400 hover:text-yellow-400 text-sm">{t.contactUs}</span></Link>
+          </div>
         </div>
+        )}
       </div>
     </div>
   );

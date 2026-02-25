@@ -33,8 +33,10 @@ import BotSim from "@/pages/sim/BotSim";
 import Web3Quiz from "@/pages/Web3Quiz";
 import LearningPath from "@/pages/LearningPath";
 import LearningComplete from "@/pages/LearningComplete";
+import Legal from "@/pages/Legal";
 import { useEffect, useRef, useState } from "react";
 import { saveScrollPosition, getScrollPosition } from "@/hooks/useScrollMemory";
+import { useLearningPathSync } from "@/hooks/useLearningPathSync";
 import MobileFloatNav from "@/components/MobileFloatNav";
 
 // ============================================================
@@ -42,6 +44,7 @@ import MobileFloatNav from "@/components/MobileFloatNav";
 // ============================================================
 function PageTransition({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
+  useLearningPathSync();
   const [displayLocation, setDisplayLocation] = useState(location);
   const [transitionStage, setTransitionStage] = useState<"enter" | "exit">("enter");
    const prevLocation = useRef(location);
@@ -90,9 +93,8 @@ function Router() {
   return (
     <PageTransition>
       <Switch>
-        {/* 总主页（导航门户）*/}
-        <Route path={"/"} component={Portal} />
-        <Route path={"/portal"} component={Portal} />
+        <Route path="/" component={Portal} />
+        <Route path="/portal" component={Portal} />
 
         {/* 币圈省钱指南板块 */}
         <Route path={"/crypto-saving"} component={Home} />
@@ -121,6 +123,7 @@ function Router() {
         <Route path="/web3-quiz" component={Web3Quiz} />
         <Route path="/learning-path" component={LearningPath} />
         <Route path="/learning-complete" component={LearningComplete} />
+        <Route path="/legal" component={Legal} />
 
         {/* 模拟交易游戏 */}
         <Route path="/sim/spot" component={SpotSim} />
