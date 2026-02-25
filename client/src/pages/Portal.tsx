@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { useScrollMemory } from '@/hooks/useScrollMemory';
+import OnboardingPrompt from "@/components/OnboardingPrompt";
 
 // ============================================================
 // 多语言文案
@@ -340,6 +341,76 @@ function LogoMarquee({ label }: { label: string }) {
 }
 
 // ============================================================
+// 个性化学习引导卡片（非模态，始终可见）
+// ============================================================
+function QuizBanner({ lang }: { lang: "zh" | "en" }) {
+  const zh = lang === "zh";
+  const [show, setShow] = useState(false);
+  const [hasPath, setHasPath] = useState(false);
+
+  useEffect(() => {
+    const profile = localStorage.getItem("web3_quiz_profile");
+    const path = localStorage.getItem("web3_learning_path");
+    if (path) {
+      setHasPath(true);
+      setShow(true);
+    } else if (!profile) {
+      setShow(true);
+    }
+  }, []);
+
+  if (!show) return null;
+
+  if (hasPath) {
+    return (
+      <div className="mb-8">
+        <Link href="/learning-path">
+          <div className="group mx-auto max-w-xl rounded-2xl border border-cyan-500/20 p-4 flex items-center gap-4 cursor-pointer hover:border-cyan-500/40 transition-all"
+            style={{ background: "linear-gradient(135deg, rgba(6,182,212,0.06), rgba(139,92,246,0.04))" }}>
+            <span className="text-3xl shrink-0">🗺️</span>
+            <div className="flex-1 min-w-0">
+              <h4 className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">
+                {zh ? "继续你的学习路径" : "Continue Your Learning Path"}
+              </h4>
+              <p className="text-xs text-slate-500">{zh ? "个性化定制的 Web3 学习之旅等你探索" : "Your personalized Web3 journey awaits"}</p>
+            </div>
+            <svg className="w-5 h-5 text-slate-600 group-hover:text-cyan-400 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mb-8">
+      <Link href="/web3-quiz">
+        <div className="group mx-auto max-w-xl rounded-2xl border border-cyan-500/15 p-4 flex items-center gap-4 cursor-pointer hover:border-cyan-500/35 transition-all"
+          style={{ background: "linear-gradient(135deg, rgba(6,182,212,0.04), rgba(139,92,246,0.02))" }}>
+          <span className="text-3xl shrink-0" style={{ animation: "float 3s ease-in-out infinite" }}>🧭</span>
+          <div className="flex-1 min-w-0">
+            <h4 className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">
+              {zh ? "不知道从何开始？让我了解你" : "Not sure where to start? Let us know you"}
+            </h4>
+            <p className="text-xs text-slate-500">{zh ? "2 分钟测评，获取专属学习路径" : "2-min quiz for a personalized path"}</p>
+          </div>
+          <svg className="w-5 h-5 text-slate-600 group-hover:text-cyan-400 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </Link>
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-6px); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+// ============================================================
 // 主组件
 // ============================================================
 const moduleColors = [
@@ -414,6 +485,7 @@ export default function Portal() {
 
   return (
     <div className="min-h-screen bg-[#050D1A] text-white relative overflow-hidden">
+      <OnboardingPrompt lang={lang} />
       {/* Canvas 背景动画 */}
       <AnimatedBackground />
 
@@ -482,6 +554,9 @@ export default function Portal() {
             ))}
           </div>
         </div>
+
+        {/* ===== 个性化学习引导卡片 ===== */}
+        <QuizBanner lang={lang} />
 
         {/* ===== Logo 滚动横幅 ===== */}
         <div className="mb-12">

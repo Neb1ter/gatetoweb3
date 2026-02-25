@@ -30,6 +30,9 @@ import TradFiSim from "@/pages/sim/TradFiSim";
 import MarginSim from "@/pages/sim/MarginSim";
 import OptionsSim from "@/pages/sim/OptionsSim";
 import BotSim from "@/pages/sim/BotSim";
+import Web3Quiz from "@/pages/Web3Quiz";
+import LearningPath from "@/pages/LearningPath";
+import LearningComplete from "@/pages/LearningComplete";
 import { useEffect, useRef, useState } from "react";
 import { saveScrollPosition, getScrollPosition } from "@/hooks/useScrollMemory";
 import MobileFloatNav from "@/components/MobileFloatNav";
@@ -113,6 +116,11 @@ function Router() {
          <Route path="/exchange-guide/:featureSlug" component={ExchangeFeatureDetail} />
         {/* 后台管理 */}
         <Route path="/admin/exchange-guide" component={AdminExchangeGuide} />
+
+        {/* Web3 测评与学习路径 */}
+        <Route path="/web3-quiz" component={Web3Quiz} />
+        <Route path="/learning-path" component={LearningPath} />
+        <Route path="/learning-complete" component={LearningComplete} />
 
         {/* 模拟交易游戏 */}
         <Route path="/sim/spot" component={SpotSim} />

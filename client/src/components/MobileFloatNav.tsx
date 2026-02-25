@@ -12,11 +12,12 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Home, Building2, BookOpen, Mail } from "lucide-react";
+import { Home, Building2, BookOpen, Mail, Compass } from "lucide-react";
 
 // ─── 导航项（未来增加只需在此追加）────────────────────────────────────────────
 const NAV_ITEMS = [
   { key: "home",      path: "/",              icon: Home,      labelZh: "首页",   labelEn: "Home",      color: "#10b981", colorRgb: "16,185,129" },
+  { key: "learn",     path: "/learning-path", icon: Compass,   labelZh: "学习",   labelEn: "Learn",     color: "#06b6d4", colorRgb: "6,182,212"  },
   { key: "exchanges", path: "/exchanges",      icon: Building2, labelZh: "交易所", labelEn: "Exchanges", color: "#3b82f6", colorRgb: "59,130,246" },
   { key: "guide",     path: "/exchange-guide", icon: BookOpen,  labelZh: "指南",   labelEn: "Guide",     color: "#f59e0b", colorRgb: "245,158,11" },
   { key: "contact",   path: "/contact",        icon: Mail,      labelZh: "联系",   labelEn: "Contact",   color: "#a855f7", colorRgb: "168,85,247" },
@@ -107,6 +108,8 @@ export default function MobileFloatNav() {
   const [inited,       setInited]       = useState(false);
   const [scrollBtnVis, setScrollBtnVis] = useState(false);
   const [repelling,    setRepelling]    = useState(false);
+  const [hasLearningPath, setHasLearningPath] = useState(false);
+  const [learningIncomplete, setLearningIncomplete] = useState(false);
 
   const posRef      = useRef({ x: 0, y: 0 });
   const ballRef     = useRef<HTMLDivElement>(null);
@@ -123,8 +126,35 @@ export default function MobileFloatNav() {
   const inertiaRaf  = useRef<number | null>(null);
   const scrollBtnVisRef = useRef(false);
 
+  useEffect(() => {
+    const checkPath = () => {
+      try {
+        const raw = localStorage.getItem("web3_learning_path");
+        if (raw) {
+          setHasLearningPath(true);
+          const data = JSON.parse(raw);
+          if (data.steps && data.completedSteps && data.completedSteps.length < data.steps.length) {
+            setLearningIncomplete(true);
+          } else {
+            setLearningIncomplete(false);
+          }
+        } else {
+          setHasLearningPath(false);
+          setLearningIncomplete(false);
+        }
+      } catch {
+        setHasLearningPath(false);
+      }
+    };
+    checkPath();
+    window.addEventListener("storage", checkPath);
+    const interval = setInterval(checkPath, 5000);
+    return () => { window.removeEventListener("storage", checkPath); clearInterval(interval); };
+  }, []);
+
   const isActive = (path: string) => {
     if (path === "/") return location === "/" || location === "/portal";
+    if (path === "/learning-path") return location === "/learning-path" || location === "/web3-quiz" || location === "/learning-complete";
     return location.startsWith(path);
   };
   const activeItem = NAV_ITEMS.find(item => isActive(item.path)) ?? NAV_ITEMS[0];
@@ -200,6 +230,15 @@ export default function MobileFloatNav() {
     setExpanded(true);
     setTimeout(() => setAnimating(false), TRANSITION_MS);
   }, [animating]);
+
+  const handleNavClick = useCallback((path: string, key: string) => {
+    if (key === "learn") {
+      navigate(hasLearningPath ? "/learning-path" : "/web3-quiz");
+    } else {
+      navigate(path);
+    }
+    setTimeout(() => triggerCollapse(), 150);
+  }, [hasLearningPath, navigate, triggerCollapse]);
 
   // ── 点击页面任意处收缩 ───────────────────────────────────────────────────
   useEffect(() => {
@@ -499,10 +538,11 @@ export default function MobileFloatNav() {
             const Icon = item.icon;
             const label = zh ? item.labelZh : item.labelEn;
             const r = item.colorRgb;
+            const showDot = item.key === "learn" && learningIncomplete && !active;
             return (
               <button
                 key={item.key}
-                onClick={() => { navigate(item.path); setTimeout(() => triggerCollapse(), 150); }}
+                onClick={() => handleNavClick(item.path, item.key)}
                 style={{
                   display: "flex",
                   flexDirection: isVertical ? "row" : "column",
@@ -535,12 +575,23 @@ export default function MobileFloatNav() {
                     boxShadow: `0 0 6px ${item.color}`,
                   }} />
                 )}
-                <Icon
-                  size={isVertical ? 18 : 20}
-                  color={active ? item.color : "rgba(255,255,255,0.5)"}
-                  strokeWidth={active ? 2.2 : 1.8}
-                  style={{ filter: active ? `drop-shadow(0 0 4px ${item.color}80)` : "none", transition: "color 0.2s ease, filter 0.2s ease", flexShrink: 0 }}
-                />
+                <span style={{ position: "relative", flexShrink: 0 }}>
+                  <Icon
+                    size={isVertical ? 18 : 20}
+                    color={active ? item.color : "rgba(255,255,255,0.5)"}
+                    strokeWidth={active ? 2.2 : 1.8}
+                    style={{ filter: active ? `drop-shadow(0 0 4px ${item.color}80)` : "none", transition: "color 0.2s ease, filter 0.2s ease" }}
+                  />
+                  {showDot && (
+                    <span style={{
+                      position: "absolute", top: -2, right: -2,
+                      width: 7, height: 7, borderRadius: "50%",
+                      background: "#06b6d4",
+                      boxShadow: "0 0 6px rgba(6,182,212,0.6)",
+                      animation: "pulse 2s ease-in-out infinite",
+                    }} />
+                  )}
+                </span>
                 <span style={{
                   fontSize: isVertical ? "13px" : "10px",
                   fontWeight: active ? 700 : 500,
