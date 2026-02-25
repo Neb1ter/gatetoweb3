@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: gatetoweb3
+    runtime: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: JWT_SECRET
+        value: demo_jwt_secret_key_for_production_12345678
+      - key: VITE_APP_ID
+        value: gatetoweb3
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gatetoweb3-db
+          property: connectionString
+  - type: pserv
+    name: gatetoweb3-db
+    runtime: mysql
+    plan: free
+    ipAllowList: []
