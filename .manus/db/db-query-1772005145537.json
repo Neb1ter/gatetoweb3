@@ -1,0 +1,24 @@
+{
+  "query": "SELECT id, slug, nameZh, nameEn, sortOrder FROM exchange_feature_categories WHERE slug IN ('spot', 'futures', 'margin') ORDER BY sortOrder;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user gEfX2nVM53abT36.60c081d972d4 --database X5wBr6ZSQRBDKkmFR8t9WQ --execute SELECT id, slug, nameZh, nameEn, sortOrder FROM exchange_feature_categories WHERE slug IN ('spot', 'futures', 'margin') ORDER BY sortOrder;",
+  "rows": [
+    {
+      "id": "1",
+      "slug": "spot",
+      "nameZh": "现货交易",
+      "nameEn": "Spot Trading",
+      "sortOrder": "1"
+    },
+    {
+      "id": "2",
+      "slug": "futures",
+      "nameZh": "合约交易",
+      "nameEn": "Futures / Perpetuals",
+      "sortOrder": "2"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tslug\tnameZh\tnameEn\tsortOrder\n1\tspot\t现货交易\tSpot Trading\t1\n2\tfutures\t合约交易\tFutures / Perpetuals\t2\n",
+  "stderr": "",
+  "execution_time_ms": 61
+}

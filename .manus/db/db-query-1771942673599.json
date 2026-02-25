@@ -1,0 +1,9 @@
+{
+  "query": "SELECT * FROM exchange_feature_categories ORDER BY sortOrder;\nSELECT * FROM exchange_feature_support LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user gEfX2nVM53abT36.60c081d972d4 --database X5wBr6ZSQRBDKkmFR8t9WQ --execute SELECT * FROM exchange_feature_categories ORDER BY sortOrder;\nSELECT * FROM exchange_feature_support LIMIT 10;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 67
+}

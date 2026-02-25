@@ -1,0 +1,22 @@
+{
+  "query": "SHOW TABLES; SELECT * FROM __drizzle_migrations ORDER BY created_at;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user gEfX2nVM53abT36.60c081d972d4 --database X5wBr6ZSQRBDKkmFR8t9WQ --execute SHOW TABLES; SELECT * FROM __drizzle_migrations ORDER BY created_at;",
+  "rows": [
+    {
+      "Tables_in_X5wBr6ZSQRBDKkmFR8t9WQ": "__drizzle_migrations"
+    },
+    {
+      "Tables_in_X5wBr6ZSQRBDKkmFR8t9WQ": "users"
+    },
+    {
+      "Tables_in_X5wBr6ZSQRBDKkmFR8t9WQ": "id\thash\tcreated_at"
+    },
+    {
+      "Tables_in_X5wBr6ZSQRBDKkmFR8t9WQ": "1\t814a08e40d7fc2bcfd458759d18319198ca8ae394f2fa15617a78678e9c9c93b\t1771940786184"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_X5wBr6ZSQRBDKkmFR8t9WQ\n__drizzle_migrations\nusers\nid\thash\tcreated_at\n1\t814a08e40d7fc2bcfd458759d18319198ca8ae394f2fa15617a78678e9c9c93b\t1771940786184\n",
+  "stderr": "",
+  "execution_time_ms": 86
+}

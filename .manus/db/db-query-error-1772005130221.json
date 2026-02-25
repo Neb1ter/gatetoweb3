@@ -1,0 +1,8 @@
+{
+  "query": "SELECT id, slug, name_zh, name_en, sort_order FROM exchange_guide_categories WHERE slug IN ('spot', 'futures', 'margin') ORDER BY sort_order;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user gEfX2nVM53abT36.60c081d972d4 --database X5wBr6ZSQRBDKkmFR8t9WQ --execute SELECT id, slug, name_zh, name_en, sort_order FROM exchange_guide_categories WHERE slug IN ('spot', 'futures', 'margin') ORDER BY sort_order;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1146 (42S02) at line 1: Table 'x5wbr6zsqrbdkkmfr8t9wq.exchange_guide_categories' doesn't exist"
+  ]
+}

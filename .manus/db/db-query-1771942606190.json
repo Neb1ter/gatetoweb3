@@ -1,0 +1,22 @@
+{
+  "query": "SELECT 'exchange_feature_categories' as tbl, COUNT(*) as cnt FROM exchange_feature_categories\nUNION ALL\nSELECT 'exchange_feature_support', COUNT(*) FROM exchange_feature_support\nUNION ALL\nSELECT 'exchange_links', COUNT(*) FROM exchange_links;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user gEfX2nVM53abT36.60c081d972d4 --database X5wBr6ZSQRBDKkmFR8t9WQ --execute SELECT 'exchange_feature_categories' as tbl, COUNT(*) as cnt FROM exchange_feature_categories\nUNION ALL\nSELECT 'exchange_feature_support', COUNT(*) FROM exchange_feature_support\nUNION ALL\nSELECT 'exchange_links', COUNT(*) FROM exchange_links;",
+  "rows": [
+    {
+      "tbl": "exchange_feature_support",
+      "cnt": "0"
+    },
+    {
+      "tbl": "exchange_links",
+      "cnt": "5"
+    },
+    {
+      "tbl": "exchange_feature_categories",
+      "cnt": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "tbl\tcnt\nexchange_feature_support\t0\nexchange_links\t5\nexchange_feature_categories\t0\n",
+  "stderr": "",
+  "execution_time_ms": 57
+}

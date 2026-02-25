@@ -1,0 +1,60 @@
+{
+  "query": "SELECT * FROM exchange_feature_categories LIMIT 5;\nSELECT * FROM exchange_links LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user gEfX2nVM53abT36.60c081d972d4 --database X5wBr6ZSQRBDKkmFR8t9WQ --execute SELECT * FROM exchange_feature_categories LIMIT 5;\nSELECT * FROM exchange_links LIMIT 5;",
+  "rows": [
+    {
+      "id": "1",
+      "slug": "gate",
+      "name": "Gate.io",
+      "referralLink": "https://www.gateport.business/share/FORMANUS",
+      "inviteCode": "FORMANUS",
+      "rebateRate": "60%",
+      "sortOrder": "1",
+      "updatedAt": "2026-02-24 14:01:00"
+    },
+    {
+      "id": "2",
+      "slug": "okx",
+      "name": "OKX",
+      "referralLink": "https://www.vmutkhamuut.com/join/MANUS",
+      "inviteCode": "MANUS",
+      "rebateRate": "20%",
+      "sortOrder": "2",
+      "updatedAt": "2026-02-24 14:01:00"
+    },
+    {
+      "id": "3",
+      "slug": "binance",
+      "name": "Binance",
+      "referralLink": "https://www.gateport.company/share/GATEBITS",
+      "inviteCode": "MANUS",
+      "rebateRate": "20%",
+      "sortOrder": "3",
+      "updatedAt": "2026-02-24 14:01:00"
+    },
+    {
+      "id": "4",
+      "slug": "bybit",
+      "name": "Bybit",
+      "referralLink": "https://partner.bybit.com/b/MMANUS",
+      "inviteCode": "MMANUS",
+      "rebateRate": "30%",
+      "sortOrder": "4",
+      "updatedAt": "2026-02-24 14:01:00"
+    },
+    {
+      "id": "5",
+      "slug": "bitget",
+      "name": "Bitget",
+      "referralLink": "https://partner.hdmune.cn/bg/u9qqgq4u",
+      "inviteCode": "MANUS",
+      "rebateRate": "50%",
+      "sortOrder": "5",
+      "updatedAt": "2026-02-24 14:01:00"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tslug\tname\treferralLink\tinviteCode\trebateRate\tsortOrder\tupdatedAt\n1\tgate\tGate.io\thttps://www.gateport.business/share/FORMANUS\tFORMANUS\t60%\t1\t2026-02-24 14:01:00\n2\tokx\tOKX\thttps://www.vmutkhamuut.com/join/MANUS\tMANUS\t20%\t2\t2026-02-24 14:01:00\n3\tbinance\tBinance\thttps://www.gateport.company/share/GATEBITS\tMANUS\t20%\t3\t2026-02-24 14:01:00\n4\tbybit\tBybit\thttps://partner.bybit.com/b/MMANUS\tMMANUS\t30%\t4\t2026-02-24 14:01:00\n5\tbitget\tBitget\thttps://partner.hdmune.cn/bg/u9qqgq4u\tMANUS\t50%\t5\t2026-02-24 14:01:00\n",
+  "stderr": "",
+  "execution_time_ms": 59
+}

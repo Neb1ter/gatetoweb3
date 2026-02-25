@@ -1,0 +1,34 @@
+{
+  "query": "\nCREATE TABLE IF NOT EXISTS `contact_submissions` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `platform` varchar(64) NOT NULL,\n  `accountName` varchar(256) NOT NULL,\n  `exchangeUid` varchar(128),\n  `exchangeUsername` varchar(256),\n  `message` text,\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  CONSTRAINT `contact_submissions_id` PRIMARY KEY(`id`)\n);\n\nCREATE TABLE IF NOT EXISTS `exchange_links` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `slug` varchar(32) NOT NULL,\n  `name` varchar(64) NOT NULL,\n  `referralLink` text NOT NULL,\n  `inviteCode` varchar(64) NOT NULL,\n  `rebateRate` varchar(16) NOT NULL,\n  `sortOrder` int NOT NULL DEFAULT 0,\n  `updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `exchange_links_id` PRIMARY KEY(`id`),\n  CONSTRAINT `exchange_links_slug_unique` UNIQUE(`slug`)\n);\n\nCREATE TABLE IF NOT EXISTS `faqs` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `question` text NOT NULL,\n  `answer` text NOT NULL,\n  `category` varchar(32) NOT NULL DEFAULT 'basic',\n  `sortOrder` int NOT NULL DEFAULT 0,\n  `isActive` boolean NOT NULL DEFAULT true,\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  `updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `faqs_id` PRIMARY KEY(`id`)\n);\n\nCREATE TABLE IF NOT EXISTS `crypto_news` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `title` text NOT NULL,\n  `summary` text,\n  `source` varchar(64) NOT NULL DEFAULT '律动BlockBeats',\n  `url` text,\n  `category` varchar(32) NOT NULL DEFAULT 'market',\n  `isPinned` boolean NOT NULL DEFAULT false,\n  `isActive` boolean NOT NULL DEFAULT true,\n  `publishedAt` timestamp NOT NULL DEFAULT (now()),\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  CONSTRAINT `crypto_news_id` PRIMARY KEY(`id`)\n);\n\nCREATE TABLE IF NOT EXISTS `exchange_feature_categories` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `slug` varchar(32) NOT NULL,\n  `nameZh` varchar(64) NOT NULL,\n  `nameEn` varchar(64) NOT NULL,\n  `icon` varchar(8) NOT NULL,\n  `descZh` text NOT NULL,\n  `descEn` text NOT NULL,\n  `difficulty` enum('beginner','intermediate','advanced') NOT NULL DEFAULT 'beginner',\n  `sortOrder` int NOT NULL DEFAULT 0,\n  CONSTRAINT `exchange_feature_categories_id` PRIMARY KEY(`id`),\n  CONSTRAINT `exchange_feature_categories_slug_unique` UNIQUE(`slug`)\n);\n\nCREATE TABLE IF NOT EXISTS `exchange_feature_support` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `exchangeSlug` varchar(32) NOT NULL,\n  `featureSlug` varchar(32) NOT NULL,\n  `supported` tinyint NOT NULL DEFAULT 1,\n  `levelZh` varchar(16) NOT NULL,\n  `levelEn` varchar(32) NOT NULL,\n  `detailZh` text NOT NULL,\n  `detailEn` text NOT NULL,\n  `maxLeverage` varchar(8),\n  `feeInfo` varchar(128),\n  `highlight` tinyint NOT NULL DEFAULT 0,\n  CONSTRAINT `exchange_feature_support_id` PRIMARY KEY(`id`)\n);\n\nSHOW TABLES;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user gEfX2nVM53abT36.60c081d972d4 --database X5wBr6ZSQRBDKkmFR8t9WQ --execute \nCREATE TABLE IF NOT EXISTS `contact_submissions` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `platform` varchar(64) NOT NULL,\n  `accountName` varchar(256) NOT NULL,\n  `exchangeUid` varchar(128),\n  `exchangeUsername` varchar(256),\n  `message` text,\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  CONSTRAINT `contact_submissions_id` PRIMARY KEY(`id`)\n);\n\nCREATE TABLE IF NOT EXISTS `exchange_links` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `slug` varchar(32) NOT NULL,\n  `name` varchar(64) NOT NULL,\n  `referralLink` text NOT NULL,\n  `inviteCode` varchar(64) NOT NULL,\n  `rebateRate` varchar(16) NOT NULL,\n  `sortOrder` int NOT NULL DEFAULT 0,\n  `updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `exchange_links_id` PRIMARY KEY(`id`),\n  CONSTRAINT `exchange_links_slug_unique` UNIQUE(`slug`)\n);\n\nCREATE TABLE IF NOT EXISTS `faqs` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `question` text NOT NULL,\n  `answer` text NOT NULL,\n  `category` varchar(32) NOT NULL DEFAULT 'basic',\n  `sortOrder` int NOT NULL DEFAULT 0,\n  `isActive` boolean NOT NULL DEFAULT true,\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  `updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `faqs_id` PRIMARY KEY(`id`)\n);\n\nCREATE TABLE IF NOT EXISTS `crypto_news` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `title` text NOT NULL,\n  `summary` text,\n  `source` varchar(64) NOT NULL DEFAULT '律动BlockBeats',\n  `url` text,\n  `category` varchar(32) NOT NULL DEFAULT 'market',\n  `isPinned` boolean NOT NULL DEFAULT false,\n  `isActive` boolean NOT NULL DEFAULT true,\n  `publishedAt` timestamp NOT NULL DEFAULT (now()),\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  CONSTRAINT `crypto_news_id` PRIMARY KEY(`id`)\n);\n\nCREATE TABLE IF NOT EXISTS `exchange_feature_categories` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `slug` varchar(32) NOT NULL,\n  `nameZh` varchar(64) NOT NULL,\n  `nameEn` varchar(64) NOT NULL,\n  `icon` varchar(8) NOT NULL,\n  `descZh` text NOT NULL,\n  `descEn` text NOT NULL,\n  `difficulty` enum('beginner','intermediate','advanced') NOT NULL DEFAULT 'beginner',\n  `sortOrder` int NOT NULL DEFAULT 0,\n  CONSTRAINT `exchange_feature_categories_id` PRIMARY KEY(`id`),\n  CONSTRAINT `exchange_feature_categories_slug_unique` UNIQUE(`slug`)\n);\n\nCREATE TABLE IF NOT EXISTS `exchange_feature_support` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `exchangeSlug` varchar(32) NOT NULL,\n  `featureSlug` varchar(32) NOT NULL,\n  `supported` tinyint NOT NULL DEFAULT 1,\n  `levelZh` varchar(16) NOT NULL,\n  `levelEn` varchar(32) NOT NULL,\n  `detailZh` text NOT NULL,\n  `detailEn` text NOT NULL,\n  `maxLeverage` varchar(8),\n  `feeInfo` varchar(128),\n  `highlight` tinyint NOT NULL DEFAULT 0,\n  CONSTRAINT `exchange_feature_support_id` PRIMARY KEY(`id`)\n);\n\nSHOW TABLES;\n",
+  "rows": [
+    {
+      "Tables_in_X5wBr6ZSQRBDKkmFR8t9WQ": "__drizzle_migrations"
+    },
+    {
+      "Tables_in_X5wBr6ZSQRBDKkmFR8t9WQ": "contact_submissions"
+    },
+    {
+      "Tables_in_X5wBr6ZSQRBDKkmFR8t9WQ": "crypto_news"
+    },
+    {
+      "Tables_in_X5wBr6ZSQRBDKkmFR8t9WQ": "exchange_feature_categories"
+    },
+    {
+      "Tables_in_X5wBr6ZSQRBDKkmFR8t9WQ": "exchange_feature_support"
+    },
+    {
+      "Tables_in_X5wBr6ZSQRBDKkmFR8t9WQ": "exchange_links"
+    },
+    {
+      "Tables_in_X5wBr6ZSQRBDKkmFR8t9WQ": "faqs"
+    },
+    {
+      "Tables_in_X5wBr6ZSQRBDKkmFR8t9WQ": "users"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_X5wBr6ZSQRBDKkmFR8t9WQ\n__drizzle_migrations\ncontact_submissions\ncrypto_news\nexchange_feature_categories\nexchange_feature_support\nexchange_links\nfaqs\nusers\n",
+  "stderr": "",
+  "execution_time_ms": 448
+}
