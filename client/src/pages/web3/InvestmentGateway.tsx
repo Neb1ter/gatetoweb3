@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import Web3ChapterNav from "@/components/Web3ChapterNav";
 import { useScrollMemory } from '@/hooks/useScrollMemory';
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
+import { renderBoldText } from "@/lib/utils";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -419,8 +420,9 @@ DEX 质押收益高，原因有三：
             <div className="px-4 pb-4 pt-0">
               <div className="border-t border-white/10 pt-4">
                 {item.a.split("\n\n").map((para, j) => (
-                  <p key={j} className="text-slate-300 text-sm leading-relaxed mb-3 last:mb-0"
-                    dangerouslySetInnerHTML={{ __html: para.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>') }} />
+                  <p key={j} className="text-slate-300 text-sm leading-relaxed mb-3 last:mb-0">
+                    {renderBoldText(para)}
+                  </p>
                 ))}
               </div>
             </div>
@@ -612,20 +614,16 @@ export default function InvestmentGateway() {
                 <div className="text-2xl mb-2">📚</div>
                 <h4 className="font-bold text-white text-sm mb-1">第七章：交易所入门指南</h4>
                 <p className="text-slate-400 text-xs mb-3">详细了解各大交易所的对比、注册步骤和安全使用指南</p>
-                <Link href="/web3-guide/exchange-guide">
-                  <button className="w-full py-2 rounded-lg border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 text-xs font-bold transition-all">
+                <Link href="/web3-guide/exchange-guide" className="w-full py-2 rounded-lg border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 text-xs font-bold transition-all">
                     继续学习 →
-                  </button>
                 </Link>
               </div>
               <div className="rounded-xl border border-yellow-500/20 bg-black/20 p-4 text-center">
                 <div className="text-2xl mb-2">🎁</div>
                 <h4 className="font-bold text-white text-sm mb-1">立即注册，享受返佣优惠</h4>
                 <p className="text-slate-400 text-xs mb-3">通过邀请码注册，享受最高 30% 手续费返佣，每笔交易都更划算</p>
-                <Link href="/crypto-saving">
-                  <button className="w-full py-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-black text-xs font-black transition-all">
+                <Link href="/crypto-saving" className="w-full py-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-black text-xs font-black transition-all">
                     查看返佣邀请码 →
-                  </button>
                 </Link>
               </div>
             </div>

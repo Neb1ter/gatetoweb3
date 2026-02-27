@@ -15,6 +15,7 @@ import {
   TrendingDown, Globe, Zap, Clock, BarChart2, Lock,
   RefreshCw, CheckCircle2, ChevronRight, MessageCircle,
 } from "lucide-react";
+import { EXCHANGE_FEES, SPOT_MAKER_ROW, FUT_MAKER_ROW, REBATE_ROW, INVITE_CODES, getFallbackInviteCode } from "@shared/exchangeFees";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 数据层
@@ -36,7 +37,7 @@ const STATIC: Record<string, {
   gate: {
     emoji: "🟢", color: "#00B173", accentCls: "text-emerald-400",
     borderCls: "border-emerald-500/40", bgGrad: "from-emerald-950/60 to-gray-900",
-    spotMaker: "0.15%", spotTaker: "0.15%", futMaker: "-0.015%", futTaker: "0.016%",
+    spotMaker: EXCHANGE_FEES.gate.spotMaker, spotTaker: EXCHANGE_FEES.gate.spotTaker, futMaker: EXCHANGE_FEES.gate.futMaker, futTaker: EXCHANGE_FEES.gate.futTaker,
     rebateStars: "⭐⭐⭐⭐⭐", founded: "2013", hq: "开曼群岛", coins: "3,600+",
     volume: "$18.8亿", reserve: "125%", leverage: "100x", token: "GT",
     badge: { zh: "新币最多", en: "Most Altcoins" }, badgeCls: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
@@ -58,7 +59,7 @@ const STATIC: Record<string, {
   okx: {
     emoji: "🔷", color: "#3B82F6", accentCls: "text-blue-400",
     borderCls: "border-blue-500/40", bgGrad: "from-blue-950/60 to-gray-900",
-    spotMaker: "0.08%", spotTaker: "0.10%", futMaker: "-0.0025%", futTaker: "0.0075%",
+    spotMaker: EXCHANGE_FEES.okx.spotMaker, spotTaker: EXCHANGE_FEES.okx.spotTaker, futMaker: EXCHANGE_FEES.okx.futMaker, futTaker: EXCHANGE_FEES.okx.futTaker,
     rebateStars: "⭐⭐⭐⭐⭐", founded: "2017", hq: "塞舌尔/巴哈马", coins: "350+",
     volume: "$16.5亿", reserve: "105%+", leverage: "125x", token: "OKB",
     badge: { zh: "Web3 最强", en: "Best Web3" }, badgeCls: "bg-blue-500/20 text-blue-400 border-blue-500/30",
@@ -80,7 +81,7 @@ const STATIC: Record<string, {
   binance: {
     emoji: "🟡", color: "#F0B90B", accentCls: "text-yellow-400",
     borderCls: "border-yellow-500/40", bgGrad: "from-yellow-950/60 to-gray-900",
-    spotMaker: "0.10%", spotTaker: "0.10%", futMaker: "0.02%", futTaker: "0.04%",
+    spotMaker: EXCHANGE_FEES.binance.spotMaker, spotTaker: EXCHANGE_FEES.binance.spotTaker, futMaker: EXCHANGE_FEES.binance.futMaker, futTaker: EXCHANGE_FEES.binance.futTaker,
     rebateStars: "⭐⭐⭐⭐", founded: "2017", hq: "开曼群岛", coins: "350+",
     volume: "$40-60亿", reserve: "100%+", leverage: "125x", token: "BNB",
     badge: { zh: "流动性最强", en: "Best Liquidity" }, badgeCls: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
@@ -102,7 +103,7 @@ const STATIC: Record<string, {
   bybit: {
     emoji: "🔵", color: "#2775CA", accentCls: "text-blue-300",
     borderCls: "border-blue-400/40", bgGrad: "from-blue-950/60 to-gray-900",
-    spotMaker: "0.10%", spotTaker: "0.10%", futMaker: "0.01%", futTaker: "0.055%",
+    spotMaker: EXCHANGE_FEES.bybit.spotMaker, spotTaker: EXCHANGE_FEES.bybit.spotTaker, futMaker: EXCHANGE_FEES.bybit.futMaker, futTaker: EXCHANGE_FEES.bybit.futTaker,
     rebateStars: "⭐⭐⭐⭐", founded: "2018", hq: "迪拜", coins: "1,000+",
     volume: "$10亿+", reserve: "100%+", leverage: "125x", token: "BIT",
     badge: { zh: "合约专家", en: "Derivatives Expert" }, badgeCls: "bg-blue-500/20 text-blue-300 border-blue-400/30",
@@ -124,7 +125,7 @@ const STATIC: Record<string, {
   bitget: {
     emoji: "🟣", color: "#00D4AA", accentCls: "text-teal-400",
     borderCls: "border-teal-500/40", bgGrad: "from-teal-950/60 to-gray-900",
-    spotMaker: "0.02%", spotTaker: "0.06%", futMaker: "0.02%", futTaker: "0.06%",
+    spotMaker: EXCHANGE_FEES.bitget.spotMaker, spotTaker: EXCHANGE_FEES.bitget.spotTaker, futMaker: EXCHANGE_FEES.bitget.futMaker, futTaker: EXCHANGE_FEES.bitget.futTaker,
     rebateStars: "⭐⭐⭐⭐", founded: "2018", hq: "塞舌尔", coins: "800+",
     volume: "$5-10亿", reserve: "150%+", leverage: "125x", token: "BGB",
     badge: { zh: "跟单第一", en: "Copy Trading #1" }, badgeCls: "bg-teal-500/20 text-teal-400 border-teal-500/30",
@@ -149,8 +150,8 @@ const COMPARE_MATRIX = [
   { key: "coins",      zh: "支持币种",     en: "Coins",          vals: ["3,600+", "350+", "350+", "1,000+", "800+"],        star: 0 },
   { key: "volume",     zh: "日交易量",     en: "Daily Volume",   vals: ["$18.8亿", "$16.5亿", "$40-60亿", "$10亿+", "$5-10亿"], star: 2 },
   { key: "reserve",    zh: "储备率",       en: "Reserve Ratio",  vals: ["125% ⭐", "105%+", "100%+", "100%+", "150%+ ⭐"],    star: -1 },
-  { key: "smFee",      zh: "现货Maker费",  en: "Spot Maker",     vals: ["0.15%", "0.08% ⭐", "0.10%", "0.10%", "0.02% ⭐"],  star: -1 },
-  { key: "fmFee",      zh: "合约Maker费",  en: "Futures Maker",  vals: ["-0.015%", "-0.0025%", "0.02%", "0.01% ⭐", "0.02%"], star: -1 },
+  { key: "smFee",      zh: "现货Maker费",  en: "Spot Maker",     vals: SPOT_MAKER_ROW,  star: -1 },
+  { key: "fmFee",      zh: "合约Maker费",  en: "Futures Maker",  vals: FUT_MAKER_ROW, star: -1 },
   { key: "leverage",   zh: "最高杠杆",     en: "Max Leverage",   vals: ["100x", "125x", "125x", "125x", "125x"],              star: -1 },
   { key: "copy",       zh: "跟单交易",     en: "Copy Trading",   vals: [false, true, true, true, "⭐最强"],                   star: 4 },
   { key: "web3",       zh: "Web3 钱包",    en: "Web3 Wallet",    vals: [true, "⭐最强", true, false, true],                   star: 1 },
@@ -240,8 +241,8 @@ export default function Exchanges() {
   // DB data
   const { data: dbLinks } = trpc.exchanges.list.useQuery();
   const slugs = ["gate", "okx", "binance", "bybit", "bitget"];
-  const getLink = (slug: string) => dbLinks?.find(l => l.slug === slug)?.referralLink ?? "#";
-  const getCode = (slug: string) => dbLinks?.find(l => l.slug === slug)?.inviteCode ?? "";
+  const getLink = (slug: string) => dbLinks?.find(l => l.slug === slug)?.referralLink ?? INVITE_CODES[slug as keyof typeof INVITE_CODES]?.referralLink ?? "#";
+  const getCode = (slug: string) => dbLinks?.find(l => l.slug === slug)?.inviteCode ?? getFallbackInviteCode(slug);
 
   // Simulator state
   const [simStep, setSimStep] = useState<1 | 2 | 3 | 4>(1);
@@ -422,7 +423,7 @@ export default function Exchanges() {
                     </div>
                     <div className="bg-white/5 rounded-xl p-3">
                       <p className={`text-xs font-semibold mb-1.5 ${s.accentCls}`}>{zh ? "合约手续费" : "Futures Fees"}</p>
-                      <p className="text-xs text-white/50">Maker: <span className={`font-bold ${s.futMaker.startsWith("-") ? "text-green-400" : "text-white"}`}>{s.futMaker}</span></p>
+                      <p className="text-xs text-white/50">Maker: <span className="text-white font-bold">{s.futMaker}</span></p>
                       <p className="text-xs text-white/50">Taker: <span className="text-white font-bold">{s.futTaker}</span></p>
                     </div>
                   </div>
@@ -472,7 +473,7 @@ export default function Exchanges() {
             <div className="bg-white/[0.04] border border-white/10 rounded-xl p-5">
               <p className="text-yellow-400/80 font-semibold mb-3 text-sm">{zh ? "⚠️ 若链接无法跳转，注册时请手动填写邀请码：" : "⚠️ If the link fails, enter the invite code manually:"}</p>
               <div className="space-y-2">
-                {[["Gate.io", "FORMANUS"], [zh ? "其他交易所（OKX / Binance / Bybit / Bitget）" : "Others (OKX / Binance / Bybit / Bitget)", "MANUS"]].map(([label, code]) => (
+                {([["Gate.io", INVITE_CODES.gate.inviteCode], [zh ? "其他交易所（OKX / Binance / Bybit / Bitget）" : "Others (OKX / Binance / Bybit / Bitget)", INVITE_CODES.okx.inviteCode]] as [string, string][]).map(([label, code]) => (
                   <div key={code} className="flex items-center justify-between bg-white/5 rounded-lg px-4 py-3">
                     <span className="text-white/50 text-sm">{label}</span>
                     <code className="font-mono font-black text-yellow-400 text-lg tracking-widest">{code}</code>
@@ -925,7 +926,7 @@ export default function Exchanges() {
                 {zh ? "查看全部交易所" : "All Exchanges"}
               </Button>
             </div>
-            <p className="text-xs text-white/30">{zh ? "邀请码：FORMANUS（Gate.io）/ MANUS（其他交易所）" : "Invite code: FORMANUS (Gate.io) / MANUS (others)"}</p>
+            <p className="text-xs text-white/30">{zh ? `邀请码：${INVITE_CODES.gate.inviteCode}（Gate.io）/ ${INVITE_CODES.okx.inviteCode}（其他交易所）` : `Invite code: ${INVITE_CODES.gate.inviteCode} (Gate.io) / ${INVITE_CODES.okx.inviteCode} (others)`}</p>
           </div>
         </div>
       )}

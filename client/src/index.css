@@ -119,6 +119,14 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* 彻底禁用浏览器原生左右滑动手势导航（Chrome/Safari swipe-back/forward） */
+    overscroll-behavior-x: none;
+    /* 只允许垂直方向滚动，禁用水平滑动触发页面切换 */
+    touch-action: pan-y;
+  }
+  html {
+    /* 同样在 html 层面禁用水平过滚 */
+    overscroll-behavior-x: none;
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),

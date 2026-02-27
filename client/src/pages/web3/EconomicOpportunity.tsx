@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import Web3ChapterNav from "@/components/Web3ChapterNav";
 import { useScrollMemory } from '@/hooks/useScrollMemory';
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
+import { renderBoldText } from "@/lib/utils";
 
 // ============================================================
 // 工具 Hook：滚动进入视野触发动画
@@ -357,9 +358,7 @@ export default function EconomicOpportunity() {
                     <h3 className={`font-black text-lg mb-3 ${item.color}`}>{item.title}</h3>
                     <div className="text-slate-300 text-sm leading-relaxed mb-4 space-y-2">
                       {item.content.split("\n\n").map((para, j) => (
-                        <p key={j} dangerouslySetInnerHTML={{
-                          __html: para.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>')
-                        }} />
+                        <p key={j}>{renderBoldText(para)}</p>
                       ))}
                     </div>
                     <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border ${item.borderColor} ${item.bgColor}`}>
@@ -412,9 +411,7 @@ export default function EconomicOpportunity() {
                     <h3 className={`font-black text-lg mb-3 ${item.color}`}>{item.title}</h3>
                     <div className="text-slate-300 text-sm leading-relaxed mb-4 space-y-2">
                       {item.content.split("\n\n").map((para, j) => (
-                        <p key={j} dangerouslySetInnerHTML={{
-                          __html: para.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>')
-                        }} />
+                        <p key={j}>{renderBoldText(para)}</p>
                       ))}
                     </div>
                     <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border ${item.borderColor} ${item.bgColor}`}>
@@ -562,20 +559,14 @@ export default function EconomicOpportunity() {
               通过我们的合作伙伴链接注册交易所，享受永久高额手续费返佣，让每一笔交易都更划算。
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href="/crypto-saving">
-                <button className="bg-yellow-500 hover:bg-yellow-400 text-black font-black px-7 py-3 rounded-xl transition-all hover:scale-105 text-sm">
+              <Link href="/crypto-saving" className="bg-yellow-500 hover:bg-yellow-400 text-black font-black px-7 py-3 rounded-xl transition-all hover:scale-105 text-sm">
                   🎁可以尝试下
-                </button>
               </Link>
-              <Link href="/web3-guide">
-                <button className="border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 font-bold px-7 py-3 rounded-xl transition-all text-sm">
+              <Link href="/web3-guide" className="border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 font-bold px-7 py-3 rounded-xl transition-all text-sm">
                   📖 返回 Web3 入圈指南
-                </button>
               </Link>
-              <Link href="/web3-guide/investment-gateway">
-                <button className="border border-orange-500/40 text-orange-400 hover:bg-orange-500/10 font-bold px-7 py-3 rounded-xl transition-all text-sm">
+              <Link href="/web3-guide/investment-gateway" className="border border-orange-500/40 text-orange-400 hover:bg-orange-500/10 font-bold px-7 py-3 rounded-xl transition-all text-sm">
                   🚪 下一章：参与 Web3 的门户 →
-                </button>
               </Link>
             </div>
           </div>
@@ -583,18 +574,14 @@ export default function EconomicOpportunity() {
 
         {/* 底部导航 */}
         <div className="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <Link href="/web3-guide">
-            <button className="text-slate-400 hover:text-white transition-colors text-sm flex items-center gap-2">
+          <Link href="/web3-guide" className="text-slate-400 hover:text-white transition-colors text-sm flex items-center gap-2">
               ← 返回 Web3 入圈指南
-            </button>
           </Link>
           <p className="text-slate-600 text-xs text-center">
             数据来源：IMF · ILO · CoinGecko · 彭博社 · Fortune Business Insights · 律动BlockBeats
           </p>
-          <Link href="/web3-guide/investment-gateway">
-            <button className="text-slate-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2">
+          <Link href="/web3-guide/investment-gateway" className="text-slate-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2">
               第六章：参与 Web3 的门户 →
-            </button>
           </Link>
         </div>
       </div>

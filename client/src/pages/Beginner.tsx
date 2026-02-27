@@ -213,15 +213,11 @@ export default function Beginner() {
 
         {/* Exchange CTA */}
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Link href="/contact">
-            <button className="w-full py-3 px-4 rounded-xl bg-yellow-500 text-gray-900 text-sm font-bold hover:bg-yellow-400 transition-colors">
+          <Link href="/contact" className="w-full py-3 px-4 rounded-xl bg-yellow-500 text-gray-900 text-sm font-bold hover:bg-yellow-400 transition-colors">
               {zh ? '联系我们获取返佣' : 'Contact Us for Rebates'}
-            </button>
           </Link>
-          <Link href="/exchanges">
-            <button className="w-full py-3 px-4 rounded-xl border border-yellow-500/40 text-yellow-400 text-sm font-medium hover:bg-yellow-500/10 transition-colors">
+          <Link href="/exchanges" className="w-full py-3 px-4 rounded-xl border border-yellow-500/40 text-yellow-400 text-sm font-medium hover:bg-yellow-500/10 transition-colors">
               {zh ? '查看交易所对比' : 'Compare Exchanges'}
-            </button>
           </Link>
         </div>
 

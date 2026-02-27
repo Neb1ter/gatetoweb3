@@ -282,10 +282,8 @@ export default function ExchangeGuideDeep() {
                   现在，如果你决定迈出第一步，通过我们的合作伙伴链接注册可以享受<strong className="text-yellow-300">永久的手续费返佣</strong>，
                   让每一笔交易都更划算。
                 </p>
-                <Link href="/crypto-saving">
-                  <button className="bg-yellow-500 hover:bg-yellow-400 text-black font-black px-6 py-3 rounded-xl transition-all hover:scale-105 text-sm">
+                <Link href="/crypto-saving" className="bg-yellow-500 hover:bg-yellow-400 text-black font-black px-6 py-3 rounded-xl transition-all hover:scale-105 text-sm">
                     查看合作伙伴邀请链接 →
-                  </button>
                 </Link>
               </div>
             </div>

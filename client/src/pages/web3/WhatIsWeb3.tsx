@@ -319,10 +319,8 @@ export default function WhatIsWeb3() {
               <h3 className="font-black text-white text-lg">⛓️ 区块链技术基础</h3>
               <p className="text-slate-400 text-sm">深入了解支撑 Web3 的底层技术原理</p>
             </div>
-            <Link href="/web3-guide/blockchain-basics">
-              <button className="px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white font-bold rounded-xl transition-all whitespace-nowrap">
+            <Link href="/web3-guide/blockchain-basics" className="px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white font-bold rounded-xl transition-all whitespace-nowrap">
                 继续学习 →
-              </button>
             </Link>
           </div>
         </FadeIn>

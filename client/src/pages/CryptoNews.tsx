@@ -253,10 +253,8 @@ export default function CryptoNews() {
             >
               {zh ? "访问律动BlockBeats" : "Visit BlockBeats"}
             </a>
-            <Link href="/exchanges">
-              <button className="px-4 py-2 rounded-lg border border-yellow-500/40 text-yellow-400 text-sm font-medium hover:bg-yellow-500/10 transition-colors w-full sm:w-auto">
+            <Link href="/exchanges" className="px-4 py-2 rounded-lg border border-yellow-500/40 text-yellow-400 text-sm font-medium hover:bg-yellow-500/10 transition-colors w-full sm:w-auto">
                 {zh ? "查看交易所返佣" : "View Exchange Rebates"}
-              </button>
             </Link>
           </div>
         </div>

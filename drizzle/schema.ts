@@ -124,21 +124,71 @@ export type InsertExchangeFeatureCategory = typeof exchangeFeatureCategories.$in
 
 /**
  * Exchange feature support details — per-exchange support level and details for each feature.
- * Editable from Dashboard Database panel.
+ * Editable from Dashboard Database panel or /admin/exchange-guide.
  */
 export const exchangeFeatureSupport = mysqlTable("exchange_feature_support", {
   id: int("id").autoincrement().primaryKey(),
   exchangeSlug: varchar("exchangeSlug", { length: 32 }).notNull(),
   featureSlug: varchar("featureSlug", { length: 32 }).notNull(),
   supported: tinyint("supported").default(1).notNull(),
-  levelZh: varchar("levelZh", { length: 16 }).notNull(),
-  levelEn: varchar("levelEn", { length: 32 }).notNull(),
+  levelZh: varchar("levelZh", { length: 32 }).notNull(),
+  levelEn: varchar("levelEn", { length: 64 }).notNull(),
   detailZh: text("detailZh").notNull(),
   detailEn: text("detailEn").notNull(),
-  maxLeverage: varchar("maxLeverage", { length: 8 }),
-  feeInfo: varchar("feeInfo", { length: 128 }),
+  maxLeverage: varchar("maxLeverage", { length: 16 }),
+  feeInfo: varchar("feeInfo", { length: 256 }),
   highlight: tinyint("highlight").default(0).notNull(),
+  /** KYC requirement level: none | basic | standard | enhanced */
+  kycLevel: varchar("kycLevel", { length: 16 }).default("standard"),
+  /** Comma-separated supported regions, e.g. "CN,HK,TW,SG" */
+  supportedRegions: varchar("supportedRegions", { length: 256 }),
+  /** Fee tier label, e.g. "低" / "中" / "高" */
+  feeLevel: varchar("feeLevel", { length: 8 }),
+  /** Extra notes shown in admin panel */
+  notes: text("notes"),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
 export type ExchangeFeatureSupport = typeof exchangeFeatureSupport.$inferSelect;
 export type InsertExchangeFeatureSupport = typeof exchangeFeatureSupport.$inferInsert;
+
+/**
+ * Simulated trading history — stores closed positions for each user.
+ * simType: "spot" | "futures" | "margin"
+ * direction: "long" | "short" | "buy" | "sell"
+ * Data is tied to the user's account; reset only on explicit user request.
+ */
+export const simTradeHistory = mysqlTable("sim_trade_history", {
+  id: int("id").autoincrement().primaryKey(),
+  /** User who made the trade */
+  userId: int("userId").notNull(),
+  /** Type of simulation: spot, futures, margin */
+  simType: mysqlEnum("simType", ["spot", "futures", "margin"]).notNull(),
+  /** Trading pair, e.g. BTC/USDT */
+  symbol: varchar("symbol", { length: 16 }).notNull(),
+  /** Trade direction */
+  direction: mysqlEnum("direction", ["long", "short", "buy", "sell"]).notNull(),
+  /** Entry price */
+  entryPrice: varchar("entryPrice", { length: 32 }).notNull(),
+  /** Exit price */
+  exitPrice: varchar("exitPrice", { length: 32 }).notNull(),
+  /** Position size (e.g. BTC amount) */
+  size: varchar("size", { length: 32 }).notNull(),
+  /** Leverage multiplier (1 for spot) */
+  leverage: int("leverage").default(1).notNull(),
+  /** Realized PnL in USDT */
+  pnl: varchar("pnl", { length: 32 }).notNull(),
+  /** PnL percentage */
+  pnlPct: varchar("pnlPct", { length: 16 }).notNull(),
+  /** How position was closed: manual | tp | sl | liquidated | reversed */
+  closeReason: varchar("closeReason", { length: 32 }).default("manual").notNull(),
+  /** Margin mode for futures/margin: cross | isolated */
+  marginMode: varchar("marginMode", { length: 16 }),
+  /** When the position was opened */
+  openedAt: timestamp("openedAt").notNull(),
+  /** When the position was closed */
+  closedAt: timestamp("closedAt").defaultNow().notNull(),
+});
+
+export type SimTradeHistory = typeof simTradeHistory.$inferSelect;
+export type InsertSimTradeHistory = typeof simTradeHistory.$inferInsert;

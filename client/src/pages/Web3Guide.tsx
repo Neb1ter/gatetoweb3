@@ -883,13 +883,11 @@ export default function Web3Guide() {
       <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-[#050D1A]/90 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0 flex-1">
-            <Link href="/portal">
-              <button className="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors text-sm shrink-0">
+            <Link href="/portal" className="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors text-sm shrink-0">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
                 <span className="hidden sm:inline">返回主页</span>
-              </button>
             </Link>
             <div className="w-px h-4 bg-slate-700 shrink-0" />
             {/* 桌面端：页面标题；移动端：当前章节标题（滚动感知） */}
@@ -1044,10 +1042,8 @@ export default function Web3Guide() {
             {/* 深入学习按钮 */}
             <div className="mt-6 pt-5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
               <p className="text-slate-500 text-xs">想深入了解 Web1/2/3 的演进历史、数据所有权原理？</p>
-              <Link href="/web3-guide/what-is-web3">
-                <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 text-sm font-bold transition-all whitespace-nowrap">
+              <Link href="/web3-guide/what-is-web3" className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 text-sm font-bold transition-all whitespace-nowrap">
                   📖 深入学习 Web3 基础 →
-                </button>
               </Link>
             </div>
           </div>
@@ -1151,10 +1147,8 @@ export default function Web3Guide() {
             {/* 深入学习按钮 */}
             <div className="mt-4 pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
               <p className="text-slate-500 text-xs">想深入了解共识机制、Layer2、Gas 费等技术细节？</p>
-              <Link href="/web3-guide/blockchain-basics">
-                <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-blue-500/40 text-blue-400 hover:bg-blue-500/10 text-sm font-bold transition-all whitespace-nowrap">
+              <Link href="/web3-guide/blockchain-basics" className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-blue-500/40 text-blue-400 hover:bg-blue-500/10 text-sm font-bold transition-all whitespace-nowrap">
                   ⛓️ 深入学习区块链技术 →
-                </button>
               </Link>
             </div>
           </div>
@@ -1256,10 +1250,8 @@ export default function Web3Guide() {
             {/* 深入学习按钮 */}
             <div className="px-6 py-4 border-t border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3">
               <p className="text-slate-500 text-xs">想深入了解 AMM 原理、流动性挖矿、收益计算？</p>
-              <Link href="/web3-guide/defi-deep">
-                <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-yellow-500/40 text-yellow-400 hover:bg-yellow-500/10 text-sm font-bold transition-all whitespace-nowrap">
+              <Link href="/web3-guide/defi-deep" className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-yellow-500/40 text-yellow-400 hover:bg-yellow-500/10 text-sm font-bold transition-all whitespace-nowrap">
                   💰 深入学习 DeFi 玩法 →
-                </button>
               </Link>
             </div>
           </div>
@@ -1341,10 +1333,8 @@ export default function Web3Guide() {
                 </p>
               </div>
             </div>
-            <Link href="/web3-guide/economic-opportunity">
-              <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-400 text-black text-sm font-black transition-all whitespace-nowrap flex-shrink-0">
+            <Link href="/web3-guide/economic-opportunity" className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-400 text-black text-sm font-black transition-all whitespace-nowrap flex-shrink-0">
                 深入了解 →
-              </button>
             </Link>
           </div>
         </FadeIn>
@@ -1387,10 +1377,8 @@ export default function Web3Guide() {
                 </p>
               </div>
             </div>
-            <Link href="/web3-guide/investment-gateway">
-              <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-400 text-black text-sm font-black transition-all whitespace-nowrap flex-shrink-0">
+            <Link href="/web3-guide/investment-gateway" className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-400 text-black text-sm font-black transition-all whitespace-nowrap flex-shrink-0">
                 深入了解 →
-              </button>
             </Link>
           </div>
         </FadeIn>
@@ -1480,15 +1468,11 @@ export default function Web3Guide() {
             <div className="mt-5 pt-5 border-t border-yellow-500/20 flex flex-col sm:flex-row items-center justify-between gap-3">
               <p className="text-slate-500 text-xs">想深度了解 CEX vs DEX vs 链上的全面对比、质押收益计算器？</p>
               <div className="flex gap-2 flex-wrap">
-                <Link href="/web3-guide/investment-gateway">
-                  <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-400 text-black text-sm font-black transition-all whitespace-nowrap">
+                <Link href="/web3-guide/investment-gateway" className="flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-400 text-black text-sm font-black transition-all whitespace-nowrap">
                     🚪 第六章：参与 Web3 的门户 →
-                  </button>
                 </Link>
-                <Link href="/web3-guide/exchange-guide">
-                  <button className="flex items-center gap-2 px-4 py-2 rounded-xl border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 text-sm font-bold transition-all whitespace-nowrap">
+                <Link href="/web3-guide/exchange-guide" className="flex items-center gap-2 px-4 py-2 rounded-xl border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 text-sm font-bold transition-all whitespace-nowrap">
                     🏦 交易所入门指南 →
-                  </button>
                 </Link>
               </div>
             </div>
@@ -1513,10 +1497,8 @@ export default function Web3Guide() {
                     </div>
                     <p className="text-slate-300 text-sm leading-relaxed mb-3">{step.desc}</p>
                     <div className="flex items-center justify-between">
-                      <Link href={step.href}>
-                        <button className={`text-sm font-bold px-4 py-2 rounded-lg border ${step.borderColor} ${step.color} hover:bg-white/5 transition-colors`}>
+                      <Link href={step.href} className={`text-sm font-bold px-4 py-2 rounded-lg border ${step.borderColor} ${step.color} hover:bg-white/5 transition-colors`}>
                           {step.action} →
-                        </button>
                       </Link>
                       <span className={`text-xs px-2 py-1 rounded-full ${step.bgColor} border ${step.borderColor} ${step.color}`}>
                         💡 {step.tip}
@@ -1558,15 +1540,11 @@ export default function Web3Guide() {
               通过我们的邀请码注册交易所，享受永久手续费返佣，让每一笔交易都更划算。
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href="/crypto-saving">
-                <button className="bg-yellow-500 hover:bg-yellow-400 text-black font-black px-8 py-3 rounded-xl transition-all hover:scale-105">
+              <Link href="/crypto-saving" className="bg-yellow-500 hover:bg-yellow-400 text-black font-black px-8 py-3 rounded-xl transition-all hover:scale-105">
                   🎁 查看返佣邀请码
-                </button>
               </Link>
-              <Link href="/exchanges">
-                <button className="border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 font-bold px-8 py-3 rounded-xl transition-all">
+              <Link href="/exchanges" className="border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 font-bold px-8 py-3 rounded-xl transition-all">
                   📊 交易所对比
-                </button>
               </Link>
             </div>
           </div>
@@ -1574,18 +1552,14 @@ export default function Web3Guide() {
 
         {/* 底部导航 */}
         <div className="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <Link href="/portal">
-            <button className="text-slate-400 hover:text-white transition-colors text-sm flex items-center gap-2">
+          <Link href="/portal" className="text-slate-400 hover:text-white transition-colors text-sm flex items-center gap-2">
               ← 返回主页
-            </button>
           </Link>
           <p className="text-slate-600 text-xs text-center">
             内容参考：币安学院 · BlockBeats · CoinMarketCap · 登链社区
           </p>
-          <Link href="/crypto-saving">
-            <button className="text-slate-400 hover:text-yellow-400 transition-colors text-sm flex items-center gap-2">
+          <Link href="/crypto-saving" className="text-slate-400 hover:text-yellow-400 transition-colors text-sm flex items-center gap-2">
               币圈省钱指南 →
-            </button>
           </Link>
         </div>
       </div>

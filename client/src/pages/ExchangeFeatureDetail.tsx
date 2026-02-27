@@ -447,9 +447,7 @@ export default function ExchangeFeatureDetail() {
       <div className="min-h-screen bg-[#0A192F] flex items-center justify-center">
         <div className="text-center">
           <p className="text-slate-400 mb-4">功能页面未找到</p>
-          <Link href="/exchange-guide">
-            <button className="bg-yellow-500 text-black px-6 py-2 rounded-xl font-bold">返回指南</button>
-          </Link>
+          <Link href="/exchange-guide" className="bg-yellow-500 text-black px-6 py-2 rounded-xl font-bold no-underline inline-block">返回指南</Link>
         </div>
       </div>
     );
@@ -474,12 +472,10 @@ export default function ExchangeFeatureDetail() {
       <div className="sticky top-0 z-50 bg-[#0A192F]/95 backdrop-blur-sm border-b border-white/10">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
           {/* 左上角返回按钮 */}
-          <Link href="/exchange-guide">
-            <button className="flex items-center gap-2 text-slate-400 hover:text-yellow-400 transition-colors text-sm">
+          <Link href="/exchange-guide" className="flex items-center gap-2 text-slate-400 hover:text-yellow-400 transition-colors text-sm">
               <ArrowLeft className="w-4 h-4" />
               <span className="hidden sm:inline">返回交易所扫盲指南</span>
               <span className="sm:hidden">返回</span>
-            </button>
           </Link>
 
           {/* 功能标题 */}
@@ -623,10 +619,8 @@ export default function ExchangeFeatureDetail() {
                           <p className="text-slate-300 text-sm">{item.feeInfo}</p>
                         </div>
                       )}
-                      <Link href="/exchanges">
-                        <button className="mt-3 flex items-center gap-1 text-yellow-400 text-xs hover:text-yellow-300 transition-colors">
+                      <Link href="/exchanges" className="mt-3 flex items-center gap-1 text-yellow-400 text-xs hover:text-yellow-300 transition-colors">
                           查看 {EXCHANGE_NAMES[item.exchangeSlug]} 返佣链接 <ExternalLink className="w-3 h-3" />
-                        </button>
                       </Link>
                     </div>
                   )}
@@ -717,11 +711,12 @@ export default function ExchangeFeatureDetail() {
                   <p className="text-slate-300 text-sm mb-1">{sim.desc}</p>
                   <p className="text-slate-400 text-xs">无需真实资金 · 模拟真实市场 · 即时反馈</p>
                 </div>
-                <Link href={sim.path}>
-                  <button className={`px-8 py-4 rounded-2xl font-black text-lg transition-all hover:scale-105 bg-gradient-to-r ${sim.color.replace('text-', 'from-').replace('-400', '-500')} to-transparent border-2 ${sim.color.replace('text-', 'border-')} text-white whitespace-nowrap flex items-center gap-3`}>
-                    <Gamepad2 className="w-5 h-5" />
-                    进入模拟游戏 →
-                  </button>
+                <Link
+                  href={sim.path}
+                  className={`px-8 py-4 rounded-2xl font-black text-lg transition-all hover:scale-105 bg-gradient-to-r ${sim.color.replace('text-', 'from-').replace('-400', '-500')} to-transparent border-2 ${sim.color.replace('text-', 'border-')} text-white whitespace-nowrap flex items-center gap-3 no-underline`}
+                >
+                  <Gamepad2 className="w-5 h-5" />
+                  进入模拟游戏 →
                 </Link>
               </div>
             </section>
@@ -735,20 +730,14 @@ export default function ExchangeFeatureDetail() {
             了解了{content.title}的原理，下一步就是选择合适的交易所开始体验。通过我们的合作伙伴链接注册，享受永久手续费返佣。
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/exchanges">
-              <button className="bg-yellow-500 hover:bg-yellow-400 text-black font-black px-6 py-3 rounded-xl transition-all hover:scale-105 text-sm">
+            <Link href="/exchanges" className="bg-yellow-500 hover:bg-yellow-400 text-black font-black px-6 py-3 rounded-xl transition-all hover:scale-105 text-sm">
                 🎁 查看合作伙伴链接
-              </button>
             </Link>
-            <Link href="/exchange-guide">
-              <button className="border border-white/20 text-white hover:bg-white/10 px-6 py-3 rounded-xl transition-all text-sm font-semibold">
+            <Link href="/exchange-guide" className="border border-white/20 text-white hover:bg-white/10 px-6 py-3 rounded-xl transition-all text-sm font-semibold">
                 ← 返回功能列表
-              </button>
             </Link>
-            <Link href="/beginner">
-              <button className="border border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10 px-6 py-3 rounded-xl transition-all text-sm font-semibold flex items-center gap-2 justify-center">
+            <Link href="/beginner" className="border border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10 px-6 py-3 rounded-xl transition-all text-sm font-semibold flex items-center gap-2 justify-center">
                 <HelpCircle className="w-4 h-4" /> 有疑问？查看新手问答
-              </button>
             </Link>
           </div>
         </section>

@@ -23,21 +23,29 @@ import EconomicOpportunity from "@/pages/web3/EconomicOpportunity";
 import ExchangeGuideIndex from "@/pages/ExchangeGuideIndex";
 import ExchangeDownload from "@/pages/ExchangeDownload";
 import ExchangeFeatureDetail from "@/pages/ExchangeFeatureDetail";
+import AdminExchangeGuide from "@/pages/AdminExchangeGuide";
 import SpotSim from "@/pages/sim/SpotSim";
 import FuturesSim from "@/pages/sim/FuturesSim";
 import TradFiSim from "@/pages/sim/TradFiSim";
 import MarginSim from "@/pages/sim/MarginSim";
 import OptionsSim from "@/pages/sim/OptionsSim";
 import BotSim from "@/pages/sim/BotSim";
-import BrokerProgram from "@/pages/BrokerProgram";
+import Web3Quiz from "@/pages/Web3Quiz";
+import LearningPath from "@/pages/LearningPath";
+import LearningComplete from "@/pages/LearningComplete";
+import Legal from "@/pages/Legal";
 import { useEffect, useRef, useState } from "react";
 import { saveScrollPosition, getScrollPosition } from "@/hooks/useScrollMemory";
+import { useLearningPathSync } from "@/hooks/useLearningPathSync";
+import MobileFloatNav from "@/components/MobileFloatNav";
+import DesktopFloatNav from "@/components/DesktopFloatNav";
 
 // ============================================================
 // 页面过渡动画包装器
 // ============================================================
 function PageTransition({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
+  useLearningPathSync();
   const [displayLocation, setDisplayLocation] = useState(location);
   const [transitionStage, setTransitionStage] = useState<"enter" | "exit">("enter");
    const prevLocation = useRef(location);
@@ -86,9 +94,8 @@ function Router() {
   return (
     <PageTransition>
       <Switch>
-        {/* 总主页（导航门户）*/}
-        <Route path={"/"} component={Portal} />
-        <Route path={"/portal"} component={Portal} />
+        <Route path="/" component={Portal} />
+        <Route path="/portal" component={Portal} />
 
         {/* 币圈省钱指南板块 */}
         <Route path={"/crypto-saving"} component={Home} />
@@ -110,6 +117,14 @@ function Router() {
         <Route path="/exchange-guide" component={ExchangeGuideIndex} />
         <Route path="/exchange-download" component={ExchangeDownload} />
          <Route path="/exchange-guide/:featureSlug" component={ExchangeFeatureDetail} />
+        {/* 后台管理 */}
+        <Route path="/admin/exchange-guide" component={AdminExchangeGuide} />
+
+        {/* Web3 测评与学习路径 */}
+        <Route path="/web3-quiz" component={Web3Quiz} />
+        <Route path="/learning-path" component={LearningPath} />
+        <Route path="/learning-complete" component={LearningComplete} />
+        <Route path="/legal" component={Legal} />
 
         {/* 模拟交易游戏 */}
         <Route path="/sim/spot" component={SpotSim} />
@@ -119,14 +134,52 @@ function Router() {
         <Route path="/sim/options" component={OptionsSim} />
         <Route path="/sim/bot" component={BotSim} />
 
-        {/* 代理计划 */}
-        <Route path="/broker" component={BrokerProgram} />
-
         <Route path={"404"} component={NotFound} />
         <Route component={NotFound} />
       </Switch>
     </PageTransition>
   );
+}
+
+// 全局禁用水平滑动手势（防止浏览器导航切换页面）
+function GlobalSwipeBlocker() {
+  const [location] = useLocation();
+  const isSimPage = location.startsWith("/sim/");
+
+  useEffect(() => {
+    // 全局水平滑动拦截：对所有页面生效，在模拟器页面更严格
+    let startX = 0, startY = 0;
+    const onTouchStart = (e: TouchEvent) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      const dx = Math.abs(e.touches[0].clientX - startX);
+      const dy = Math.abs(e.touches[0].clientY - startY);
+      // 如果水平滑动大于垂直滑动，则阻止默认行为（防止浏览器手势导航）
+      if (dx > dy && dx > 3) {
+        e.preventDefault();
+      }
+    };
+    // 在模拟器页面上全局注册，其他页面不干扰垂直滚动
+    if (isSimPage) {
+      document.addEventListener("touchstart", onTouchStart, { passive: true });
+      document.addEventListener("touchmove", onTouchMove, { passive: false });
+      // 确保 body 和 html 的 overscroll 属性在运行时也生效
+      document.body.style.overscrollBehaviorX = "none";
+      document.documentElement.style.overscrollBehaviorX = "none";
+    }
+    return () => {
+      document.removeEventListener("touchstart", onTouchStart);
+      document.removeEventListener("touchmove", onTouchMove);
+      if (isSimPage) {
+        document.body.style.overscrollBehaviorX = "";
+        document.documentElement.style.overscrollBehaviorX = "";
+      }
+    };
+  }, [isSimPage]);
+
+  return null;
 }
 
 function App() {
@@ -137,6 +190,9 @@ function App() {
           <TooltipProvider>
             <Toaster />
             <Router />
+            <MobileFloatNav />
+            <DesktopFloatNav />
+            <GlobalSwipeBlocker />
           </TooltipProvider>
         </ThemeProvider>
       </LanguageProvider>

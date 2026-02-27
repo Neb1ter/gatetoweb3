@@ -9,6 +9,7 @@ import {
   ChevronDown, ChevronUp,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { EXCHANGE_FEES, SPOT_MAKER_ROW, FUT_MAKER_ROW, INVITE_CODES, getFallbackInviteCode, getFallbackReferralLink } from '@shared/exchangeFees';
 
 // ─── Exchange static data ─────────────────────────────────────────────────────
 
@@ -28,8 +29,8 @@ const EXCHANGES = [
     reserves: '$49.3亿',
     reserveRatio: '125%',
     maxLeverage: '100x',
-    makerFee: '0.15%',
-    takerFee: '0.15%',
+    makerFee: EXCHANGE_FEES.gate.spotMaker,
+    takerFee: EXCHANGE_FEES.gate.spotTaker,
     platformToken: 'GT',
     tagline: { zh: '最多新币 · 最透明储备 · TradFi先锋', en: 'Most Altcoins · Highest Transparency · TradFi Pioneer' },
     badge: { zh: '新币最多', en: 'Most Altcoins' },
@@ -71,8 +72,8 @@ const EXCHANGES = [
     reserves: '$143.9亿',
     reserveRatio: '105%+',
     maxLeverage: '125x',
-    makerFee: '0.08%',
-    takerFee: '0.10%',
+    makerFee: EXCHANGE_FEES.okx.spotMaker,
+    takerFee: EXCHANGE_FEES.okx.spotTaker,
     platformToken: 'OKB',
     tagline: { zh: 'Web3 门户 · 最强 DEX · 自有 Layer2', en: 'Web3 Gateway · Best DEX · Own Layer2' },
     badge: { zh: 'Web3 最强', en: 'Best Web3' },
@@ -114,8 +115,8 @@ const EXCHANGES = [
     reserves: '行业最大',
     reserveRatio: '100%+',
     maxLeverage: '125x',
-    makerFee: '0.10%',
-    takerFee: '0.10%',
+    makerFee: EXCHANGE_FEES.binance.spotMaker,
+    takerFee: EXCHANGE_FEES.binance.spotTaker,
     platformToken: 'BNB',
     tagline: { zh: '全球第一 · 最强流动性 · 最大 P2P', en: 'World #1 · Best Liquidity · Largest P2P' },
     badge: { zh: '全球最大', en: 'World\'s Largest' },
@@ -157,8 +158,8 @@ const EXCHANGES = [
     reserves: '$100亿+',
     reserveRatio: '100%+',
     maxLeverage: '125x',
-    makerFee: '0.01%',
-    takerFee: '0.055%',
+    makerFee: EXCHANGE_FEES.bybit.futMaker,
+    takerFee: EXCHANGE_FEES.bybit.futTaker,
     platformToken: '无',
     tagline: { zh: '衍生品专家 · 超低合约费 · 跟单交易', en: 'Derivatives Expert · Ultra-Low Contract Fees · Copy Trading' },
     badge: { zh: '合约最低费', en: 'Lowest Contract Fee' },
@@ -200,8 +201,8 @@ const EXCHANGES = [
     reserves: '$30亿+',
     reserveRatio: '150%+',
     maxLeverage: '125x',
-    makerFee: '0.02%',
-    takerFee: '0.06%',
+    makerFee: EXCHANGE_FEES.bitget.spotMaker,
+    takerFee: EXCHANGE_FEES.bitget.spotTaker,
     platformToken: 'BGB',
     tagline: { zh: '跟单鼻祖 · 最大跟单平台 · 用户保护基金', en: 'Copy Trading Pioneer · Largest Copy Platform · User Protection Fund' },
     badge: { zh: '跟单第一', en: 'Copy Trading #1' },
@@ -236,8 +237,8 @@ const COMPARISON_FEATURES = [
   { key: 'coins',        zh: '支持币种',     en: 'Supported Coins',    values: ['3,600+', '350+', '350+', '1,000+', '800+'], highlight: 0 },
   { key: 'volume',       zh: '日交易量',     en: 'Daily Volume',       values: ['$18.8亿', '$16.5亿', '$40-60亿', '$10亿+', '$5-10亿'], highlight: 2 },
   { key: 'reserves',     zh: '储备率',       en: 'Reserve Ratio',      values: ['125% ⭐', '105%+', '100%+', '100%+', '150%+ ⭐'], highlight: -1 },
-  { key: 'makerFee',     zh: '现货Maker费',  en: 'Spot Maker Fee',     values: ['0.15%', '0.08% ⭐', '0.10%', '0.10%', '0.02% ⭐'], highlight: -1 },
-  { key: 'futuresFee',   zh: '合约Maker费',  en: 'Futures Maker Fee',  values: ['-0.015%', '-0.0025%', '0.02%', '0.01% ⭐', '0.02%'], highlight: -1 },
+  { key: 'makerFee',     zh: '现货Maker费',  en: 'Spot Maker Fee',     values: SPOT_MAKER_ROW, highlight: -1 },
+  { key: 'futuresFee',   zh: '合约Maker费',  en: 'Futures Maker Fee',  values: FUT_MAKER_ROW, highlight: -1 },
   { key: 'leverage',     zh: '最高杠杆',     en: 'Max Leverage',       values: ['100x', '125x', '125x', '125x', '125x'], highlight: -1 },
   { key: 'copyTrading',  zh: '跟单交易',     en: 'Copy Trading',       values: [false, true, true, true, '⭐最强'], highlight: 4 },
   { key: 'web3Wallet',   zh: 'Web3 钱包',    en: 'Web3 Wallet',        values: [true, '⭐最强', true, false, true], highlight: 1 },
@@ -286,10 +287,10 @@ export default function ExchangeGuide() {
   };
 
   const getReferralLink = (slug: string) => {
-    return dbLinks?.find(l => l.slug === slug)?.referralLink ?? '#';
+    return dbLinks?.find(l => l.slug === slug)?.referralLink ?? getFallbackReferralLink(slug);
   };
   const getInviteCode = (slug: string) => {
-    return dbLinks?.find(l => l.slug === slug)?.inviteCode ?? '';
+    return dbLinks?.find(l => l.slug === slug)?.inviteCode ?? getFallbackInviteCode(slug);
   };
 
   const renderValue = (val: string | boolean) => {
